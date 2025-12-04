@@ -912,4 +912,25 @@
   <data name="MainView_Plugin_Training_Description" xml:space="preserve">
     <value>提供训练模式、分析技能伤害分布与各职业排行榜功能</value>
   </data>
+  <!--  ⭐ 新增: 开关伤害统计快捷键  -->
+  <data name="Settings_Shortcut_ToggleDps" xml:space="preserve">
+ <value>开关伤害统计</value>
+  </data>
+  <data name="Settings_Shortcut_ToggleDps_Tooltip" xml:space="preserve">
+    <value>在此聚焦并按下快捷键（例如 F10）。按 Delete 清除。</value>
+  </data>
+  <!--  ⭐ 新增: 角色设置  -->
+  <data name="Settings_Section_Character_Title" xml:space="preserve">
+    <value>角色设置</value>
+  </data>
+<data name="Settings_Section_Character_Sub" xml:space="preserve">
+<value>设置你的角色UID用于个人打桩模式</value>
+  </data>
+  <data name="Settings_Character_Uid" xml:space="preserve">
+    <value>角色UID</value>
+  </data>
+  <data name="Settings_Character_Uid_Tooltip" xml:space="preserve">
+    <value>输入你的角色UID（数字）
+如何获取：在游戏战斗后打开统计窗口，你的角色会自动显示</value>
+  </data>
 </root>

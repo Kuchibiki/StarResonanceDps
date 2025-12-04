@@ -232,7 +232,7 @@
     <value>Limpar dados após combate</value>
   </data>
   <data name="Settings_Common_Seconds" xml:space="preserve">
-    <value>seg</value>
+    <value>s</value>
   </data>
   <data name="Settings_Combat_ClearAfterTeleport" xml:space="preserve">
     <value>Resetar ao mudar de mapa</value>
