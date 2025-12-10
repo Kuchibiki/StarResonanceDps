@@ -44,6 +44,10 @@ public partial class SkillBreakdownViewModel(ILogger<SkillBreakdownViewModel> lo
         InitializePie(slot.Heal, HpsPlot);
         InitializePie(slot.TakenDamage, DtpsPlot);
 
+        UpdateHitTypeDistribution(DamageStats, DpsPlot);
+        UpdateHitTypeDistribution(HealingStats, HpsPlot);
+        UpdateHitTypeDistribution(TakenDamageStats, DtpsPlot);
+
         logger.LogDebug("SkillBreakdownViewModel initialized for player: {PlayerName}", PlayerName);
     }
 
@@ -74,6 +78,7 @@ public partial class SkillBreakdownViewModel(ILogger<SkillBreakdownViewModel> lo
         if (skills is null) return;
         var duration = ObservedSlot.Duration > 0 ? ObservedSlot.Duration : 1;
         skills.UpdateDamage(duration, DamageStats);
+        UpdateHitTypeDistribution(DamageStats, DpsPlot);
     }
 
     private void HealSkillChanged(IReadOnlyList<SkillItemViewModel>? skills)
@@ -82,6 +87,7 @@ public partial class SkillBreakdownViewModel(ILogger<SkillBreakdownViewModel> lo
         if (skills is null) return;
         var duration = ObservedSlot.Duration > 0 ? ObservedSlot.Duration : 1;
         skills.UpdateHealing(duration, HealingStats);
+        UpdateHitTypeDistribution(HealingStats, HpsPlot);
     }
 
     private void TakenDamageSkillChanged(IReadOnlyList<SkillItemViewModel>? skills)
@@ -90,6 +96,7 @@ public partial class SkillBreakdownViewModel(ILogger<SkillBreakdownViewModel> lo
         if (skills is null) return;
         var duration = ObservedSlot.Duration > 0 ? ObservedSlot.Duration : 1;
         skills.UpdateDamageTaken(duration, TakenDamageStats);
+        UpdateHitTypeDistribution(TakenDamageStats, DtpsPlot);
     }
 
     #endregion
@@ -179,6 +186,15 @@ public partial class SkillBreakdownViewModel(ILogger<SkillBreakdownViewModel> lo
         target.SetPieSeriesData(skills);
     }
 
+    private void UpdateHitTypeDistribution(DataStatistics stat, PlotViewModel target)
+    {
+        if (stat.Hits <= 0) return;
+        var crit = (double)stat.CritCount / stat.Hits * 100;
+        var lucky = (double)stat.LuckyCount / stat.Hits * 100;
+        var normal = 100 - crit - lucky;
+        target.SetHitTypeDistribution(normal, crit, lucky);
+    }
+
     #endregion
 
     #region Zoom Commands
@@ -237,6 +253,12 @@ public partial class SkillBreakdownViewModel(ILogger<SkillBreakdownViewModel> lo
     private void Cancel()
     {
         logger.LogDebug("Cancel SkillBreakDown");
+    }
+
+    [RelayCommand]
+    private void Refresh()
+    {
+        logger.LogDebug("Manual refresh");
     }
 
     #endregion
