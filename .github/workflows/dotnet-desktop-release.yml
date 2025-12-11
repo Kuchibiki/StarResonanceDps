@@ -1,0 +1,79 @@
+name: .NET Build and GitHub Release
+
+on:
+  push:
+    branches: [ "master" ]     
+    tags:
+      - 'v*'                   
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Needed to create releases
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        configuration: [Release]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore StarResonanceDpsAnalysis.sln
+
+      - name: Build solution
+        run: dotnet build StarResonanceDpsAnalysis.sln --configuration ${{ matrix.configuration }} --no-restore
+
+      - name: Run tests
+        run: dotnet test StarResonanceDpsAnalysis.sln --configuration ${{ matrix.configuration }} --no-build
+
+      - name: Publish project
+        run: dotnet publish StarResonanceDpsAnalysis.WPF/StarResonanceDpsAnalysis.WPF.csproj -c ${{ matrix.configuration }} -o publish
+
+      - name: Verify publish output
+        run: dir publish
+
+      - name: Create ZIP package
+        run: Compress-Archive -Path publish/* -DestinationPath StarResonanceDpsAnalysis-${{ github.run_number }}.zip
+
+      - name: Verify ZIP file
+        run: dir StarResonanceDpsAnalysis-${{ github.run_number }}.zip
+
+      - name: Get latest commit info
+        id: commit
+        shell: pwsh
+        run: |
+          $commit = git log -1 --pretty=format:"%s"
+          $author = git log -1 --pretty=format:"%an"
+          $body = git log -1 --pretty=format:"%b"
+      
+          echo "message=$commit" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          echo "author=$author" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          echo "body=$body" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')   
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}          
+          name: "StarResonanceDpsAnalysis ${{ github.ref_name }}"
+          body: |
+            ✅ Automated Release from GitHub Actions
+            • Build: ${{ github.run_number }}
+            • Tag: ${{ github.ref_name }}
+            • Commit SHA: ${{ github.sha }}
+            • Commit Author: ${{ steps.commit.outputs.author }}
+            • Commit Message: ${{ steps.commit.outputs.message }}
+            • Commit Description: ${{ steps.commit.outputs.body }}
+          files: |
+            StarResonanceDpsAnalysis-${{ github.run_number }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
