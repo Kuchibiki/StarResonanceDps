@@ -219,6 +219,9 @@
   <data name="Settings_Section_Display_Title" xml:space="preserve">
     <value>표시 설정</value>
   </data>
+  <data name="Settings_Language_Title" xml:space="preserve">
+    <value>언어</value>
+  </data>
   <data name="Settings_Section_Combat_Title" xml:space="preserve">
     <value>전투 설정</value>
   </data>
@@ -606,7 +609,6 @@
   <data name="SkillBreakdown_Card_RealtimeChart" xml:space="preserve">
     <value>DPS/HPS/DTPS 실시간 그래프</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="SkillBreakdown_Placeholder_LineChart" xml:space="preserve">
     <value>여기에 깎은선 그래프가 있다고 상상해보세요</value>
   </data>
@@ -951,82 +953,82 @@
   <data name="Settings_Common_Records" xml:space="preserve">
     <value>개</value>
   </data>
-  <data name="Menu_SkillDiary" xml:space="preserve">
-    <value>스킬 기록</value>
-  </data>
   <data name="Debug_Localization_Apply" xml:space="preserve">
     <value>적용</value>
+  </data>
+  <data name="Menu_SkillDiary" xml:space="preserve">
+    <value>스킬 기록</value>
   </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
     <value>한국어</value>
   </data>
-  <data name="Settings_Language_Title" xml:space="preserve">
-    <value>언어</value>
-  </data>
-    <data name="SkillBreakdown_Label_Total" xml:space="preserve">
+  <data name="SkillBreakdown_Label_Total" xml:space="preserve">
     <value>총합</value>
   </data>
-    <data name="SkillBreakdown_Unit_Hits" xml:space="preserve">
+  <data name="SkillBreakdown_Unit_Hits" xml:space="preserve">
     <value>회</value>
   </data>
-    <data name="SkillBreakdown_Label_AverageDps" xml:space="preserve">
+  <data name="SkillBreakdown_Label_AverageDps" xml:space="preserve">
     <value>평균 DPS</value>
   </data>
-    <data name="SkillBreakdown_Label_TotalHits" xml:space="preserve">
+  <data name="SkillBreakdown_Label_TotalHits" xml:space="preserve">
     <value>총 타수</value>
   </data>
-    <data name="SkillBreakdown_Section_DamageSkillsAnalysis" xml:space="preserve">
+  <data name="SkillBreakdown_Section_DamageSkillsAnalysis" xml:space="preserve">
     <value>공격 스킬 분석</value>
   </data>
-    <data name="SkillBreakdown_Chart_RealTimeDps" xml:space="preserve">
+  <data name="SkillBreakdown_Chart_RealTimeDps" xml:space="preserve">
     <value>실시간 DPS</value>
   </data>
-    <data name="SkillBreakdown_Tooltip_ResetZoom" xml:space="preserve">
+  <data name="SkillBreakdown_Tooltip_ResetZoom" xml:space="preserve">
     <value>확대/축소 초기화</value>
   </data>
-    <data name="SkillBreakdown_Chart_SkillDamageDistribution" xml:space="preserve">
+  <data name="SkillBreakdown_Chart_SkillDamageDistribution" xml:space="preserve">
     <value>스킬 피해 비율</value>
   </data>
-    <data name="SkillBreakdown_Chart_HitTypeDistribution" xml:space="preserve">
+  <data name="SkillBreakdown_Chart_HitTypeDistribution" xml:space="preserve">
     <value>타격 유형 분포</value>
   </data>
-    <data name="SkillBreakdown_Label_TotalHealing" xml:space="preserve">
+  <data name="SkillBreakdown_Label_TotalHealing" xml:space="preserve">
     <value>총 치유량</value>
   </data>
-    <data name="SkillBreakdown_Label_AverageHps" xml:space="preserve">
+  <data name="SkillBreakdown_Label_AverageHps" xml:space="preserve">
     <value>평균 HPS</value>
   </data>
-    <data name="SkillBreakdown_Label_TotalHeals" xml:space="preserve">
+  <data name="SkillBreakdown_Label_TotalHeals" xml:space="preserve">
     <value>총 치유 횟수</value>
   </data>
-    <data name="SkillBreakdown_Section_HealingSkillsAnalysis" xml:space="preserve">
+  <data name="SkillBreakdown_Section_HealingSkillsAnalysis" xml:space="preserve">
     <value>치유 스킬 분석</value>
   </data>
-    <data name="SkillBreakdown_Chart_RealTimeHps" xml:space="preserve">
+  <data name="SkillBreakdown_Chart_RealTimeHps" xml:space="preserve">
     <value>실시간 HPS</value>
   </data>
-    <data name="SkillBreakdown_Chart_HealingDistribution" xml:space="preserve">
+  <data name="SkillBreakdown_Chart_HealingDistribution" xml:space="preserve">
     <value>치유 분포</value>
   </data>
-    <data name="SkillBreakdown_Chart_HealTypeDistribution" xml:space="preserve">
+  <data name="SkillBreakdown_Chart_HealTypeDistribution" xml:space="preserve">
     <value>치유 유형 분포</value>
   </data>
-    <data name="SkillBreakdown_Label_TotalDamageTaken" xml:space="preserve">
+  <data name="SkillBreakdown_Label_TotalDamageTaken" xml:space="preserve">
     <value>총 받은 피해</value>
   </data>
-    <data name="SkillBreakdown_Label_AverageDtps" xml:space="preserve">
+  <data name="SkillBreakdown_Label_AverageDtps" xml:space="preserve">
     <value>평균 DTPS</value>
   </data>
-    <data name="SkillBreakdown_Label_TotalHitsTaken" xml:space="preserve">
+  <data name="SkillBreakdown_Label_TotalHitsTaken" xml:space="preserve">
     <value>총 피격 횟수</value>
   </data>
-    <data name="SkillBreakdown_Section_DamageTakenAnalysis" xml:space="preserve">
+  <data name="SkillBreakdown_Section_DamageTakenAnalysis" xml:space="preserve">
     <value>받은 피해 분석</value>
   </data>
-    <data name="SkillBreakdown_Chart_RealTimeDtps" xml:space="preserve">
+  <data name="SkillBreakdown_Chart_RealTimeDtps" xml:space="preserve">
     <value>실시간 DTPS</value>
   </data>
-    <data name="SkillBreakdown_Chart_DamageSourcesDistribution" xml:space="preserve">
+  <data name="SkillBreakdown_Chart_DamageSourcesDistribution" xml:space="preserve">
     <value>피해 원인 분포</value>
+  </data>
+  <data name="SkillBreakdown_Chart_DpsSeriesXAxis" xml:space="preserve">
+    <value />
   </data>
 </root>

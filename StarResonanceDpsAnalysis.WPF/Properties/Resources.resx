@@ -1056,4 +1056,16 @@ How to get: After a fight, your character will automatically appear in the stats
   <data name="SkillBreakdown_Chart_DamageSourcesDistribution" xml:space="preserve">
     <value>Damage Sources Distribution</value>
   </data>
+  <data name="SkillBreakdown_Chart_DpsSeriesXAxis" xml:space="preserve">
+    <value>Time (s)</value>
+  </data>
+  <data name="Common_HitType_Lucky" xml:space="preserve">
+    <value>Lucky</value>
+  </data>
+  <data name="Common_HitType_Critical" xml:space="preserve">
+    <value>Crit</value>
+  </data>
+  <data name="Common_HitType_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
 </root>

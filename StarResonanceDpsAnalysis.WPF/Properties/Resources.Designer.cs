@@ -511,6 +511,33 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Crit.
+        /// </summary>
+        public static string Common_HitType_Critical {
+            get {
+                return ResourceManager.GetString("Common_HitType_Critical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lucky.
+        /// </summary>
+        public static string Common_HitType_Lucky {
+            get {
+                return ResourceManager.GetString("Common_HitType_Lucky", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal.
+        /// </summary>
+        public static string Common_HitType_Normal {
+            get {
+                return ResourceManager.GetString("Common_HitType_Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Classes.
         /// </summary>
         public static string DamageReference_Classes_All {
@@ -2096,6 +2123,15 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string SkillBreakdown_Chart_DamageSourcesDistribution {
             get {
                 return ResourceManager.GetString("SkillBreakdown_Chart_DamageSourcesDistribution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time (s).
+        /// </summary>
+        public static string SkillBreakdown_Chart_DpsSeriesXAxis {
+            get {
+                return ResourceManager.GetString("SkillBreakdown_Chart_DpsSeriesXAxis", resourceCulture);
             }
         }
         
