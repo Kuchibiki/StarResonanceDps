@@ -525,6 +525,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         catch (FileNotFoundException)
         {
             // 没有缓存
+            // cache not found
         }
         catch (DataTamperedException)
         {
@@ -699,9 +700,9 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         DataStorage_DpsDataUpdated();
     }
 
+
     // 添加事件处理方法(约第1175行 StorageOnNewSectionCreated 之前):
-    /// ⭐ 修复: 分段清空前事件处理 - 同步保存快照
-    /// </summary>
+    // ⭐ 修复: 分段清空前事件处理 - 同步保存快照
     private void StorageOnBeforeSectionCleared()
     {
         // ⭐ 关键修复: 使用 Invoke 而不是 BeginInvoke，确保保存完成后再返回
@@ -1974,7 +1975,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
     /// </summary>
     private List<SkillItemViewModel> ConvertSnapshotSkillsToViewModel(List<SnapshotSkillData> snapshotSkills)
     {
-        if (snapshotSkills == null || snapshotSkills.Count == 0)
+        if (snapshotSkills.Count == 0)
             return new List<SkillItemViewModel>();
 
         return snapshotSkills.Select(s => new SkillItemViewModel
@@ -1983,6 +1984,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
             TotalDamage = (long)s.TotalValue,
             HitCount = s.UseTimes,
             CritCount = s.CritTimes,
+            LuckyCount = s.LuckyTimes,
             AvgDamage = s.UseTimes > 0 ? (int)(s.TotalValue / (ulong)s.UseTimes) : 0,
             CritRate = s.UseTimes > 0 ? (double)s.CritTimes / s.UseTimes : 0
         }).ToList();
