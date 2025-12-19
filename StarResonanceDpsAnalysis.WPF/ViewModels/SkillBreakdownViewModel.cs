@@ -64,7 +64,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel
         Uid = slot.Player?.Uid ?? 0;
         PowerLevel = slot.Player?.PowerLevel ?? 0;
 
-        var duration = slot.Duration > 0 ? slot.Duration : 1;
+        var duration = TimeSpan.FromTicks(slot.DurationTicks);
 
         // Calculate statistics from skills
         DamageStats = slot.Damage.TotalSkillList.FromSkillsToDamage(duration);
@@ -152,7 +152,8 @@ public partial class SkillBreakdownViewModel : BaseViewModel
     {
         if (ObservedSlot is null) return;
         if (skills is null) return;
-        var duration = ObservedSlot.Duration > 0 ? ObservedSlot.Duration : 1;
+        var duration = TimeSpan.FromTicks(ObservedSlot.DurationTicks);
+
         skills.UpdateDamage(duration, DamageStats);
         UpdateHitTypeDistribution(DamageStats, DpsPlot);
     }
@@ -161,7 +162,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel
     {
         if (ObservedSlot is null) return;
         if (skills is null) return;
-        var duration = ObservedSlot.Duration > 0 ? ObservedSlot.Duration : 1;
+        var duration = TimeSpan.FromTicks(ObservedSlot.DurationTicks);
         skills.UpdateHealing(duration, HealingStats);
         UpdateHitTypeDistribution(HealingStats, HpsPlot);
     }
@@ -170,7 +171,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel
     {
         if (ObservedSlot is null) return;
         if (skills is null) return;
-        var duration = ObservedSlot.Duration > 0 ? ObservedSlot.Duration : 1;
+        var duration = TimeSpan.FromTicks(ObservedSlot.DurationTicks);
         skills.UpdateDamageTaken(duration, TakenDamageStats);
         UpdateHitTypeDistribution(TakenDamageStats, DtpsPlot);
     }

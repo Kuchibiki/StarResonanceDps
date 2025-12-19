@@ -21,7 +21,7 @@ namespace StarResonanceDpsAnalysis.WPF.ViewModels;
 public readonly record struct DpsDataProcessed(
     DpsData OriginalData,
     ulong Value,
-    ulong Duration,
+    long DurationTicks,
     List<SkillItemViewModel> DamageSkillList,
     List<SkillItemViewModel> HealSkillList,
     List<SkillItemViewModel> TakenDamageSkillList,
@@ -173,7 +173,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
         {
             Index = 999,
             Value = 0,
-            Duration = (dpsData.LastLoggedTick - (dpsData.StartLoggedTick ?? 0)).ConvertToUnsigned(),
+            DurationTicks = dpsData.LastLoggedTick - (dpsData.StartLoggedTick ?? 0),
             Player = new PlayerInfoViewModel(_localizationManager)
             {
                 Uid = dpsData.UID,
@@ -237,7 +237,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 
             // Update slot values with pre-computed data
             slot.Value = processed.Value;
-            slot.Duration = processed.Duration;
+            slot.DurationTicks = processed.DurationTicks;
 
             slot.Damage.TotalSkillList = processed.DamageSkillList;
             slot.Damage.RefreshFilteredList(SkillDisplayLimit);
@@ -307,7 +307,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
         {
             Index = slots.Count + 1,
             Value = (ulong)Random.Shared.Next(100, 2000),
-            Duration = 60000,
+            DurationTicks = 60000,
             Player = new PlayerInfoViewModel(LocalizationManager.Instance)
             {
                 Uid = Random.Shared.Next(100, 999),

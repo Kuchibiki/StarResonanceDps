@@ -1101,10 +1101,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
 
         foreach (var dpsData in data)
         {
-            // Get player info for this UID
-            _storage.ReadOnlyPlayerInfoDatas.TryGetValue(dpsData.UID, out var playerInfo);
-
-            var duration = (dpsData.LastLoggedTick - (dpsData.StartLoggedTick ?? 0)).ConvertToUnsigned();
+            var durationTicks = dpsData.LastLoggedTick - (dpsData.StartLoggedTick ?? 0);
 
             // Build skill lists once for reuse
             var (totalDmg, totalHeal, totalTaken) =
@@ -1122,7 +1119,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
                 if (shouldShowInDamageList)
                 {
                     result[StatisticType.Damage][dpsData.UID] = new DpsDataProcessed(
-                        dpsData, damageValue, duration, totalDmg, totalHeal, totalTaken, dpsData.UID);
+                        dpsData, damageValue, durationTicks, totalDmg, totalHeal, totalTaken, dpsData.UID);
                 }
             }
 
@@ -1131,7 +1128,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
             if (healingValue > 0 && !dpsData.IsNpcData)
             {
                 result[StatisticType.Healing][dpsData.UID] = new DpsDataProcessed(
-                    dpsData, healingValue, duration, totalDmg, totalHeal, totalTaken, dpsData.UID);
+                    dpsData, healingValue, durationTicks, totalDmg, totalHeal, totalTaken, dpsData.UID);
             }
 
             // Process TakenDamage
@@ -1144,12 +1141,12 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
                     _logger.LogDebug(
                         $"NPC TakenDamage: UID={dpsData.UID}, Value={takenDamageValue}, IsNpcData={dpsData.IsNpcData}");
                     result[StatisticType.NpcTakenDamage][dpsData.UID] = new DpsDataProcessed(
-                        dpsData, takenDamageValue, duration, totalDmg, totalHeal, totalTaken, dpsData.UID);
+                        dpsData, takenDamageValue, durationTicks, totalDmg, totalHeal, totalTaken, dpsData.UID);
                 }
                 else // 玩家 TakenDamage - 只显示玩家
                 {
                     result[StatisticType.TakenDamage][dpsData.UID] = new DpsDataProcessed(
-                        dpsData, takenDamageValue, duration, totalDmg, totalHeal, totalTaken, dpsData.UID);
+                        dpsData, takenDamageValue, durationTicks, totalDmg, totalHeal, totalTaken, dpsData.UID);
                 }
             }
         }
