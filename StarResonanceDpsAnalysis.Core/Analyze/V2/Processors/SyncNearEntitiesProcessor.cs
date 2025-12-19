@@ -77,7 +77,7 @@ internal sealed class SyncNearEntitiesProcessor : IMessageProcessor
                 case AttrType.AttrName:
                     var playerName = reader.ReadString();
                     _storage.SetPlayerName(playerUid, playerName);
-                    _logger?.LogWarning("Set PlayerName: {playerUid}@{playerName}", playerUid, playerName);
+                    _logger?.LogDebug("Set PlayerName: {playerUid}@{playerName}", playerUid, playerName);
                     break;
                 case AttrType.AttrProfessionId:
                     _storage.SetPlayerProfessionID(playerUid, reader.ReadInt32());
