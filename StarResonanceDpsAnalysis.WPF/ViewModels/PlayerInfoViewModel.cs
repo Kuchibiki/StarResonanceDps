@@ -52,7 +52,7 @@ public partial class PlayerInfoViewModel : BaseViewModel
     private void UpdatePlayerInfo()
     {
         PlayerInfo = IsNpc
-            ? _localizationManager.GetString($"Monster:{NpcTemplateId}")
+            ? _localizationManager.GetString($"JsonDictionary:Monster:{NpcTemplateId}", null, "UnknownMonster")
             : $"{GetName()} - {GetSpec()} ({PowerLevel}-{DreamStrength})";// Name - Class Spec (PowerLevel-DreamStrength)
 
         return;
