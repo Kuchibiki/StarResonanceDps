@@ -181,7 +181,8 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
                 Name = ret ? playerInfo?.Name ?? $"UID: {dpsData.UID}" : $"UID: {dpsData.UID}",
                 Spec = playerInfo?.Spec ?? ClassSpec.Unknown,
                 IsNpc = dpsData.IsNpcData,
-                NpcTemplateId = playerInfo?.NpcTemplateId ?? 0
+                NpcTemplateId = playerInfo?.NpcTemplateId ?? 0,
+                Mask = _parent.AppConfig.MaskPlayerName
             },
             // Set the hover action to call parent's SetIndicatorHover
             SetHoverStateAction = isHovering => _parent.SetIndicatorHover(isHovering)

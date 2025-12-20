@@ -1,9 +1,11 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Google.Protobuf;
 using Microsoft.Extensions.Logging;
 using StarResonanceDpsAnalysis.Core;
 using StarResonanceDpsAnalysis.Core.Analyze.Exceptions;
@@ -36,6 +38,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
     private readonly IApplicationControlService _appControlService;
     private readonly IConfigManager _configManager;
     private readonly Dispatcher _dispatcher;
+    private readonly IMessageDialogService _messageDialogService;
     private readonly ILogger<DpsStatisticsViewModel> _logger;
 
     // ⭐ 新增: 快照服务
@@ -46,7 +49,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
     private readonly Stopwatch _timer = new();
     private readonly ITopmostService _topmostService;
     private readonly IWindowManagementService _windowManagement;
-    [ObservableProperty] private AppConfig _appConfig;
+    [ObservableProperty] private AppConfig _appConfig = new();
 
     // Whether we are waiting for the first datapoint of a new section
     private bool _awaitingSectionStart;
@@ -110,7 +113,8 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         IApplicationControlService appControlService,
         Dispatcher dispatcher,
         DebugFunctions debugFunctions,
-        BattleSnapshotService snapshotService, LocalizationManager localizationManager)
+        BattleSnapshotService snapshotService, LocalizationManager localizationManager,
+        IMessageDialogService messageDialogService)
     {
         _logger = logger;
         _storage = storage;
@@ -119,6 +123,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         _topmostService = topmostService;
         _appControlService = appControlService;
         _dispatcher = dispatcher;
+        _messageDialogService = messageDialogService;
         DebugFunctions = debugFunctions;
         SnapshotService = snapshotService;
 
@@ -323,17 +328,10 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
             // UID未设置,弹出提示并打开设置页面
             _logger.LogWarning("尝试打开个人打桩模式但UID未设置");
 
-            // 显示提示对话框
-            MessageBox.Show(
-                """
-                请先在设置中配置您的角色UID，才能使用个人打桩模式。
-
-
-                如何获取UID："如何获取UID：进入游戏后，左下角玩家编号就是UID
-                """,
+            _messageDialogService.Show(
                 "需要设置角色UID",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+                "请先在设置中配置您的角色UID，才能使用个人打桩模式。\n\n如何获取UID：进入游戏后，左下角玩家编号就是UID",
+                _windowManagement.DpsStatisticsView);
 
             // 打开设置页面(角色设置区域)
             _windowManagement.SettingsView.Show();
@@ -675,7 +673,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
     /// <summary>
     /// Stop DPS update timer
     /// </summary>
-    private void StopDpsUpdateTimer()
+    private void StopDps UpdateTimer()
     {
         if (_dpsUpdateTimer != null)
         {
@@ -1698,6 +1696,39 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         UpdateData();
     }
 
+    // ⭐ 新增: 快照查看模式相关命令
+    [RelayCommand]
+    private void ViewFullSnapshot()
+    {
+        // 查看全程快照(合并所有分段)
+        // 只在当前有战斗数据时允许
+        if (_storage.ReadOnlyFullDpsDataList.Count == 0)
+        {
+            _messageDialogService.Show("查看全程快照", "当前没有可用的全程快照数据。", _windowManagement.DpsStatisticsView);
+            return;
+        }
+
+        // 切换到全程模式
+        _logger.LogInformation("切换到全程模式以查看快照");
+        ScopeTime = ScopeTime.Total;
+    }
+
+    [RelayCommand]
+    private void ViewCurrentSnapshot()
+    {
+        // 查看当前战斗快照
+        // 只在有分段数据时允许
+        if (_storage.ReadOnlySectionedDpsDataList.Count == 0)
+        {
+            _messageDialogService.Show("查看战斗快照", "当前没有可用的战斗快照数据。", _windowManagement.DpsStatisticsView);
+            return;
+        }
+
+        // 切换到当前模式
+        _logger.LogInformation("切换到当前模式以查看战斗快照");
+        ScopeTime = ScopeTime.Current;
+    }
+
     // ⭐ 新增: 加载快照命令
     [RelayCommand]
     private void LoadSnapshot(BattleSnapshotData snapshot)
@@ -1963,5 +1994,46 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
             AvgDamage = s.UseTimes > 0 ? (int)(s.TotalValue / (ulong)s.UseTimes) : 0,
             CritRate = s.UseTimes > 0 ? (double)s.CritTimes / s.UseTimes : 0
         }).ToList();
+    }
+
+    partial void OnAppConfigChanging(AppConfig value)
+    {
+        _appConfig.PropertyChanged -= AppConfigOnPropertyChanged;
+    }
+
+    partial void OnAppConfigChanged(AppConfig value)
+    {
+        value.PropertyChanged += AppConfigOnPropertyChanged;
+        ApplyMaskToPlayers(value.MaskPlayerName);
+    }
+
+    private void AppConfigOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(AppConfig.MaskPlayerName))
+        {
+            ApplyMaskToPlayers(AppConfig.MaskPlayerName);
+        }
+    }
+
+    private void ApplyMaskToPlayers(bool mask)
+    {
+        if (_dispatcher.CheckAccess())
+        {
+            Apply();
+        }
+        else
+        {
+            _dispatcher.Invoke(Apply);
+        }
+
+        return;
+
+        void Apply()
+        {
+            foreach (var vm in StatisticData.Values)
+            {
+                vm.SetPlayerInfoMask(mask);
+            }
+        }
     }
 }
