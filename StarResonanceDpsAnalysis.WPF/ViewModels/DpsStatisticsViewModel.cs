@@ -673,7 +673,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
     /// <summary>
     /// Stop DPS update timer
     /// </summary>
-    private void StopDps UpdateTimer()
+    private void StopDpsUpdateTimer()
     {
         if (_dpsUpdateTimer != null)
         {

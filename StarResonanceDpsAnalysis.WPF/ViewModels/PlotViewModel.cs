@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using StarResonanceDpsAnalysis.WPF.Models;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
 
@@ -20,13 +21,15 @@ public record PlotOptions
 
 public partial class PlotViewModel : BaseViewModel
 {
+    private readonly StatisticType _statisticType;
     private readonly CategoryAxis _hitTypeBarCategoryAxis;
     [ObservableProperty] private PlotModel _hitTypeBarPlotModel;
     [ObservableProperty] private PlotModel _piePlotModel;
     [ObservableProperty] private PlotModel _seriesPlotModel;
 
-    public PlotViewModel(PlotOptions? options)
+    public PlotViewModel(PlotOptions? options, StatisticType statisticType)
     {
+        _statisticType = statisticType;
         LineSeriesData = new LineSeries
         {
             Title = options?.LineSeriesTitle,
@@ -91,7 +94,15 @@ public partial class PlotViewModel : BaseViewModel
         for (var i = 0; i < skills.Count; i++)
         {
             var skill = skills[i];
-            PieSeriesData.Slices.Add(new PieSlice(skill.SkillName, skill.TotalDamage)
+            var value = _statisticType switch
+            {
+                StatisticType.Damage => skill.Damage,
+                StatisticType.Healing => skill.Heal,
+                StatisticType.TakenDamage => skill.TakenDamage,
+                StatisticType.NpcTakenDamage => skill.TakenDamage,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            PieSeriesData.Slices.Add(new PieSlice(skill.SkillName, value.TotalValue)
             {
                 IsExploded = false,
                 Fill = colors[i]

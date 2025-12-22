@@ -323,45 +323,47 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
         [
             new SkillItemViewModel
             {
-                SkillName = "Test Skill A", TotalDamage = 15000, HitCount = 25, CritCount = 8, AvgDamage = 600
+                SkillName = "Test Skill A",
+                Damage = new SkillItemViewModel.SkillValue { TotalValue = 15000, HitCount = 25, CritCount = 8, Average = 600 } },
+            new SkillItemViewModel
+            {
+                SkillName = "Test Skill B",
+                Damage = new SkillItemViewModel.SkillValue { TotalValue = 8500, HitCount = 15, CritCount = 4, Average = 567 }
             },
             new SkillItemViewModel
             {
-                SkillName = "Test Skill B", TotalDamage = 8500, HitCount = 15, CritCount = 4, AvgDamage = 567
-            },
-            new SkillItemViewModel
-            {
-                SkillName = "Test Skill C", TotalDamage = 12300, HitCount = 30, CritCount = 12, AvgDamage = 410
+                SkillName = "Test Skill C",
+                Damage = new SkillItemViewModel.SkillValue { TotalValue = 12300, HitCount = 30, CritCount = 12, Average = 410 }
             }
         ];
         newItem.Heal.FilteredSkillList =
         [
             new SkillItemViewModel
             {
-                SkillName = "Test Heal Skill A", TotalDamage = 15000, HitCount = 25, CritCount = 8, AvgDamage = 600
+                SkillName = "Test Heal Skill A", Heal = new() { TotalValue = 15000, HitCount = 25, CritCount = 8, Average = 600 }
             },
             new SkillItemViewModel
             {
-                SkillName = "Test Heal Skill B", TotalDamage = 8500, HitCount = 15, CritCount = 4, AvgDamage = 567
+                SkillName = "Test Heal Skill B", Heal = new() { TotalValue = 8500, HitCount = 15, CritCount = 4, Average = 567 }
             },
             new SkillItemViewModel
             {
-                SkillName = "Test Heal Skill C", TotalDamage = 12300, HitCount = 30, CritCount = 12, AvgDamage = 410
+                SkillName = "Test Heal Skill C",Heal = new() { TotalValue = 12300, HitCount = 30, CritCount = 12, Average = 410 }
             }
         ];
         newItem.TakenDamage.FilteredSkillList =
         [
             new SkillItemViewModel
             {
-                SkillName = "Test Taken Skill A", TotalDamage = 15000, HitCount = 25, CritCount = 8, AvgDamage = 600
+                SkillName = "Test Taken Skill A", TakenDamage = new() { TotalValue = 15000, HitCount = 25, CritCount = 8, Average = 600 }
             },
             new SkillItemViewModel
             {
-                SkillName = "Test Taken Skill B", TotalDamage = 8500, HitCount = 15, CritCount = 4, AvgDamage = 567
+                SkillName = "Test Taken Skill B", TakenDamage =new() { TotalValue = 8500, HitCount = 15, CritCount = 4, Average = 567 }
             },
             new SkillItemViewModel
             {
-                SkillName = "Test Taken Skill C", TotalDamage = 12300, HitCount = 30, CritCount = 12, AvgDamage = 410
+                SkillName = "Test Taken Skill C", TakenDamage = new() { TotalValue = 12300, HitCount = 30, CritCount = 12, Average = 410 }
             }
         ];
 

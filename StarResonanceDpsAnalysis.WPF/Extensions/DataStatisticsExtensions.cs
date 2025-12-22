@@ -1,44 +1,44 @@
+using System.Windows.Forms;
 using StarResonanceDpsAnalysis.WPF.ViewModels;
 
 namespace StarResonanceDpsAnalysis.WPF.Extensions;
 
 public static class DataStatisticsExtensions
 {
-    public static DataStatistics FromSkillsToDamageTaken(
-        this IReadOnlyList<SkillItemViewModel> skills,
-        TimeSpan durationMs)
+    public static DataStatistics FromSkillsToDamageTaken(this IReadOnlyList<SkillItemViewModel> skills,
+        TimeSpan duration)
     {
-        return CreateStatistics(skills, s => s.TotalTakenDamage, durationMs);
+        return CreateStatistics(skills, s => s.TakenDamage, duration);
     }
 
     public static void UpdateDamageTaken(
         this IReadOnlyList<SkillItemViewModel> skills,
-        TimeSpan durationMs,
+        TimeSpan duration,
         DataStatistics stats)
     {
-        UpdateStatistics(skills, s => s.TotalTakenDamage, durationMs, stats);
+        UpdateStatistics(skills, s => s.TakenDamage, duration, stats);
     }
 
     public static DataStatistics FromSkillsToHealing(
         this IReadOnlyList<SkillItemViewModel> skills,
-        TimeSpan durationMs)
+        TimeSpan duration)
     {
-        return CreateStatistics(skills, s => s.TotalHeal, durationMs);
+        return CreateStatistics(skills, s => s.Heal, duration);
     }
 
     public static void UpdateHealing(
         this IReadOnlyList<SkillItemViewModel> skills,
-        TimeSpan durationMs,
+        TimeSpan duration,
         DataStatistics stats)
     {
-        UpdateStatistics(skills, s => s.TotalHeal, durationMs, stats);
+        UpdateStatistics(skills, s => s.Heal, duration, stats);
     }
 
     public static DataStatistics FromSkillsToDamage(
         this IReadOnlyList<SkillItemViewModel> skills,
-        TimeSpan durationMs)
+        TimeSpan duration)
     {
-        return CreateStatistics(skills, s => s.TotalDamage, durationMs);
+        return CreateStatistics(skills, s => s.Damage, duration);
     }
 
     public static void UpdateDamage(
@@ -46,13 +46,13 @@ public static class DataStatisticsExtensions
         TimeSpan durationMs,
         DataStatistics stats)
     {
-        UpdateStatistics(skills, s => s.TotalDamage, durationMs, stats);
+        UpdateStatistics(skills, s => s.Damage, durationMs, stats);
     }
 
     // Creates a new DataStatistics instance using the shared aggregation logic.
     private static DataStatistics CreateStatistics(
         IReadOnlyList<SkillItemViewModel> skills,
-        Func<SkillItemViewModel, long> totalSelector,
+        Func<SkillItemViewModel, SkillItemViewModel.SkillValue> totalSelector,
         TimeSpan duration)
     {
         var stats = new DataStatistics();
@@ -63,19 +63,20 @@ public static class DataStatisticsExtensions
     // Shared aggregation logic for damage, healing and damage taken.
     private static void UpdateStatistics(
         IReadOnlyList<SkillItemViewModel> skills,
-        Func<SkillItemViewModel, long> totalSelector,
+        Func<SkillItemViewModel, SkillItemViewModel.SkillValue> selector,
         TimeSpan duration,
         DataStatistics stats)
     {
-        stats.Total = skills.Sum(totalSelector);
-        stats.Hits = skills.Sum(s => s.HitCount);
-        stats.LuckyCount = skills.Sum(s => s.LuckyCount);
+        stats.Total = skills.Sum(s => selector(s).TotalValue);
+        stats.Hits = skills.Sum(s => selector(s).HitCount);
+        stats.LuckyCount = skills.Sum(s => selector(s).LuckyCount);
 
-        var totalCritHits = skills.Sum(s => s.CritCount);
+        var totalCritHits = skills.Sum(s => selector(s).CritCount);
         stats.CritCount = totalCritHits;
-        stats.CritRate = stats.Hits > 0
-            ? (double)totalCritHits / stats.Hits
-            : 0;
+
+        stats.NormalValue = skills.Sum(s => selector(s).NormalValue);
+        stats.CritValue = skills.Sum(s => selector(s).CritValue);
+        stats.LuckyValue = skills.Sum(s => selector(s).LuckyValue);
 
         if (duration.Ticks == 0)
         {
