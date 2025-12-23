@@ -29,6 +29,15 @@ public partial class DpsStatisticsOptions : BaseViewModel
     {
         MinimalDurationInSeconds = duration;
     }
+
+    /// <summary>
+    /// ⭐ 新增: 当最小记录时长改变时保存到配置
+    /// </summary>
+    partial void OnMinimalDurationInSecondsChanged(int value)
+    {
+        // 这里需要访问外部的ConfigManager,所以需要传递引用或通过事件通知
+        // 简单起见,我们通过DpsStatisticsViewModel来处理
+    }
 }
 
 public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
@@ -157,7 +166,56 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         // 初始化AppConfig
         AppConfig = _configManager.CurrentConfig;
 
+        // ⭐ 从配置加载DPS统计页面的设置
+        LoadDpsStatisticsSettings();
+
         _logger.LogDebug("DpsStatisticsViewModel constructor completed");
+    }
+
+    /// <summary>
+    /// ⭐ 新增: 从配置加载DPS统计页面的设置
+    /// </summary>
+    private void LoadDpsStatisticsSettings()
+    {
+        // 加载技能显示数量
+        var savedSkillLimit = _configManager.CurrentConfig.SkillDisplayLimit;
+        if (savedSkillLimit > 0)
+        {
+            foreach (var vm in StatisticData.Values)
+            {
+                vm.SkillDisplayLimit = savedSkillLimit;
+            }
+            _logger.LogInformation("从配置加载技能显示数量: {Limit}", savedSkillLimit);
+        }
+
+        // 加载是否统计NPC
+        IsIncludeNpcData = _configManager.CurrentConfig.IsIncludeNpcData;
+        _logger.LogInformation("从配置加载统计NPC设置: {Value}", IsIncludeNpcData);
+
+        // 加载是否显示团队总伤
+        ShowTeamTotalDamage = _configManager.CurrentConfig.ShowTeamTotalDamage;
+        _logger.LogInformation("从配置加载显示团队总伤设置: {Value}", ShowTeamTotalDamage);
+
+        // 加载最小记录时长
+        Options.MinimalDurationInSeconds = _configManager.CurrentConfig.MinimalDurationInSeconds;
+        _logger.LogInformation("从配置加载最小记录时长: {Duration}秒", Options.MinimalDurationInSeconds);
+
+        // ⭐ 订阅Options的属性变更事件，以便保存配置
+        Options.PropertyChanged += Options_PropertyChanged;
+    }
+
+    /// <summary>
+    /// ⭐ 新增: Options属性变更处理
+    /// </summary>
+    private void Options_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(DpsStatisticsOptions.MinimalDurationInSeconds))
+        {
+            var newValue = Options.MinimalDurationInSeconds;
+            _configManager.CurrentConfig.MinimalDurationInSeconds = newValue;
+            _ = _configManager.SaveAsync();
+            _logger.LogInformation("最小记录时长已保存到配置: {Duration}秒", newValue);
+        }
     }
 
     // ⭐ 新增: 暴露快照服务给View绑定
@@ -1233,7 +1291,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
             }
         }
 
-        // ⭐ 转换伤害技能为ViewModel
+        // ⭐ 转換傷害技能為ViewModel
         var damageSkills = damageSkillDict
             .OrderByDescending(static kvp => kvp.Value.totalValue)
             .Select(kvp =>
@@ -1379,6 +1437,11 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         {
             vm.SkillDisplayLimit = clampedLimit; // Displayed skill count will be changed after SkillDisplayLimit is set
         }
+
+        // ⭐ 保存到配置
+        _configManager.CurrentConfig.SkillDisplayLimit = clampedLimit;
+        _ = _configManager.SaveAsync();
+        _logger.LogDebug("技能显示数量已保存到配置: {Limit}", clampedLimit);
 
         // Notify that current data's SkillDisplayLimit changed
         OnPropertyChanged(nameof(CurrentStatisticData));
@@ -1609,7 +1672,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
             {
                 try
                 {
-                    // ⭐ 传递用户设置的最小时长
+                    // ⭐ 传递用户设置的最时时长
                     SnapshotService.SaveTotalSnapshot(_storage, BattleDuration, Options.MinimalDurationInSeconds);
                     _logger.LogInformation("服务器切换时保存全程快照成功");
                 }
@@ -1665,10 +1728,26 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         _logger.LogDebug("OnStatisticIndexChanged: 统计类型已切换,强制刷新完成");
     }
 
+    // ⭐ 新增: 当ShowTeamTotalDamage改变时保存配置
+    partial void OnShowTeamTotalDamageChanged(bool value)
+    {
+        _logger.LogDebug("ShowTeamTotalDamage changed to: {Value}", value);
+        
+        // 保存到配置
+        _configManager.CurrentConfig.ShowTeamTotalDamage = value;
+        _ = _configManager.SaveAsync();
+        _logger.LogInformation("显示团队总伤设置已保存到配置: {Value}", value);
+    }
+
     // ⭐ 新增: 当IsIncludeNpcData改变时刷新数据
     partial void OnIsIncludeNpcDataChanged(bool value)
     {
         _logger.LogDebug($"IsIncludeNpcData changed to: {value}");
+
+        // ⭐ 保存到配置
+        _configManager.CurrentConfig.IsIncludeNpcData = value;
+        _ = _configManager.SaveAsync();
+        _logger.LogInformation("统计NPC设置已保存到配置: {Value}", value);
 
         // ⭐ 新增: 如果取消勾选,清除所有StatisticData中的NPC数据
         if (!value)
