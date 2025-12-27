@@ -251,7 +251,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         }
     }
 
-    // 暴露快照服务给View绑定
+    // ⭐ 新增: 暴露快照服务给View绑定
     public BattleSnapshotService SnapshotService { get; }
 
     public Dictionary<StatisticType, DpsStatisticsSubViewModel> StatisticData { get; }
@@ -261,6 +261,32 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
     public DebugFunctions DebugFunctions { get; }
 
     public DpsStatisticsOptions Options { get; } = new();
+
+    /// <summary>
+    /// ⭐ 新增: 主题颜色（用于Header和Footer）
+    /// </summary>
+    public string ThemeColor
+    {
+        get
+        {
+            var color = AppConfig.ThemeColor;
+            _logger.LogDebug("ThemeColor requested: {Color}", color);
+            return color;
+        }
+    }
+
+    /// <summary>
+    /// ⭐ 新增: 背景图片路径
+    /// </summary>
+    public string BackgroundImagePath
+    {
+        get
+        {
+            var path = AppConfig.BackgroundImagePath;
+            _logger.LogDebug("BackgroundImagePath requested: {Path}", path);
+            return path;
+        }
+    }
 
     /// <inheritdoc/>
     public void Dispose()
@@ -379,6 +405,10 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         var oldInterval = AppConfig.DpsUpdateInterval;
 
         AppConfig = newConfig;
+
+        // ⭐ 强制通知主题颜色和背景图片变更
+        OnPropertyChanged(nameof(ThemeColor));
+        OnPropertyChanged(nameof(BackgroundImagePath));
 
         // If update mode or interval changed, reconfigure update mechanism
         if (oldMode != newConfig.DpsUpdateMode || oldInterval != newConfig.DpsUpdateInterval)
@@ -2080,6 +2110,17 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         if (e.PropertyName == nameof(AppConfig.UseCustomFormat))
         {
             ApplyPlayerInfoFormatSwitchToPlayers(AppConfig.UseCustomFormat);
+        }
+
+        // ⭐ 新增: 监听主题颜色和背景图片的变化
+        if (e.PropertyName == nameof(AppConfig.ThemeColor))
+        {
+            OnPropertyChanged(nameof(ThemeColor));
+        }
+
+        if (e.PropertyName == nameof(AppConfig.BackgroundImagePath))
+        {
+            OnPropertyChanged(nameof(BackgroundImagePath));
         }
     }
 

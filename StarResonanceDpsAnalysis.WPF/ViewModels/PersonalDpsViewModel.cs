@@ -62,6 +62,9 @@ public partial class PersonalDpsViewModel : BaseViewModel
         _configManager = configManager;
         _logger = logger;
 
+        // ⭐ 订阅配置更新事件以响应主题颜色变化
+        _configManager.ConfigurationUpdated += OnConfigurationUpdated;
+
         //throw new NotImplementedException();
 
         /*
@@ -88,6 +91,11 @@ public partial class PersonalDpsViewModel : BaseViewModel
     }
 
     public TimeSpan TimeLimit { get; } = TimeSpan.FromMinutes(3);
+
+    /// <summary>
+    /// ⭐ 主题颜色（用于渐变和文字）
+    /// </summary>
+    public string ThemeColor => _configManager.CurrentConfig.ThemeColor;
 
     [ObservableProperty] private bool _startTraining;
     [ObservableProperty] private bool _enableTrainingMode;
@@ -492,6 +500,17 @@ public partial class PersonalDpsViewModel : BaseViewModel
         {
             _remainingTimer?.Change(Timeout.Infinite, Timeout.Infinite);
         }
+    }
+
+    /// <summary>
+    /// ⭐ 配置更新事件处理（支持主题颜色实时更新）
+    /// </summary>
+    private void OnConfigurationUpdated(object? sender, AppConfig newConfig)
+    {
+        _dispatcher.BeginInvoke(() =>
+        {
+            OnPropertyChanged(nameof(ThemeColor));
+        });
     }
 
     [RelayCommand]

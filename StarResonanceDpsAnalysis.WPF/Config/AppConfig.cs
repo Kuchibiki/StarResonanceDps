@@ -229,6 +229,20 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty]
     private bool _useCustomFormat = false;
 
+    /// <summary>
+    /// ⭐ 新增: 窗口主题颜色（顶部栏和底部栏）
+    /// 默认值：#1690F8 (蓝色)
+    /// </summary>
+    [ObservableProperty]
+    private string _themeColor = "#1690F8";
+
+    /// <summary>
+    /// ⭐ 新增: 背景图片路径
+    /// 只支持PNG格式
+    /// </summary>
+    [ObservableProperty]
+    private string _backgroundImagePath = "";
+
     public AppConfig Clone()
     {
         // TODO: Add unittest

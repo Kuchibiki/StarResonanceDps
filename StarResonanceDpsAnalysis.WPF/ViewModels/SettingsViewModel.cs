@@ -470,6 +470,87 @@ public partial class SettingsViewModel(
     }
 
     /// <summary>
+    /// ⭐ 新增: 选择背景图片
+    /// </summary>
+    [RelayCommand]
+    private void SelectBackgroundImage()
+    {
+        var dialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Title = "选择背景图片",
+            Filter = "PNG图片 (*.png)|*.png",
+            CheckFileExists = true
+        };
+
+        if (dialog.ShowDialog() == true)
+        {
+            AppConfig.BackgroundImagePath = dialog.FileName;
+        }
+    }
+
+    /// <summary>
+    /// ⭐ 新增: 清除背景图片
+    /// </summary>
+    [RelayCommand]
+    private void ClearBackgroundImage()
+    {
+        AppConfig.BackgroundImagePath = string.Empty;
+    }
+
+    /// <summary>
+    /// ⭐ 新增: 设置主题颜色（实时预览）
+    /// </summary>
+    [RelayCommand]
+    private void SetThemeColor(string color)
+    {
+        if (!string.IsNullOrEmpty(color))
+        {
+            AppConfig.ThemeColor = color;
+            
+            // ⭐ 实时应用到当前运行的配置（预览效果，不需要点保存）
+            configManager.CurrentConfig.ThemeColor = color;
+        }
+    }
+
+    /// <summary>
+    /// ⭐ 新增: 从颜色选择器更新主题颜色（用于Color对象）
+    /// </summary>
+    [RelayCommand]
+    private void UpdateThemeColorFromPicker(System.Windows.Media.Color color)
+    {
+        var hexColor = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+        AppConfig.ThemeColor = hexColor;
+        
+        // ⭐ 实时应用到当前运行的配置（预览效果）
+        configManager.CurrentConfig.ThemeColor = hexColor;
+    }
+
+    /// <summary>
+    /// ⭐ 当前主题颜色（用于颜色选择器初始化）
+    /// </summary>
+    public System.Windows.Media.Color CurrentThemeColor
+    {
+        get
+        {
+            try
+            {
+                return (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(AppConfig.ThemeColor);
+            }
+            catch
+            {
+                return System.Windows.Media.Colors.Gray;
+            }
+        }
+        set
+        {
+            var hexColor = $"#{value.R:X2}{value.G:X2}{value.B:X2}";
+            AppConfig.ThemeColor = hexColor;
+            configManager.CurrentConfig.ThemeColor = hexColor;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
     /// Restore the original config when user cancels
     /// </summary>
     private void RestoreOriginalConfig()
