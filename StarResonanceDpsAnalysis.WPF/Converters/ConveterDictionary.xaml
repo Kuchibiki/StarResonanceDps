@@ -40,5 +40,6 @@
     <converters:ThemeColorWithOpacityConverter x:Key="ThemeColorWithOpacityConverter" />
     <converters:RgbToColorConverter x:Key="RgbToColorConverter" />
     <converters:ThemeColorToGradientConverter x:Key="ThemeColorToGradientConverter" />
+    <converters:SkillNameToGradientConverter x:Key="SkillNameToGradientConverter" />
     <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
 </ResourceDictionary>
