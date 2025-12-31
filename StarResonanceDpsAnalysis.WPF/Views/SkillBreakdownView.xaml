@@ -172,13 +172,13 @@
                         </StackPanel>
 
                         <!--  Total Value  -->
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <TextBlock Style="{StaticResource StatValueText}" Text="{Binding Damage.TotalValue, StringFormat={}{0:N0}}" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Style="{StaticResource StatValueText}" HorizontalAlignment="Right" Text="{Binding Damage.TotalValue, StringFormat={}{0:N0}}" />
                         </StackPanel>
 
                         <!--  Hit Count  -->
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <TextBlock Style="{StaticResource StatValueText}">
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Style="{StaticResource StatValueText}" HorizontalAlignment="Right">
                                 <Run Text="{Binding Damage.HitCount, Mode=OneWay}" FontWeight="Light" />
                                 <Run
                                     FontSize="10"
@@ -189,8 +189,8 @@
                         </StackPanel>
 
                         <!--  Crit Rate  -->
-                        <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <StackPanel Orientation="Horizontal">
+                        <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock x:Name="CritRateText" Style="{StaticResource StatValueText}" FontWeight="Light" Text="{Binding Damage.CritRate, StringFormat={}{0:P1}}" />
                                 <TextBlock
                                     Margin="4,0,0,0"
@@ -203,8 +203,8 @@
                         </StackPanel>
 
                         <!--  Average  -->
-                        <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <TextBlock Style="{StaticResource StatValueText}" FontWeight="Light" Text="{Binding Damage.Average, StringFormat={}{0:N0}}" />
+                        <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Style="{StaticResource StatValueText}" HorizontalAlignment="Right" FontWeight="Light" Text="{Binding Damage.Average, StringFormat={}{0:N0}}" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -276,13 +276,13 @@
                         </StackPanel>
 
                         <!--  Total Value  -->
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <TextBlock Style="{StaticResource StatValueText}" Text="{Binding Heal.TotalValue, StringFormat={}{0:N0}}" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Style="{StaticResource StatValueText}" HorizontalAlignment="Right" Text="{Binding Heal.TotalValue, StringFormat={}{0:N0}}" />
                         </StackPanel>
 
                         <!--  Hit Count  -->
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <TextBlock Style="{StaticResource StatValueText}">
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Style="{StaticResource StatValueText}" HorizontalAlignment="Right">
                                 <Run Text="{Binding Heal.HitCount, Mode=OneWay}" FontWeight="Light" />
                                 <Run
                                     FontSize="10"
@@ -293,8 +293,8 @@
                         </StackPanel>
 
                         <!--  Crit Rate  -->
-                        <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <StackPanel Orientation="Horizontal">
+                        <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock x:Name="CritRateText" Style="{StaticResource StatValueText}" FontWeight="Light" Text="{Binding Heal.CritRate, StringFormat={}{0:P1}}" />
                                 <TextBlock
                                     Margin="4,0,0,0"
@@ -307,8 +307,8 @@
                         </StackPanel>
 
                         <!--  Average  -->
-                        <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <TextBlock Style="{StaticResource StatValueText}" FontWeight="Light" Text="{Binding Heal.Average, StringFormat={}{0:N0}}" />
+                        <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Style="{StaticResource StatValueText}" HorizontalAlignment="Right" FontWeight="Light" Text="{Binding Heal.Average, StringFormat={}{0:N0}}" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -380,13 +380,13 @@
                         </StackPanel>
 
                         <!--  Total Value  -->
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <TextBlock Style="{StaticResource StatValueText}" Text="{Binding TakenDamage.TotalValue, StringFormat={}{0:N0}}" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Style="{StaticResource StatValueText}" HorizontalAlignment="Right" Text="{Binding TakenDamage.TotalValue, StringFormat={}{0:N0}}" />
                         </StackPanel>
 
                         <!--  Hit Count  -->
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <TextBlock Style="{StaticResource StatValueText}">
+                        <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Style="{StaticResource StatValueText}" HorizontalAlignment="Right">
                                 <Run Text="{Binding TakenDamage.HitCount, Mode=OneWay}" FontWeight="Light" />
                                 <Run
                                     FontSize="10"
@@ -397,8 +397,8 @@
                         </StackPanel>
 
                         <!--  Crit Rate  -->
-                        <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <StackPanel Orientation="Horizontal">
+                        <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock x:Name="CritRateText" Style="{StaticResource StatValueText}" FontWeight="Light" Text="{Binding TakenDamage.CritRate, StringFormat={}{0:P1}}" />
                                 <TextBlock
                                     Margin="4,0,0,0"
@@ -411,8 +411,8 @@
                         </StackPanel>
 
                         <!--  Average  -->
-                        <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,120,0">
-                            <TextBlock Style="{StaticResource StatValueText}" FontWeight="Light" Text="{Binding TakenDamage.Average, StringFormat={}{0:N0}}" />
+                        <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                            <TextBlock Style="{StaticResource StatValueText}" HorizontalAlignment="Right" FontWeight="Light" Text="{Binding TakenDamage.Average, StringFormat={}{0:N0}}" />
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -471,13 +471,6 @@
                     Padding="0,0,4,0"
                     Background="#EEE"
                     CornerRadius="20">
-                    <Border.Effect>
-                        <DropShadowEffect
-                            BlurRadius="10"
-                            Opacity="0.5"
-                            ShadowDepth="4"
-                            Color="#3B82F6" />
-                    </Border.Effect>
                     <StackPanel
                         x:Name="TabControlIndexChanger"
                         HorizontalAlignment="Center"

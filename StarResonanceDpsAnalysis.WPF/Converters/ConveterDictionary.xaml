@@ -41,5 +41,6 @@
     <converters:RgbToColorConverter x:Key="RgbToColorConverter" />
     <converters:ThemeColorToGradientConverter x:Key="ThemeColorToGradientConverter" />
     <converters:SkillNameToGradientConverter x:Key="SkillNameToGradientConverter" />
+    <converters:SkillNameToRandomGradientConverter x:Key="SkillNameToRandomGradientConverter" />
     <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />
 </ResourceDictionary>

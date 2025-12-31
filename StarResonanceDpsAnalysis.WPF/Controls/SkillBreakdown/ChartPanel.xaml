@@ -139,7 +139,13 @@
                                 <Run Text="{lex:Loc Key=Common_HitType_Lucky}"/>
                                 <Run Text=" (Lucky)" FontSize="12" Foreground="#94A3B8"/>
                             </TextBlock>
-                            <TextBlock Grid.Column="1" Text="{Binding LuckyCount, StringFormat={}{0:N0}}" FontSize="13" FontWeight="Bold" Foreground="#1E293B"/>
+                            <TextBlock Grid.Column="1" FontSize="13" FontWeight="Bold" Foreground="#1E293B">
+                                <Run Text="{Binding LuckyCount, StringFormat={}{0:N0}, Mode=OneWay}"/>
+                                <Run Text=" (" Foreground="#64748B"/>
+                                <Run Text="{Binding LuckyPercentage, StringFormat={}{0:F1}, Mode=OneWay}" Foreground="#FACC15"/>
+                                <Run Text="%" Foreground="#FACC15"/>
+                                <Run Text=")" Foreground="#64748B"/>
+                            </TextBlock>
                         </Grid>
                         <Grid Grid.Row="1" Height="8">
                             <Border Background="#F1F5F9" CornerRadius="4"/>
@@ -169,7 +175,13 @@
                                 <Run Text="{lex:Loc Key=Common_HitType_Critical}"/>
                                 <Run Text=" (Crit)" FontSize="12" Foreground="#94A3B8"/>
                             </TextBlock>
-                            <TextBlock Grid.Column="1" Text="{Binding CritCount, StringFormat={}{0:N0}}" FontSize="13" FontWeight="Bold" Foreground="#1E293B"/>
+                            <TextBlock Grid.Column="1" FontSize="13" FontWeight="Bold" Foreground="#1E293B">
+                                <Run Text="{Binding CritCount, StringFormat={}{0:N0}, Mode=OneWay}"/>
+                                <Run Text=" (" Foreground="#64748B"/>
+                                <Run Text="{Binding CritPercentage, StringFormat={}{0:F1}, Mode=OneWay}" Foreground="#34D399"/>
+                                <Run Text="%" Foreground="#34D399"/>
+                                <Run Text=")" Foreground="#64748B"/>
+                            </TextBlock>
                         </Grid>
                         <Grid Grid.Row="1" Height="8">
                             <Border Background="#F1F5F9" CornerRadius="4"/>
@@ -199,7 +211,13 @@
                                 <Run Text="{lex:Loc Key=Common_HitType_Normal}"/>
                                 <Run Text=" (Normal)" FontSize="12" Foreground="#94A3B8"/>
                             </TextBlock>
-                            <TextBlock Grid.Column="1" Text="{Binding NormalCount, StringFormat={}{0:N0}}" FontSize="13" FontWeight="Bold" Foreground="#1E293B"/>
+                            <TextBlock Grid.Column="1" FontSize="13" FontWeight="Bold" Foreground="#1E293B">
+                                <Run Text="{Binding NormalCount, StringFormat={}{0:N0}, Mode=OneWay}"/>
+                                <Run Text=" (" Foreground="#64748B"/>
+                                <Run Text="{Binding NormalPercentage, StringFormat={}{0:F1}, Mode=OneWay}" Foreground="#3B82F6"/>
+                                <Run Text="%" Foreground="#3B82F6"/>
+                                <Run Text=")" Foreground="#64748B"/>
+                            </TextBlock>
                         </Grid>
                         <Grid Grid.Row="1" Height="8">
                             <Border Background="#F1F5F9" CornerRadius="4"/>

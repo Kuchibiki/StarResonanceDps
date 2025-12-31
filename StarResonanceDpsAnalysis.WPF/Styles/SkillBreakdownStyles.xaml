@@ -7,8 +7,8 @@
     <!--  Skill Card Styles  -->
     <Style x:Key="SkillCardBorder" TargetType="Border">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Margin" Value="12,0" />
-        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="Margin" Value="0,1" />
+        <Setter Property="Padding" Value="16,8" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Style.Triggers>
@@ -21,7 +21,7 @@
     <Style x:Key="SkillNameText" TargetType="TextBlock">
         <Setter Property="FontSize" Value="14" />
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="Foreground" Value="#262626" />
+        <Setter Property="Foreground" Value="#000000" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
@@ -51,10 +51,10 @@
 
     <Style x:Key="StatColumnText" TargetType="TextBlock">
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="Foreground" Value="#262626" />
+        <Setter Property="Foreground" Value="#000000" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontWeight" Value="Bold" />
     </Style>
 
     <Style x:Key="StatColumnLightText" TargetType="TextBlock">
@@ -63,7 +63,7 @@
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="4,0,0,0" />
-    </Style>
+        <Setter Property="FontWeight" Value="Light" /></Style>
 
     <!--  Skill List Item Template for Damage  -->
     <DataTemplate x:Key="SkillListItemTemplateDamage" DataType="{x:Type viewModels:SkillItemViewModel}">
@@ -84,16 +84,16 @@
 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2.5*" MinWidth="180" />
-                        <ColumnDefinition Width="1.2*" MinWidth="100" />
-                        <ColumnDefinition Width="1*" MinWidth="80" />
-                        <ColumnDefinition Width="1*" MinWidth="80" />
-                        <ColumnDefinition Width="1*" MinWidth="80" />
+                        <ColumnDefinition Width="2.5*" MinWidth="180" SharedSizeGroup="ColSkill" />
+                        <ColumnDefinition Width="1.2*" MinWidth="100" SharedSizeGroup="ColTotal" />
+                        <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColHits" />
+                        <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColCrit" />
+                        <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColAvg" />
                     </Grid.ColumnDefinitions>
 
                     <!--  Skill Name with Icon  -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <Border Background="{Binding SkillName, Converter={StaticResource SkillNameToGradientConverter}}" Style="{StaticResource SkillIconBorder}">
+                        <Border Style="{StaticResource SkillIconBorder}" Tag="{Binding SkillName}"><Border.Background><MultiBinding Converter="{StaticResource SkillNameToRandomGradientConverter}"><Binding Path="SkillName" /><Binding Path="Tag" RelativeSource="{RelativeSource Self}" /></MultiBinding></Border.Background>
                             <TextBlock Style="{StaticResource SkillIconText}" Text="{Binding SkillName, Converter={StaticResource StringFirstCharConverter}}" />
                         </Border>
                         <StackPanel VerticalAlignment="Center">
@@ -116,25 +116,18 @@
                     </StackPanel>
 
                     <!--  Total Value  -->
-                    <TextBlock
-                        Grid.Column="1"
-                        Style="{StaticResource StatColumnText}"
-                        FontWeight="Bold"
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource StatColumnText}" FontWeight="Bold"
                         Text="{Binding Damage.TotalValue, StringFormat={}{0:N0}}" />
 
                     <!--  Hit Count  -->
-                    <StackPanel
-                        Grid.Column="2"
-                        HorizontalAlignment="Right"
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Right"
                         Orientation="Horizontal">
                         <TextBlock Style="{StaticResource StatColumnText}" Text="{Binding Damage.HitCount, StringFormat={}{0:N0}}" />
                         <TextBlock Style="{StaticResource StatColumnLightText}" Text="{lex:Loc Key=SkillBreakdown_Unit_Hits}" />
                     </StackPanel>
 
                     <!--  Crit Rate  -->
-                    <StackPanel
-                        Grid.Column="3"
-                        HorizontalAlignment="Right"
+                    <StackPanel Grid.Column="3" HorizontalAlignment="Right"
                         Orientation="Horizontal">
                         <TextBlock Style="{StaticResource StatColumnText}" Text="{Binding Damage.CritRate, StringFormat={}{0:P1}}" />
                         <TextBlock
@@ -144,10 +137,7 @@
                     </StackPanel>
 
                     <!--  Average  -->
-                    <TextBlock
-                        x:Name="AverageText"
-                        Grid.Column="4"
-                        Style="{StaticResource StatColumnText}"
+                    <TextBlock x:Name="AverageText" Grid.Column="4" HorizontalAlignment="Right" Style="{StaticResource StatColumnText}"
                         Text="{Binding Damage.Average, StringFormat={}{0:N0}}" />
                 </Grid>
             </Grid>
@@ -178,16 +168,16 @@
 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2.5*" MinWidth="180" />
-                        <ColumnDefinition Width="1.2*" MinWidth="100" />
-                        <ColumnDefinition Width="1*" MinWidth="80" />
-                        <ColumnDefinition Width="1*" MinWidth="80" />
-                        <ColumnDefinition Width="1*" MinWidth="80" />
+                        <ColumnDefinition Width="2.5*" MinWidth="180" SharedSizeGroup="ColSkill" />
+                        <ColumnDefinition Width="1.2*" MinWidth="100" SharedSizeGroup="ColTotal" />
+                        <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColHits" />
+                        <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColCrit" />
+                        <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColAvg" />
                     </Grid.ColumnDefinitions>
 
                     <!--  Skill Name with Icon  -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <Border Background="{Binding SkillName, Converter={StaticResource SkillNameToGradientConverter}}" Style="{StaticResource SkillIconBorder}">
+                        <Border Style="{StaticResource SkillIconBorder}" Tag="{Binding SkillName}"><Border.Background><MultiBinding Converter="{StaticResource SkillNameToRandomGradientConverter}"><Binding Path="SkillName" /><Binding Path="Tag" RelativeSource="{RelativeSource Self}" /></MultiBinding></Border.Background>
                             <TextBlock Style="{StaticResource SkillIconText}" Text="{Binding SkillName, Converter={StaticResource StringFirstCharConverter}}" />
                         </Border>
                         <StackPanel VerticalAlignment="Center">
@@ -210,25 +200,18 @@
                     </StackPanel>
 
                     <!--  Total Value  -->
-                    <TextBlock
-                        Grid.Column="1"
-                        Style="{StaticResource StatColumnText}"
-                        FontWeight="Bold"
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource StatColumnText}" FontWeight="Bold"
                         Text="{Binding Heal.TotalValue, StringFormat={}{0:N0}}" />
 
                     <!--  Hit Count  -->
-                    <StackPanel
-                        Grid.Column="2"
-                        HorizontalAlignment="Right"
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Right"
                         Orientation="Horizontal">
                         <TextBlock Style="{StaticResource StatColumnText}" Text="{Binding Heal.HitCount, StringFormat={}{0:N0}}" />
                         <TextBlock Style="{StaticResource StatColumnLightText}" Text="{lex:Loc Key=SkillBreakdown_Unit_Hits}" />
                     </StackPanel>
 
                     <!--  Crit Rate  -->
-                    <StackPanel
-                        Grid.Column="3"
-                        HorizontalAlignment="Right"
+                    <StackPanel Grid.Column="3" HorizontalAlignment="Right"
                         Orientation="Horizontal">
                         <TextBlock Style="{StaticResource StatColumnText}" Text="{Binding Heal.CritRate, StringFormat={}{0:P1}}" />
                         <TextBlock
@@ -238,10 +221,7 @@
                     </StackPanel>
 
                     <!--  Average  -->
-                    <TextBlock
-                        x:Name="AverageText"
-                        Grid.Column="4"
-                        Style="{StaticResource StatColumnText}"
+                    <TextBlock x:Name="AverageText" Grid.Column="4" HorizontalAlignment="Right" Style="{StaticResource StatColumnText}"
                         Text="{Binding Heal.Average, StringFormat={}{0:N0}}" />
                 </Grid>
             </Grid>
@@ -272,16 +252,16 @@
 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2.5*" MinWidth="180" />
-                        <ColumnDefinition Width="1.2*" MinWidth="100" />
-                        <ColumnDefinition Width="1*" MinWidth="80" />
-                        <ColumnDefinition Width="1*" MinWidth="80" />
-                        <ColumnDefinition Width="1*" MinWidth="80" />
+                        <ColumnDefinition Width="2.5*" MinWidth="180" SharedSizeGroup="ColSkill" />
+                        <ColumnDefinition Width="1.2*" MinWidth="100" SharedSizeGroup="ColTotal" />
+                        <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColHits" />
+                        <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColCrit" />
+                        <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColAvg" />
                     </Grid.ColumnDefinitions>
 
                     <!--  Skill Name with Icon  -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <Border Background="{Binding SkillName, Converter={StaticResource SkillNameToGradientConverter}}" Style="{StaticResource SkillIconBorder}">
+                        <Border Style="{StaticResource SkillIconBorder}" Tag="{Binding SkillName}"><Border.Background><MultiBinding Converter="{StaticResource SkillNameToRandomGradientConverter}"><Binding Path="SkillName" /><Binding Path="Tag" RelativeSource="{RelativeSource Self}" /></MultiBinding></Border.Background>
                             <TextBlock Style="{StaticResource SkillIconText}" Text="{Binding SkillName, Converter={StaticResource StringFirstCharConverter}}" />
                         </Border>
                         <StackPanel VerticalAlignment="Center">
@@ -304,25 +284,18 @@
                     </StackPanel>
 
                     <!--  Total Value  -->
-                    <TextBlock
-                        Grid.Column="1"
-                        Style="{StaticResource StatColumnText}"
-                        FontWeight="Bold"
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource StatColumnText}" FontWeight="Bold"
                         Text="{Binding TakenDamage.TotalValue, StringFormat={}{0:N0}}" />
 
                     <!--  Hit Count  -->
-                    <StackPanel
-                        Grid.Column="2"
-                        HorizontalAlignment="Right"
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Right"
                         Orientation="Horizontal">
                         <TextBlock Style="{StaticResource StatColumnText}" Text="{Binding TakenDamage.HitCount, StringFormat={}{0:N0}}" />
                         <TextBlock Style="{StaticResource StatColumnLightText}" Text="{lex:Loc Key=SkillBreakdown_Unit_Hits}" />
                     </StackPanel>
 
                     <!--  Crit Rate  -->
-                    <StackPanel
-                        Grid.Column="3"
-                        HorizontalAlignment="Right"
+                    <StackPanel Grid.Column="3" HorizontalAlignment="Right"
                         Orientation="Horizontal">
                         <TextBlock Style="{StaticResource StatColumnText}" Text="{Binding TakenDamage.CritRate, StringFormat={}{0:P1}}" />
                         <TextBlock
@@ -332,10 +305,7 @@
                     </StackPanel>
 
                     <!--  Average  -->
-                    <TextBlock
-                        x:Name="AverageText"
-                        Grid.Column="4"
-                        Style="{StaticResource StatColumnText}"
+                    <TextBlock x:Name="AverageText" Grid.Column="4" HorizontalAlignment="Right" Style="{StaticResource StatColumnText}"
                         Text="{Binding TakenDamage.Average, StringFormat={}{0:N0}}" />
                 </Grid>
             </Grid>
@@ -350,3 +320,16 @@
     </DataTemplate>
 
 </ResourceDictionary>
+
+
+
+
+
+
+
+
+
+
+
+
+

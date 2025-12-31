@@ -40,7 +40,7 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Foreground" Value="#B0B0B0" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
+            
             <Setter Property="FontFamily" Value="pack://application:,,,/Assets/Fonts/#HarmonyOS Sans SC" />
         </Style>
 
@@ -152,53 +152,75 @@
             </Grid>
         </Border>
 
-        <!--  Column Headers  -->
-        <Border
-            Grid.Row="1"
-            Padding="16,8,32,8"
-            Background="#F9FAFB"
-            BorderBrush="#E8E8E8"
-            BorderThickness="0,1,0,1">
+      <!--  Column Headers  -->
+      <Border Grid.Row="1" Background="#F9FAFB" BorderBrush="#E8E8E8" BorderThickness="0,1,0,1">
+        <Grid>
+          <Border Padding="16,8">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2.5*" MinWidth="180" SharedSizeGroup="ColSkill" />
-                    <ColumnDefinition Width="1.2*" MinWidth="100" SharedSizeGroup="ColTotal" />
-                    <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColHits" />
-                    <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColCrit" />
-                    <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColAvg" />
-                </Grid.ColumnDefinitions>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.5*" MinWidth="180" SharedSizeGroup="ColSkill" />
+                <ColumnDefinition Width="1.2*" MinWidth="100" SharedSizeGroup="ColTotal" />
+                <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColHits" />
+                <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColCrit" />
+                <ColumnDefinition Width="1*" MinWidth="80" SharedSizeGroup="ColAvg" />
+              </Grid.ColumnDefinitions>
 
-                <TextBlock
-                    Grid.Column="0"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource HeaderColumnText}"
-                    Text="SKILL (NAME)" />
-                <TextBlock
-                    Grid.Column="1"
-                    Margin="0,0,120,0"
-                    Style="{StaticResource HeaderColumnText}"
-                    Text="{lex:Loc Key=SkillBreakdown_Label_Total}" />
-                <TextBlock
-                    Grid.Column="2"
-                    Margin="0,0,120,0"
-                    Style="{StaticResource HeaderColumnText}"
-                    Text="{lex:Loc Key=SkillBreakdown_Label_HitCount}" />
-                <TextBlock
-                    Grid.Column="3"
-                    Margin="0,0,120,0"
-                    Style="{StaticResource HeaderColumnText}"
-                    Text="{lex:Loc Key=SkillBreakdown_Label_CritRate}" />
-                <TextBlock
-                    Grid.Column="4"
-                    Margin="0,0,120,0"
-                    Style="{StaticResource HeaderColumnText}"
-                    Text="{lex:Loc Key=SkillBreakdown_Label_AverageDamage}" />
+              <TextBlock
+                  Grid.Column="0"
+                  HorizontalAlignment="Left"
+                  FontSize="11"
+                  FontWeight="Bold"
+                  Foreground="#B0B0B0"
+                  VerticalAlignment="Center"
+                  FontFamily="pack://application:,,,/Assets/Fonts/#HarmonyOS Sans SC"
+                  Text="SKILL (NAME)" />
+
+              <TextBlock
+                  Grid.Column="1"
+                  HorizontalAlignment="Right"
+                  FontSize="11"
+                  FontWeight="Bold"
+                  Foreground="#B0B0B0"
+                  VerticalAlignment="Center"
+                  FontFamily="pack://application:,,,/Assets/Fonts/#HarmonyOS Sans SC"
+                  Text="{lex:Loc Key=SkillBreakdown_Label_Total}" />
+
+              <TextBlock
+                  Grid.Column="2"
+                  HorizontalAlignment="Right"
+                  FontSize="11"
+                  FontWeight="Bold"
+                  Foreground="#B0B0B0"
+                  VerticalAlignment="Center"
+                  FontFamily="pack://application:,,,/Assets/Fonts/#HarmonyOS Sans SC"
+                  Text="{lex:Loc Key=SkillBreakdown_Label_HitCount}" />
+
+              <TextBlock
+                  Grid.Column="3"
+                  HorizontalAlignment="Right"
+                  FontSize="11"
+                  FontWeight="Bold"
+                  Foreground="#B0B0B0"
+                  VerticalAlignment="Center"
+                  FontFamily="pack://application:,,,/Assets/Fonts/#HarmonyOS Sans SC"
+                  Text="{lex:Loc Key=SkillBreakdown_Label_CritRate}" />
+
+              <TextBlock
+                  Grid.Column="4"
+                  HorizontalAlignment="Right"
+                  FontSize="11"
+                  FontWeight="Bold"
+                  Foreground="#B0B0B0"
+                  VerticalAlignment="Center"
+                  FontFamily="pack://application:,,,/Assets/Fonts/#HarmonyOS Sans SC"
+                  Text="{lex:Loc Key=SkillBreakdown_Label_AverageDamage}" />
             </Grid>
-        </Border>
-
+          </Border>
+        </Grid>
+      </Border>
         <!--  Skills List  -->
         <Border Grid.Row="2" Style="{StaticResource SkillListBorder}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="16,0,16,0">
+            <ScrollViewer VerticalScrollBarVisibility="Visible" Padding="0">
                 <ItemsControl
                     x:Name="SkillItemsControl"
                     ItemsSource="{Binding SkillItems}"
@@ -207,3 +229,20 @@
         </Border>
     </Grid>
 </UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
