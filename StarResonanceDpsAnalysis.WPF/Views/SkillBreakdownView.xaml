@@ -540,6 +540,14 @@
             <Border Grid.Row="1" VerticalAlignment="Bottom" Height="1" Background="#E8E8E8" />
 
             <!--  Content Grid with visibility-based tab switching (prevents chart disposal issues)  -->
+
+            <ctrl:Footer
+                Grid.Row="3"
+                Height="50"
+                CancelClick="Footer_CancelClick"
+                CancelCommand="{Binding CancelCommand}"
+                ConfirmClick="Footer_ConfirmClick"
+                ConfirmCommand="{Binding RefreshCommand}" />
             <TabControl
                 x:Name="MainTabControl"
                 Grid.Row="2"
@@ -547,10 +555,10 @@
                 SelectionChanged="MainTabControl_SelectionChanged">
                 <TabControl.Resources>
                     <!--  Hide default tab headers since we use custom selector  -->
-                    <Style TargetType="TabControl">
+                    <Style TargetType="{x:Type TabControl}">
                         <Setter Property="Template">
                             <Setter.Value>
-                                <ControlTemplate TargetType="TabControl">
+                                <ControlTemplate TargetType="{x:Type TabControl}">
                                     <ContentPresenter ContentSource="SelectedContent" />
                                 </ControlTemplate>
                             </Setter.Value>
@@ -575,7 +583,7 @@
                         TotalLabel="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Label_Total}}"
                         Total="{Binding Stats.Total}"
                         NormalCount="{Binding Stats.NormalCount}"
-                        NormalRate="{Binding Stats.NormalRate, StringFormat={}{0:P1}}"
+                        NormalRate="{Binding Stats.NormalRate, StringFormat=\{0:P1\}}"
                         SeriesTitle="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Chart_RealTimeDps}}"
                         HitTypeChartTitle="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Chart_HitTypeDistribution}}"
                         PieChartTitle="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Chart_SkillDamageDistribution}}"
@@ -603,7 +611,7 @@
                         TotalLabel="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Label_Total}}"
                         Total="{Binding Stats.Total}"
                         NormalCount="{Binding Stats.NormalCount}"
-                        NormalRate="{Binding Stats.NormalRate, StringFormat={}{0:P1}}"
+                        NormalRate="{Binding Stats.NormalRate, StringFormat=\{0:P1\}}"
                         SeriesTitle="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Chart_RealTimeDps}}"
                         HitTypeChartTitle="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Chart_HitTypeDistribution}}"
                         PieChartTitle="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Chart_SkillDamageDistribution}}"
@@ -630,7 +638,7 @@
                         TotalLabel="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Label_Total}}"
                         Total="{Binding Stats.Total}"
                         NormalCount="{Binding Stats.NormalCount}"
-                        NormalRate="{Binding Stats.NormalRate, StringFormat={}{0:P1}}"
+                        NormalRate="{Binding Stats.NormalRate, StringFormat=\{0:P1\}}"
                         SeriesTitle="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Chart_RealTimeDps}}"
                         HitTypeChartTitle="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Chart_HitTypeDistribution}}"
                         PieChartTitle="{lex:Loc Key={x:Static loc:ResourcesKeys.SkillBreakdown_Chart_SkillDamageDistribution}}"
@@ -640,14 +648,6 @@
                         ItemTemplate="{StaticResource SkillListItemTemplateTaken}" />
                 </TabItem>
             </TabControl>
-
-            <ctrl:Footer
-                Grid.Row="3"
-                Height="50"
-                CancelClick="Footer_CancelClick"
-                CancelCommand="{Binding CancelCommand}"
-                ConfirmClick="Footer_ConfirmClick"
-                ConfirmCommand="{Binding RefreshCommand}" />
         </Grid>
     </Border>
 </Window>

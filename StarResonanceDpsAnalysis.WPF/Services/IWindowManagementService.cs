@@ -13,4 +13,5 @@ public interface IWindowManagementService
     ModuleSolveView ModuleSolveView { get; }
     BossTrackerView BossTrackerView { get; }
     MainView MainView { get; }
+    SkillLogView SkillLogView { get; }
 }

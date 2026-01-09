@@ -519,6 +519,16 @@ public class InstantizedDataStorage : IDataStorage, IDisposable
         DataStorage.ReadOnlyPlayerInfoDatas[playerUid].SeasonStrength = seasonStrength;
     }
 
+    public IReadOnlyList<BattleLog> GetBattleLogsForPlayer(long uid, bool fullSession)
+    {
+        throw new NotSupportedException("GetBattleLogsForPlayer is not supported in InstantizedDataStorage. Use DataStorageV2 instead.");
+    }
+
+    public IReadOnlyList<BattleLog> GetBattleLogs(bool fullSession)
+    {
+        throw new NotSupportedException("GetBattleLogs is not supported in InstantizedDataStorage. Use DataStorageV2 instead.");
+    }
+
     public IReadOnlyDictionary<long, PlayerStatistics> GetStatistics(bool fullSession)
     {
         throw new NotSupportedException();

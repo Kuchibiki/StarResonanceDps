@@ -6,23 +6,24 @@
         xmlns:vm="clr-namespace:StarResonanceDpsAnalysis.WPF.ViewModels"
         xmlns:models="clr-namespace:StarResonanceDpsAnalysis.WPF.Models"
         xmlns:converters="clr-namespace:StarResonanceDpsAnalysis.WPF.Converters"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:SkillLogViewModel}"
-        Title="Battle Log" Height="600" Width="450"
+        Title="{lex:Loc SkillLog_Title}" Height="600" Width="450"
         Style="{StaticResource TransparentWindow}"
         ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         
-        <!-- Sci-Fi Dark Theme Colors -->
-        <Color x:Key="SciFiBgColor">#0F1115</Color>
+        <!-- White Theme Colors -->
+        <Color x:Key="SciFiBgColor">#FFFFFF</Color>
         <SolidColorBrush x:Key="SciFiBgBrush" Color="{StaticResource SciFiBgColor}"/>
-        <SolidColorBrush x:Key="SciFiCardBrush" Color="#161920"/>
-        <SolidColorBrush x:Key="SciFiBorderBrush" Color="#333842"/>
-        <SolidColorBrush x:Key="SciFiAccentBrush" Color="#FF9F0A"/> <!-- Orange -->
-        <SolidColorBrush x:Key="SciFiTextMainBrush" Color="#FFFFFF"/>
-        <SolidColorBrush x:Key="SciFiTextSubBrush" Color="#8890A0"/>
+        <SolidColorBrush x:Key="SciFiCardBrush" Color="#F5F5F5"/>
+        <SolidColorBrush x:Key="SciFiBorderBrush" Color="#E0E0E0"/>
+        <SolidColorBrush x:Key="SciFiAccentBrush" Color="#FF9F0A"/>
+        <SolidColorBrush x:Key="SciFiTextMainBrush" Color="#333333"/>
+        <SolidColorBrush x:Key="SciFiTextSubBrush" Color="#666666"/>
         
         <!-- ScrollBar Style -->
         <Style x:Key="SciFiScrollBar" TargetType="{x:Type ScrollBar}">
@@ -50,13 +51,13 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border x:Name="rectangle" CornerRadius="3" Background="#33FFFFFF" Height="{TemplateBinding Height}" SnapsToDevicePixels="True"/>
+                        <Border x:Name="rectangle" CornerRadius="3" Background="#BBBBBB" Height="{TemplateBinding Height}" SnapsToDevicePixels="True"/>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter TargetName="rectangle" Property="Background" Value="#55FFFFFF"/>
+                                <Setter TargetName="rectangle" Property="Background" Value="#999999"/>
                             </Trigger>
                             <Trigger Property="IsDragging" Value="true">
-                                <Setter TargetName="rectangle" Property="Background" Value="#77FFFFFF"/>
+                                <Setter TargetName="rectangle" Property="Background" Value="#777777"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -72,14 +73,14 @@
             CornerRadius="4" 
             Margin="5">
         <Border.Effect>
-            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Opacity="0.5" Color="Black"/>
+            <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.2" Color="#AAAAAA"/>
         </Border.Effect>
         
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/> <!-- Header -->
-                <RowDefinition Height="*"/>    <!-- List -->
-                <RowDefinition Height="Auto"/> <!-- Footer -->
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Header -->
@@ -93,17 +94,17 @@
                     <!-- Title Area -->
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <Border Background="{StaticResource SciFiAccentBrush}" Width="4" Height="16" CornerRadius="2" Margin="0,0,10,0"/>
-                        <TextBlock Text="BATTLE LOG" Foreground="{StaticResource SciFiTextMainBrush}" FontWeight="Bold" FontSize="16" FontFamily="Microsoft YaHei UI"/>
-                        <TextBlock Text="SYSTEM ONLINE" Foreground="{StaticResource SciFiTextSubBrush}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2" FontFamily="Consolas"/>
+                        <TextBlock Text="{lex:Loc SkillLog_Header_Title}" Foreground="{StaticResource SciFiTextMainBrush}" FontWeight="Bold" FontSize="16" FontFamily="Microsoft YaHei UI"/>
+                        <TextBlock Text="{lex:Loc SkillLog_Header_Status}" Foreground="{StaticResource SciFiTextSubBrush}" FontSize="10" VerticalAlignment="Bottom" Margin="8,0,0,2" FontFamily="Consolas"/>
                     </StackPanel>
 
                     <!-- Top Right Decoration -->
-                    <TextBlock Grid.Column="1" Text="SYSTEM ONLINE" Foreground="#445566" FontSize="9" VerticalAlignment="Center" FontFamily="Consolas"/>
+                    <TextBlock Grid.Column="1" Text="{lex:Loc SkillLog_Header_Status}" Foreground="#BBBBBB" FontSize="9" VerticalAlignment="Center" FontFamily="Consolas"/>
                 </Grid>
             </Border>
 
             <!-- Log List -->
-            <ListBox Grid.Row="1" ItemsSource="{Binding Logs}" 
+            <ListBox x:Name="LogListBox" Grid.Row="1" ItemsSource="{Binding Logs}" 
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      BorderThickness="0" Padding="10,0" Background="Transparent">
                 <ListBox.Resources>
@@ -124,10 +125,10 @@
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="ItemBorder" Property="Background" Value="#202530"/>
+                                            <Setter TargetName="ItemBorder" Property="Background" Value="#EEEEEE"/>
                                         </Trigger>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="ItemBorder" Property="Background" Value="#2A303E"/>
+                                            <Setter TargetName="ItemBorder" Property="Background" Value="#E8E8E8"/>
                                             <Setter TargetName="ItemBorder" Property="BorderBrush" Value="{StaticResource SciFiAccentBrush}"/>
                                             <Setter TargetName="ItemBorder" Property="BorderThickness" Value="1"/>
                                         </Trigger>
@@ -139,18 +140,124 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:SkillLogItem}">
-                        <Grid Height="50">
+                        <Grid Height="50" Cursor="Hand" MouseLeftButtonUp="SkillLogItem_MouseLeftButtonUp" Tag="{Binding}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="4"/>   <!-- Color Strip -->
-                                <ColumnDefinition Width="Auto"/> <!-- Icon/Time -->
-                                <ColumnDefinition Width="*"/>    <!-- Name -->
-                                <ColumnDefinition Width="Auto"/> <!-- Value -->
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Left Strip -->
-                            <Border Grid.Column="0" Background="#333842" CornerRadius="4,0,0,4"/>
+                            <!-- Detail Popup -->
+                            <Popup x:Name="DetailPopup" 
+                                   StaysOpen="False"
+                                   Placement="Mouse"
+                                   AllowsTransparency="True"
+                                   PopupAnimation="Fade">
+                                <Popup.Resources>
+                                    <Style TargetType="Popup">
+                                        <EventSetter Event="LostFocus" Handler="Popup_LostFocus"/>
+                                    </Style>
+                                </Popup.Resources>
+                                <Border Background="White" 
+                                        BorderBrush="{StaticResource SciFiBorderBrush}" 
+                                        BorderThickness="1" 
+                                        CornerRadius="4"
+                                        Padding="15"
+                                        MouseLeave="PopupBorder_MouseLeave">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.3" Color="#000000"/>
+                                    </Border.Effect>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding SkillName}" 
+                                                   FontWeight="Bold" 
+                                                   FontSize="14" 
+                                                   Foreground="{StaticResource SciFiTextMainBrush}"
+                                                   Margin="0,0,0,8"/>
+                                        <Separator Margin="0,0,0,8" Background="{StaticResource SciFiBorderBrush}"/>
+                                        
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                            <TextBlock Text="{lex:Loc SkillLog_Popup_TotalDamage}" Foreground="{StaticResource SciFiTextSubBrush}" Width="90"/>
+                                            <TextBlock Text="{Binding TotalValue, StringFormat=N0}" 
+                                                       Foreground="{StaticResource SciFiTextMainBrush}" 
+                                                       FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                        
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                            <TextBlock Text="{lex:Loc SkillLog_Popup_HitCount}" Foreground="{StaticResource SciFiTextSubBrush}" Width="90"/>
+                                            <TextBlock Text="{Binding Count}" 
+                                                       Foreground="{StaticResource SciFiTextMainBrush}" 
+                                                       FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                        
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                            <TextBlock Text="{lex:Loc SkillLog_Popup_AvgDamage}" Foreground="{StaticResource SciFiTextSubBrush}" Width="90"/>
+                                            <TextBlock Foreground="{StaticResource SciFiTextMainBrush}" FontWeight="SemiBold">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0:N0}">
+                                                        <Binding Path="TotalValue"/>
+                                                        <Binding Path="Count"/>
+                                                        <MultiBinding.Converter>
+                                                            <converters:DivisionMultiValueConverter/>
+                                                        </MultiBinding.Converter>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        
+                                        <!-- Critical Count and Damage -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4"
+                                                    Visibility="{Binding HasCrit, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <TextBlock Text="{lex:Loc SkillLog_Popup_Critical}" Foreground="{StaticResource SciFiTextSubBrush}" Width="90"/>
+                                            <TextBlock Foreground="{StaticResource SciFiAccentBrush}" FontWeight="SemiBold">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} ({1:F1}%)">
+                                                        <Binding Path="CritCount"/>
+                                                        <Binding Path="CritRate"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        
+                                        <!-- Critical Damage -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4"
+                                                    Visibility="{Binding HasCrit, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <TextBlock Text="{lex:Loc SkillLog_Popup_CritDamage}" Foreground="{StaticResource SciFiTextSubBrush}" Width="90"/>
+                                            <TextBlock Text="{Binding CritDamage, StringFormat=N0}" 
+                                                       Foreground="{StaticResource SciFiAccentBrush}" 
+                                                       FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                        
+                                        <!-- Lucky Hit Count -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4"
+                                                    Visibility="{Binding HasLucky, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <TextBlock Text="{lex:Loc SkillLog_Popup_LuckyHit}" Foreground="{StaticResource SciFiTextSubBrush}" Width="90"/>
+                                            <TextBlock Foreground="#9F55FF" FontWeight="SemiBold">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} ({1:F1}%)">
+                                                        <Binding Path="LuckyCount"/>
+                                                        <Binding Path="LuckyRate"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        
+                                        <!-- Lucky Damage -->
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4"
+                                                    Visibility="{Binding HasLucky, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <TextBlock Text="{lex:Loc SkillLog_Popup_LuckyDamage}" Foreground="{StaticResource SciFiTextSubBrush}" Width="90"/>
+                                            <TextBlock Text="{Binding LuckyDamage, StringFormat=N0}" 
+                                                       Foreground="#9F55FF" 
+                                                       FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
 
-                            <!-- Time / Icon Placeholder -->
+                            <!-- Left Strip -->
+                            <Border Grid.Column="0" Background="#DDDDDD" CornerRadius="4,0,0,4"/>
+
+                            <!-- Time -->
                             <Border Grid.Column="1" Width="40" Margin="10,0,0,0" VerticalAlignment="Center">
                                 <TextBlock Text="{Binding Timestamp, StringFormat=mm:ss}" 
                                            Foreground="{StaticResource SciFiTextSubBrush}" 
@@ -165,14 +272,14 @@
                                 
                                 <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                                     <!-- Crit Tag -->
-                                    <Border Background="#33FF9F0A" CornerRadius="2" Padding="4,1" Margin="0,0,5,0"
+                                    <Border Background="#FFEDD5" CornerRadius="2" Padding="4,1" Margin="0,0,5,0"
                                             Visibility="{Binding HasCrit, Converter={StaticResource BoolToVisibilityConverter}}">
-                                        <TextBlock Text="CRIT" Foreground="{StaticResource SciFiAccentBrush}" FontSize="9" FontWeight="Bold"/>
+                                        <TextBlock Text="{lex:Loc Common_HitType_Critical}" Foreground="{StaticResource SciFiAccentBrush}" FontSize="9" FontWeight="Bold"/>
                                     </Border>
                                     <!-- Lucky Tag -->
-                                    <Border Background="#339F55FF" CornerRadius="2" Padding="4,1" Margin="0,0,5,0"
+                                    <Border Background="#F3E8FF" CornerRadius="2" Padding="4,1" Margin="0,0,5,0"
                                             Visibility="{Binding HasLucky, Converter={StaticResource BoolToVisibilityConverter}}">
-                                        <TextBlock Text="LUCKY" Foreground="#D488FF" FontSize="9" FontWeight="Bold"/>
+                                        <TextBlock Text="{lex:Loc Common_HitType_Lucky}" Foreground="#9F55FF" FontSize="9" FontWeight="Bold"/>
                                     </Border>
                                     <!-- Count Tag -->
                                     <TextBlock Text="{Binding Count, StringFormat='{}x{0}'}" Foreground="{StaticResource SciFiTextSubBrush}" FontSize="10"
@@ -202,10 +309,10 @@
                                 <TextBlock Foreground="{StaticResource SciFiTextSubBrush}" FontSize="9" HorizontalAlignment="Right">
                                      <TextBlock.Style>
                                         <Style TargetType="TextBlock">
-                                            <Setter Property="Text" Value="DMG"/>
+                                            <Setter Property="Text" Value="{lex:Loc SkillLog_Label_Damage}"/>
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsHeal}" Value="True">
-                                                    <Setter Property="Text" Value="HEAL"/>
+                                                    <Setter Property="Text" Value="{lex:Loc SkillLog_Label_Heal}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -218,7 +325,7 @@
             </ListBox>
 
             <!-- Footer -->
-            <Border Grid.Row="2" Padding="15" Background="#0B0D10" BorderBrush="{StaticResource SciFiBorderBrush}" BorderThickness="0,1,0,0" CornerRadius="0,0,4,4">
+            <Border Grid.Row="2" Padding="15" Background="#FAFAFA" BorderBrush="{StaticResource SciFiBorderBrush}" BorderThickness="0,1,0,0" CornerRadius="0,0,4,4">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -227,16 +334,16 @@
                     
                     <!-- Status Text -->
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="CONNECTION: STABLE" Foreground="#445566" FontSize="10" FontFamily="Consolas"/>
-                        <TextBlock Text="LOGGING ENABLED" Foreground="#2A3340" FontSize="10" FontFamily="Consolas" Margin="0,2,0,0"/>
+                        <TextBlock Text="{lex:Loc SkillLog_Footer_Connection}" Foreground="#BBBBBB" FontSize="10" FontFamily="Consolas"/>
+                        <TextBlock Text="{lex:Loc SkillLog_Footer_Logging}" Foreground="#D0D0D0" FontSize="10" FontFamily="Consolas" Margin="0,2,0,0"/>
                     </StackPanel>
                     
-                    <!-- Buttons (Preserved Style) -->
+                    <!-- Buttons -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <!-- Refresh/Clear Button -->
                         <Button Command="{Binding ClearCommand}" Margin="0,0,15,0" 
                                 Width="36" Height="36" Background="Transparent" BorderThickness="0" Cursor="Hand"
-                                ToolTip="Clear Log">
+                                ToolTip="{lex:Loc SkillLog_Button_Clear}">
                             <Grid>
                                 <Ellipse Fill="#2196F3" Width="36" Height="36">
                                     <Ellipse.Effect>
@@ -265,9 +372,9 @@
                         </Button>
                         
                         <!-- Close Button -->
-                        <Button Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        <Button Command="{Binding CloseCommand}"
                                 Width="36" Height="36" Background="Transparent" BorderThickness="0" Cursor="Hand"
-                                ToolTip="Close">
+                                ToolTip="{lex:Loc SkillLog_Button_Close}">
                             <Grid>
                                 <Ellipse Fill="#F44336" Width="36" Height="36">
                                     <Ellipse.Effect>

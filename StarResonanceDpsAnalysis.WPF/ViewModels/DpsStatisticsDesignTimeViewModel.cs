@@ -95,6 +95,7 @@ public sealed class DpsStatisticsDesignTimeViewModel : DpsStatisticsViewModel
         public PersonalDpsView PersonalDpsView => throw new NotSupportedException();
         public SettingsView SettingsView => throw new NotSupportedException();
         public SkillBreakdownView SkillBreakdownView => throw new NotSupportedException();
+        public SkillLogView SkillLogView => throw new NotSupportedException();
     }
 
     private sealed class DesignDataStorage : IDataStorage
@@ -231,6 +232,16 @@ public sealed class DpsStatisticsDesignTimeViewModel : DpsStatisticsViewModel
 
         public void SetPlayerSeasonStrength(long playerUid, int seasonStrength)
         {
+        }
+
+        public IReadOnlyList<BattleLog> GetBattleLogsForPlayer(long uid, bool fullSession)
+        {
+            return Array.Empty<BattleLog>();
+        }
+
+        public IReadOnlyList<BattleLog> GetBattleLogs(bool fullSession)
+        {
+            return Array.Empty<BattleLog>();
         }
 
         public IReadOnlyDictionary<long, PlayerStatistics> GetStatistics(bool fullSession)

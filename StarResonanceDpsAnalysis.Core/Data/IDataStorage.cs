@@ -60,6 +60,21 @@ public interface IDataStorage : IDisposable
     void SetPlayerSeasonStrength(long playerUid, int seasonStrength);
 
     /// <summary>
+    /// Get battle logs for a specific player
+    /// </summary>
+    /// <param name="uid">Player UID</param>
+    /// <param name="fullSession">true for full session logs, false for current section only</param>
+    /// <returns>Battle logs where player is either attacker or target</returns>
+    IReadOnlyList<BattleLog> GetBattleLogsForPlayer(long uid, bool fullSession);
+
+    /// <summary>
+    /// Get all battle logs
+    /// </summary>
+    /// <param name="fullSession">true for full session logs, false for current section only</param>
+    /// <returns>All battle logs</returns>
+    IReadOnlyList<BattleLog> GetBattleLogs(bool fullSession);
+
+    /// <summary>
     /// Get PlayerStatistics directly (for WPF)
     /// </summary>
     IReadOnlyDictionary<long, PlayerStatistics> GetStatistics(bool fullSession);

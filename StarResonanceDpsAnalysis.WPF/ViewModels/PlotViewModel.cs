@@ -106,6 +106,11 @@ public partial class PlotViewModel : BaseViewModel
 
     public SmoothLineSeries LineSeriesData { get; }
     public PieSeries PieSeriesData { get; }
+    
+    /// <summary>
+    /// ⭐ 公开StatisticType属性供外部访问
+    /// </summary>
+    public StatisticType StatisticType => _statisticType;
 
     public void SetPieSeriesData(IReadOnlyList<SkillItemViewModel> skills)
     {

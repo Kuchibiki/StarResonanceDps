@@ -1128,4 +1128,55 @@ How to get: After a fight, your character will automatically appear in the stats
   <data name="SkillBreakdown_Label_Average" xml:space="preserve">
     <value>Average</value>
   </data>
+  <data name="SkillLog_Title" xml:space="preserve">
+    <value>Battle Log</value>
+  </data>
+  <data name="SkillLog_Header_Title" xml:space="preserve">
+    <value>BATTLE LOG</value>
+  </data>
+  <data name="SkillLog_Header_Status" xml:space="preserve">
+    <value>SYSTEM ONLINE</value>
+  </data>
+  <data name="SkillLog_Popup_TotalDamage" xml:space="preserve">
+    <value>Total Damage</value>
+  </data>
+  <data name="SkillLog_Popup_HitCount" xml:space="preserve">
+    <value>Hit Count</value>
+  </data>
+  <data name="SkillLog_Popup_AvgDamage" xml:space="preserve">
+    <value>Avg Damage</value>
+  </data>
+  <data name="SkillLog_Popup_Critical" xml:space="preserve">
+    <value>Critical</value>
+  </data>
+  <data name="SkillLog_Popup_LuckyHit" xml:space="preserve">
+    <value>Lucky Hit</value>
+  </data>
+  <data name="SkillLog_Label_Damage" xml:space="preserve">
+    <value>DMG</value>
+  </data>
+  <data name="SkillLog_Label_Heal" xml:space="preserve">
+    <value>HEAL</value>
+  </data>
+  <data name="SkillLog_Footer_Connection" xml:space="preserve">
+    <value>CONNECTION:STABLE</value>
+  </data>
+  <data name="SkillLog_Footer_Logging" xml:space="preserve">
+    <value>LOGGING ENABLED</value>
+  </data>
+  <data name="SkillLog_Button_Clear" xml:space="preserve">
+    <value>Clear Log</value>
+  </data>
+  <data name="SkillLog_Button_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="SkillLog_Popup_CritDamage" xml:space="preserve">
+    <value>Crit Damage</value>
+  </data>
+  <data name="SkillLog_Popup_LuckyDamage" xml:space="preserve">
+    <value>Lucky Damage</value>
+  </data>
+  <data name="SkillBreakdown_Label_Percentage" xml:space="preserve">
+    <value>Percentage</value>
+  </data>
 </root>

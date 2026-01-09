@@ -119,6 +119,7 @@ public partial class App : Application
                 services.AddMessageDialogService();
 
                 services.AddSingleton<BattleSnapshotService>();
+                services.AddSingleton<ISkillLogService, SkillLogService>();
 
                 services.AddSingleton<DebugFunctions>();
                 services.AddSingleton(CaptureDeviceList.Instance);

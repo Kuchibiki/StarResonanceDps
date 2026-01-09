@@ -21,11 +21,21 @@ public partial class SkillBreakdownView : Window
         DataContext = vm;
 
         Loaded += OnLoaded;
+        Closed += OnClosed; // ⭐ 添加窗口关闭事件处理
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         SyncSelectorWithTab();
+    }
+
+    /// <summary>
+    /// ⭐ 窗口关闭时停止实时更新并释放资源
+    /// </summary>
+    private void OnClosed(object? sender, EventArgs e)
+    {
+        _viewModel.StopRealTimeUpdate();
+        _viewModel.Dispose();
     }
 
     private void MainTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

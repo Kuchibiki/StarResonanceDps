@@ -535,6 +535,10 @@
                                         Command="{Binding OpenPersonalDpsViewCommand}"
                                         Header="{lex:Loc Key={x:Static loc:ResourcesKeys.Menu_Personal_Training_Mode}}" />
 
+                                    <MenuItem
+                                        Command="{Binding OpenSkillLogCommand}"
+                                        Header="技能日记" />
+
                                     <!--  记录设置  -->
                                     <MenuItem Header="{lex:Loc Key={x:Static loc:ResourcesKeys.Menu_RecordSettings}}" StaysOpenOnClick="True">
                                         <!--  ⭐ 记录所有(默认选中) -->

@@ -16,6 +16,7 @@ public class WindowManagementService(IServiceProvider provider, ILogger<WindowMa
     private PersonalDpsView? _personalDpsView;
     private SettingsView? _settingsView;
     private SkillBreakdownView? _skillBreakDownView;
+    private SkillLogView? _skillLogView;
 
     public AboutView AboutView => _aboutView ??= CreateAboutView();
     public BossTrackerView BossTrackerView => _bossTrackerView ??= CreateBossTrackerView();
@@ -26,6 +27,7 @@ public class WindowManagementService(IServiceProvider provider, ILogger<WindowMa
     public PersonalDpsView PersonalDpsView => _personalDpsView ??= CreatePersonalDpsView();
     public SettingsView SettingsView => _settingsView ??= CreateSettingsView();
     public SkillBreakdownView SkillBreakdownView => _skillBreakDownView ??= CreateSkillBreakDownView();
+    public SkillLogView SkillLogView => _skillLogView ??= CreateSkillLogView();
 
     private static void ConfigureOwnedToolWindow(Window view)
     {
@@ -137,6 +139,19 @@ public class WindowManagementService(IServiceProvider provider, ILogger<WindowMa
         {
             if (_skillBreakDownView == view) _skillBreakDownView = null;
             logger.LogDebug(WpfLogEvents.WindowClosed, "Window closed: {Window}", nameof(SkillBreakdownView));
+        };
+        return view;
+    }
+
+    private SkillLogView CreateSkillLogView()
+    {
+        var view = provider.GetRequiredService<SkillLogView>();
+        ConfigureOwnedToolWindow(view);
+        logger.LogDebug(WpfLogEvents.WindowCreated, "Window created: {Window}", nameof(SkillLogView));
+        view.Closed += (_, _) =>
+        {
+            if (_skillLogView == view) _skillLogView = null;
+            logger.LogDebug(WpfLogEvents.WindowClosed, "Window closed: {Window}", nameof(SkillLogView));
         };
         return view;
     }

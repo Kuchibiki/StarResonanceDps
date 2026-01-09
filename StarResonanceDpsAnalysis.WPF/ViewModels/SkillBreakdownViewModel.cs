@@ -8,18 +8,25 @@ using StarResonanceDpsAnalysis.WPF.Properties;
 using System.Collections.ObjectModel;
 using StarResonanceDpsAnalysis.Core.Statistics;
 using StarResonanceDpsAnalysis.WPF.Models;
+using System.Windows.Threading;
+using StarResonanceDpsAnalysis.Core.Data;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
 
 /// <summary>
 /// ViewModel for the skill breakdown view, showing detailed statistics for a player.
 /// </summary>
-public partial class SkillBreakdownViewModel : BaseViewModel
+public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
 {
     private readonly ILogger<SkillBreakdownViewModel> _logger;
     private readonly LocalizationManager _localizationManager;
+    private readonly IDataStorage _storage;
     [ObservableProperty] private StatisticType _statisticIndex;
     private PlayerStatistics? _playerStatistics;
+    
+    // ? 新增：实时更新定时器
+    private DispatcherTimer? _updateTimer;
+    private const int UpdateIntervalMs = 1000; // 每秒更新一次
 
     // NEW: Tab ViewModels for modular components
     [ObservableProperty] private TabContentViewModel _dpsTabViewModel;
@@ -29,15 +36,78 @@ public partial class SkillBreakdownViewModel : BaseViewModel
     /// <summary>
     /// ViewModel for the skill breakdown view, showing detailed statistics for a player.
     /// </summary>
-    public SkillBreakdownViewModel(ILogger<SkillBreakdownViewModel> logger, LocalizationManager localizationManager)
+    public SkillBreakdownViewModel(
+        ILogger<SkillBreakdownViewModel> logger, 
+        LocalizationManager localizationManager,
+        IDataStorage storage)
     {
         _logger = logger;
         _localizationManager = localizationManager;
+        _storage = storage;
 
         var xAxis = GetXAxisName();
         _dpsTabViewModel = new TabContentViewModel(CreatePlotViewModel(xAxis, StatisticType.Damage));
         _healingTabViewModel = new TabContentViewModel(CreatePlotViewModel(xAxis, StatisticType.Healing));
         _tankingTabViewModel = new TabContentViewModel(CreatePlotViewModel(xAxis, StatisticType.TakenDamage));
+        
+        // ? 初始化更新定时器
+        InitializeUpdateTimer();
+    }
+
+    /// <summary>
+    /// ? 初始化实时更新定时器
+    /// </summary>
+    private void InitializeUpdateTimer()
+    {
+        _updateTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(UpdateIntervalMs)
+        };
+        _updateTimer.Tick += UpdateTimer_Tick;
+    }
+
+    /// <summary>
+    /// ? 定时器回调：刷新统计数据
+    /// </summary>
+    private void UpdateTimer_Tick(object? sender, EventArgs e)
+    {
+        if (_playerStatistics == null || ObservedSlot?.Player.Uid == null)
+        {
+            return;
+        }
+
+        try
+        {
+            // ? 从存储中获取最新的PlayerStatistics
+            var latestStats = _storage.GetStatistics(fullSession: false);
+            if (latestStats.TryGetValue(ObservedSlot.Player.Uid, out var updated))
+            {
+                _playerStatistics = updated;
+                RefreshAllStatistics();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating skill breakdown data");
+        }
+    }
+
+    /// <summary>
+    /// ? 启动实时更新
+    /// </summary>
+    public void StartRealTimeUpdate()
+    {
+        _updateTimer?.Start();
+        _logger.LogDebug("Started real-time update for SkillBreakdownView");
+    }
+
+    /// <summary>
+    /// ? 停止实时更新
+    /// </summary>
+    public void StopRealTimeUpdate()
+    {
+        _updateTimer?.Stop();
+        _logger.LogDebug("Stopped real-time update for SkillBreakdownView");
     }
 
     /// <summary>
@@ -61,6 +131,9 @@ public partial class SkillBreakdownViewModel : BaseViewModel
 
         // Update all statistics
         RefreshAllStatistics();
+        
+        // ? 启动实时更新
+        StartRealTimeUpdate();
 
         _logger.LogDebug("SkillBreakdownViewModel initialized from PlayerStatistics: {Name}", PlayerName);
     }
@@ -160,6 +233,9 @@ public partial class SkillBreakdownViewModel : BaseViewModel
 
         // Update charts
         UpdateChartsForStatistic(skills, timeSeries, stats, tabViewModel.Plot);
+        
+        // ? 刷新后按当前排序选项重新排序
+        tabViewModel.SortSkillListCommand.Execute(null);
     }
 
     /// <summary>
@@ -338,6 +414,15 @@ public partial class SkillBreakdownViewModel : BaseViewModel
 
         RefreshAllStatistics();
         _logger.LogDebug("Manual refresh completed");
+    }
+
+    /// <summary>
+    /// ? 实现IDisposable接口以释放定时器资源
+    /// </summary>
+    public void Dispose()
+    {
+        StopRealTimeUpdate();
+        _updateTimer = null;
     }
 
     #endregion

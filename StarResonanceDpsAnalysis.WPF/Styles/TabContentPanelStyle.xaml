@@ -74,7 +74,8 @@
                                 IconColor="{TemplateBinding IconColor}"
                                 SkillItems="{TemplateBinding SkillItems}"
                                 SectionTitle="{TemplateBinding SkillListTitle}"
-                                ItemTemplate="{TemplateBinding ItemTemplate}" />
+                                ItemTemplate="{TemplateBinding ItemTemplate}"
+                                DataContext="{Binding DataContext, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Grid>
                     </Grid>
                 </ControlTemplate>

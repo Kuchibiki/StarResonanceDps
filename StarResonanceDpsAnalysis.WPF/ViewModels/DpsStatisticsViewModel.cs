@@ -470,6 +470,13 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         _windowManagement.DpsStatisticsView.Hide();
     }
 
+    [RelayCommand]
+    private void OpenSkillLog()
+    {
+        _logger.LogInformation("打开技能日记窗口");
+        _windowManagement.SkillLogView.Show();
+        _windowManagement.SkillLogView.Activate();
+    }
 
     [RelayCommand]
     public void ResetAll()
@@ -1891,7 +1898,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
             subViewModel.DataDictionary.Clear();
         }
 
-        // 1. 设置战斗时长
+        // 1. 设置战斗时長
         BattleDuration = snapshot.Duration;
 
         // 2. 设置团队总伤/治疗

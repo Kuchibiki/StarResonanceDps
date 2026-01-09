@@ -1097,4 +1097,55 @@
   <data name="SkillBreakdown_Label_Average" xml:space="preserve">
     <value>平均</value>
   </data>
+  <data name="SkillLog_Title" xml:space="preserve">
+    <value>战斗日记</value>
+  </data>
+  <data name="SkillLog_Header_Title" xml:space="preserve">
+    <value>战斗日记</value>
+  </data>
+  <data name="SkillLog_Header_Status" xml:space="preserve">
+    <value>系统在线</value>
+  </data>
+  <data name="SkillLog_Popup_TotalDamage" xml:space="preserve">
+    <value>总伤害</value>
+  </data>
+  <data name="SkillLog_Popup_HitCount" xml:space="preserve">
+    <value>命中次数</value>
+  </data>
+  <data name="SkillLog_Popup_AvgDamage" xml:space="preserve">
+    <value>平均伤害</value>
+  </data>
+  <data name="SkillLog_Popup_Critical" xml:space="preserve">
+    <value>暴击次数</value>
+  </data>
+  <data name="SkillLog_Popup_LuckyHit" xml:space="preserve">
+    <value>幸运一击</value>
+  </data>
+  <data name="SkillLog_Label_Damage" xml:space="preserve">
+    <value>伤害</value>
+  </data>
+  <data name="SkillLog_Label_Heal" xml:space="preserve">
+    <value>治疗</value>
+  </data>
+  <data name="SkillLog_Footer_Connection" xml:space="preserve">
+    <value>连接: 稳定</value>
+  </data>
+  <data name="SkillLog_Footer_Logging" xml:space="preserve">
+    <value>日志已启用</value>
+  </data>
+  <data name="SkillLog_Button_Clear" xml:space="preserve">
+    <value>清空日记</value>
+  </data>
+  <data name="SkillLog_Button_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="SkillLog_Popup_CritDamage" xml:space="preserve">
+    <value>暴击伤害</value>
+  </data>
+  <data name="SkillLog_Popup_LuckyDamage" xml:space="preserve">
+    <value>幸运伤害</value>
+  </data>
+  <data name="SkillBreakdown_Label_Percentage" xml:space="preserve">
+    <value>占比</value>
+  </data>
 </root>
