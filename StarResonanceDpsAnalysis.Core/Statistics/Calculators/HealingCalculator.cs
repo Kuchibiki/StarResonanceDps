@@ -37,10 +37,9 @@ public sealed class HealingCalculator : IStatisticsCalculator
         var values = stats.Healing;
         values.Total += log.Value;
         values.ValuePerSecond = ticks > 0 ? (double)values.Total * TimeSpan.TicksPerMillisecond / ticks : double.NaN;
-        values.HitCount++;
 
         // Update skill breakdown
-        var skill = stats.GetOrCreateSkill(log.SkillID);
+        var skill = stats.GetOrCreateHealingSkill(log.SkillID);
         skill.TotalValue += log.Value;
         skill.UseTimes++;
 
@@ -73,6 +72,11 @@ public sealed class HealingCalculator : IStatisticsCalculator
         {
             // Normal hit
             values.NormalValue += log.Value;
+        }
+
+        if (!log.IsLucky)
+        {
+            values.HitCount++;
         }
     }
 }
