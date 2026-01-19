@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />
+    <None Remove="Assets\Fonts\HarmonyOS_Sans_SC_Black.ttf" />
     <Compile Include="Logging\WpfLogEvents.cs" />
     <Page Include="App.xaml" />
   </ItemGroup>
@@ -87,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Fonts\AlimamaShuHeiTi-Bold.ttf" />
+    <Resource Include="Assets\Fonts\HarmonyOS_Sans_SC_Black.ttf" />
     <Resource Include="Assets\Fonts\HarmonyOS_Sans_SC_Bold.ttf" />
     <Resource Include="Assets\Fonts\HarmonyOS_Sans_SC_Regular.ttf" />
     <Resource Include="Assets\Fonts\iconfont.ttf" />
