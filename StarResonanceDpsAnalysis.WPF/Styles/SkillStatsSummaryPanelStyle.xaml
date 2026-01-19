@@ -17,7 +17,7 @@
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">
                                             <Binding Path="Total" RelativeSource="{RelativeSource TemplatedParent}" />
-                                            <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=skillBreakdown:TabContentPanel}" />
+                                            <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=Window}" />
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
@@ -27,7 +27,7 @@
                                         <Run.Text>
                                             <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">
                                                 <Binding Path="NormalDamage" RelativeSource="{RelativeSource TemplatedParent}" />
-                                                <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=skillBreakdown:TabContentPanel}" />
+                                                <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=Window}" />
                                             </MultiBinding>
                                         </Run.Text>
                                     </Run>
@@ -44,7 +44,7 @@
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">
                                             <Binding Path="Average" RelativeSource="{RelativeSource TemplatedParent}" />
-                                            <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=skillBreakdown:TabContentPanel}" />
+                                            <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=Window}" />
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
@@ -54,7 +54,7 @@
                                         <Run.Text>
                                             <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">
                                                 <Binding Path="LuckyDamage" RelativeSource="{RelativeSource TemplatedParent}" />
-                                                <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=skillBreakdown:TabContentPanel}" />
+                                                <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=Window}" />
                                             </MultiBinding>
                                         </Run.Text>
                                     </Run>
@@ -74,7 +74,7 @@
                                         <Run.Text>
                                             <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">
                                                 <Binding Path="CritDamage" RelativeSource="{RelativeSource TemplatedParent}" />
-                                                <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=skillBreakdown:TabContentPanel}" />
+                                                <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=Window}" />
                                             </MultiBinding>
                                         </Run.Text>
                                     </Run>
