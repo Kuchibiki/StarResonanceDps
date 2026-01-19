@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+ï»¿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using StarResonanceDpsAnalysis.WPF.ViewModels;
@@ -156,7 +156,9 @@ public class TabContentPanel : Control
         set => SetValue(NormalRateProperty, value);
     }
 
-    // ? ĞÂÔö£ºÆÕÍ¨ÉËº¦
+    /// <summary>
+    /// æ™®é€šä¼¤å®³
+    /// </summary>
     public static readonly DependencyProperty NormalDamageProperty = DependencyProperty.Register(
         nameof(NormalDamage), typeof(long), typeof(TabContentPanel), new PropertyMetadata(default(long)));
 
@@ -166,7 +168,9 @@ public class TabContentPanel : Control
         set => SetValue(NormalDamageProperty, value);
     }
 
-    // ? ĞÂÔö£º±©»÷ÉËº¦
+    /// <summary>
+    /// æš´å‡»ä¼¤å®³
+    /// </summary>
     public static readonly DependencyProperty CritDamageProperty = DependencyProperty.Register(
         nameof(CritDamage), typeof(long), typeof(TabContentPanel), new PropertyMetadata(default(long)));
 
@@ -176,7 +180,9 @@ public class TabContentPanel : Control
         set => SetValue(CritDamageProperty, value);
     }
 
-    // ? ĞÂÔö£ºĞÒÔËÉËº¦
+    /// <summary>
+    /// å¹¸è¿ä¼¤å®³
+    /// </summary>
     public static readonly DependencyProperty LuckyDamageProperty = DependencyProperty.Register(
         nameof(LuckyDamage), typeof(long), typeof(TabContentPanel), new PropertyMetadata(default(long)));
 
@@ -186,7 +192,9 @@ public class TabContentPanel : Control
         set => SetValue(LuckyDamageProperty, value);
     }
 
-    // ? ĞÂÔö£ºÆÕÍ¨Êı¾İ±êÇ©
+    /// <summary>
+    /// æ™®é€šæ•°æ®æ ‡ç­¾
+    /// </summary>
     public static readonly DependencyProperty NormalLabelProperty = DependencyProperty.Register(
         nameof(NormalLabel), typeof(string), typeof(TabContentPanel), new PropertyMetadata(default(string?)));
 
@@ -196,7 +204,9 @@ public class TabContentPanel : Control
         set => SetValue(NormalLabelProperty, value);
     }
 
-    // ? ĞÂÔö£º±©»÷Êı¾İ±êÇ©
+    /// <summary>
+    /// æš´å‡»æ•°æ®æ ‡ç­¾
+    /// </summary>
     public static readonly DependencyProperty CritLabelProperty = DependencyProperty.Register(
         nameof(CritLabel), typeof(string), typeof(TabContentPanel), new PropertyMetadata(default(string?)));
 
@@ -206,7 +216,9 @@ public class TabContentPanel : Control
         set => SetValue(CritLabelProperty, value);
     }
 
-    // ? ĞÂÔö£ºĞÒÔËÊı¾İ±êÇ©
+    /// <summary>
+    /// å¹¸è¿æ•°æ®æ ‡ç­¾
+    /// </summary>
     public static readonly DependencyProperty LuckyLabelProperty = DependencyProperty.Register(
         nameof(LuckyLabel), typeof(string), typeof(TabContentPanel), new PropertyMetadata(default(string?)));
 
