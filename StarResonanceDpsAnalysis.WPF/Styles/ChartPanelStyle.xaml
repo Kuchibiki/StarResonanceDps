@@ -59,7 +59,9 @@
                                         Style="{StaticResource ChartIcon}" />
                                     <TextBlock Style="{StaticResource ChartTitle}" Text="{TemplateBinding PieChartTitle}" />
                                 </StackPanel>
-                                <oxy:PlotView Height="200" Model="{Binding PiePlotModel}" />
+                                <oxy:PlotView
+                                    Height="200"
+                                    Model="{Binding PiePlotModel, RelativeSource={RelativeSource TemplatedParent}}" />
                             </StackPanel>
                         </Border>
 

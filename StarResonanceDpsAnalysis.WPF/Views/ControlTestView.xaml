@@ -5,10 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StarResonanceDpsAnalysis.WPF.Views"
         xmlns:ctrl_sb="clr-namespace:StarResonanceDpsAnalysis.WPF.Controls.SkillBreakdown"
-        xmlns:lex="http://wpflocalizeextension.codeplex.com"
-        xmlns:properties="clr-namespace:StarResonanceDpsAnalysis.WPF.Properties"
         mc:Ignorable="d"
-        Title="ControlTest" Height="450" Width="800">
+        Title="ControlTest"
+        Width="640" Height="750" >
     <Grid>
 
         <!-- 
@@ -18,24 +17,27 @@
         此窗口不用于实际使用,
         仅用于测试自定义控件
         -->
-        
-        <ctrl_sb:SkillStatsSummaryPanel
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Total="{Binding TestTotal}"
-            TotalLabel="{lex:Loc Key={x:Static properties:ResourcesKeys.SkillBreakdown_Label_TotalDamage}}"
-            NormalDamage="{Binding TestNormalDamage}"
-            CritDamage="{Binding TestCritDamage}"
-            LuckyDamage="{Binding TestLuckyDamage}"
-            Average="{Binding TestAverage}"
-            AverageLabel="{lex:Loc Key={x:Static properties:ResourcesKeys.SkillBreakdown_Label_AverageDamage}}"
-            Hits="{Binding TestHits}"
-            HitsLabel="{lex:Loc Key={x:Static properties:ResourcesKeys.SkillBreakdown_Label_HitCount}}"
-            CritRate="{Binding TestCritRate}"
-            CritRateLabel="{lex:Loc Key={x:Static properties:ResourcesKeys.SkillBreakdown_Label_CritRate}}"
-            CritCount="{Binding TestCritCount}"
-            LuckyCount="{Binding TestLuckyCount}"
-            LuckyCountLabel="{lex:Loc Key={x:Static properties:ResourcesKeys.SkillBreakdown_Label_LuckCount}}"
-            LuckyRate="{Binding TestLuckyRate}" />
+
+        <!--
+        <ctrl_sb:SkillListPanel
+            SectionTitle="Test Skill List"
+            SkillItems="{Binding TestData}" />
+        -->
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ctrl_sb:ChartPanel
+                Margin="16"
+                ChartTitle="实时DPS (测试)"
+                PieChartTitle="技能伤害分布图"
+                HitTypeChartTitle="命中类型分布 (测试)"
+                SeriesPlotModel="{Binding SkillDistributionPlot.SeriesPlotModel}"
+                PiePlotModel="{Binding SkillDistributionPlot.PiePlotModel}"
+                NormalCount="{Binding NormalHitCount}"
+                NormalRate="{Binding NormalHitRate}"
+                CritCount="{Binding CritHitCount}"
+                CritRate="{Binding CritHitRate}"
+                LuckyCount="{Binding LuckyHitCount}"
+                LuckyRate="{Binding LuckyHitRate}" />
+        </ScrollViewer>
     </Grid>
 </Window>

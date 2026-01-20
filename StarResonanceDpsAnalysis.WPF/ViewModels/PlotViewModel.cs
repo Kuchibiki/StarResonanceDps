@@ -1,8 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Globalization;
+using CommunityToolkit.Mvvm.ComponentModel;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Legends;
 using OxyPlot.Series;
+using StarResonanceDpsAnalysis.WPF.Controls.SkillBreakdown;
+using StarResonanceDpsAnalysis.WPF.Helpers;
 using StarResonanceDpsAnalysis.WPF.Models;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
@@ -72,24 +75,30 @@ public partial class PlotViewModel : BaseViewModel
             Series = { LineSeriesData }
         };
 
-        PieSeriesData = new PieSeries
+        PieSeriesData = new SkillPieSeries
         {
             StrokeThickness = 2,
             InsideLabelPosition = 0.5,
             AngleSpan = 360,
             StartAngle = -90,
             InsideLabelColor = OxyColors.White,
-            InsideLabelFormat = "{1:0.0}%",
+            InsideLabelFormat = "{2:0.0}%",
+            OutsideLabelFormat = "{1}",
+            TickDistance = 2,
+            TickRadialLength = 8,
+            TickHorizontalLength = 8,
+            TickLabelDistance = 2,
             Stroke = OxyColors.White,
             FontSize = 11,
             FontWeight = 600,
             // ⭐ Set tooltip format to show skill name and percentage on hover
-            TrackerFormatString = "{0}\n{1}: {2:0.#}\n{3:0.0}%"
+            TrackerFormatString = "{1}({4}):\n{2:N0}({5})\n{3:0.0}%",
         };
         _piePlotModel = new PlotModel
         {
             // Title = options?.PiePlotTitle, // Use XAML title instead
             Background = OxyColors.Transparent,
+            Padding = new OxyThickness(0, 4, 0, 20),
             Series = { PieSeriesData }
         };
         
@@ -113,7 +122,8 @@ public partial class PlotViewModel : BaseViewModel
     }
 
     public SmoothLineSeries LineSeriesData { get; }
-    public PieSeries PieSeriesData { get; }
+    public SkillPieSeries PieSeriesData { get; }
+    public NumberDisplayMode DamageDisplayMode { get; set; } = NumberDisplayMode.KMB;
     
     /// <summary>
     /// ⭐ 公开StatisticType属性供外部访问
@@ -140,21 +150,168 @@ public partial class PlotViewModel : BaseViewModel
         return value.ToString("0.#");
     }
 
+    private const double PieMergeRangeStartPercent = 60.0;
+    private const double PieMergeRangeEndPercent = 90.0;
+    private const double PieMergeMinKeepPercent = 6.0;
+    private const double PieMergedMaxPercent = 35.0;
+    private const string PieMergedLabel = "其它";
     public void SetPieSeriesData(IReadOnlyList<SkillItemViewModel> skills)
     {
+        /*
+         
+        Core idea: Sort items by percentage,
+        compute the average value within the [PieMergeRangeStartPercent] ~ [PieMergeRangeEndPercent] range, round it up,
+        then merge items whose percentage is below this threshold and below [PieMergeMinKeepPercent] into "Others",
+        stopping when the merged slice would exceed [PieMergedMaxPercent].
+
+        核心思路: 先按占比排序,
+        计算 [PieMergeRangeStartPercent] ~ [PieMergeRangeEndPercent] 段的平均值在向上取整后，
+        将低于该阈值且占比低于 [PieMergeMinKeepPercent] 的项合并为 "其它",
+        合并过程中若将超过 [PieMergedMaxPercent] 则停止合并
+
+         */
+
         PieSeriesData.Slices.Clear();
-        
-        for (var i = 0; i < skills.Count; i++)
+        PieSeriesData.SliceInfoMap.Clear();
+        PieSeriesData.HideInsideLabelSlices.Clear();
+        PieSeriesData.HideOutsideLabelSlices.Clear();
+
+        if (skills == null || skills.Count == 0)
         {
-            var skill = skills[i];
-            PieSeriesData.Slices.Add(new PieSlice(skill.SkillName, skill.TotalValue)
+            RefreshPie();
+            return;
+        }
+
+        var totalValue = skills.Sum(item => (double)item.TotalValue);
+        if (totalValue <= 0)
+        {
+            RefreshPie();
+            return;
+        }
+
+        var percentBySkill = new Dictionary<SkillItemViewModel, double>(skills.Count);
+        foreach (var skill in skills)
+        {
+            percentBySkill[skill] = skill.TotalValue / totalValue * 100.0;
+        }
+
+        var sortedByPercent = skills
+            .Select(skill => (Skill: skill, Percent: percentBySkill[skill]))
+            .OrderByDescending(item => item.Percent)
+            .ToList();
+
+        var thresholdPercent = CalculatePieMergeThreshold(sortedByPercent);
+        var roundedThreshold = Math.Round(thresholdPercent, 1);
+        var mergedPercent = 0.0;
+        var mergeSet = new HashSet<SkillItemViewModel>();
+
+        for (var i = sortedByPercent.Count - 1; i >= 0; i--)
+        {
+            var candidate = sortedByPercent[i];
+            if (candidate.Percent >= PieMergeMinKeepPercent || candidate.Percent >= roundedThreshold)
+            {
+                continue;
+            }
+
+            mergeSet.Add(candidate.Skill);
+            mergedPercent += candidate.Percent;
+
+            if (mergedPercent > PieMergedMaxPercent)
+            {
+                break;
+            }
+        }
+
+        var mergedTotalValue = 0L;
+        var sliceIndex = 0;
+        var culture = CultureInfo.CurrentUICulture;
+        var displayMode = DamageDisplayMode;
+        var lowPercentSlices = new List<(PieSlice Slice, double Percent)>();
+
+        foreach (var skill in skills)
+        {
+            if (mergeSet.Contains(skill))
+            {
+                mergedTotalValue += skill.TotalValue;
+                continue;
+            }
+
+            var slice = new PieSlice(skill.SkillName, skill.TotalValue);
+            PieSeriesData.Slices.Add(slice);
+            PieSeriesData.SliceInfoMap[slice] = new SkillPieSeries.SliceInfo(
+                skill.SkillName,
+                skill.SkillId,
+                skill.TotalValue,
+                NumberFormatHelper.FormatHumanReadable(skill.TotalValue, displayMode, culture));
+
+            var percent = percentBySkill[skill];
+            if (percent < PieMergeMinKeepPercent)
+            {
+                lowPercentSlices.Add((slice, percent));
+            }
+
+            slice.IsExploded = false;
+            slice.Fill = GetPaletteColor(sliceIndex++);
+        }
+
+        if (mergedTotalValue > 0)
+        {
+            var mergedSlice = new PieSlice(PieMergedLabel, mergedTotalValue)
             {
                 IsExploded = false,
-                Fill = GetPaletteColor(i)
-            });
+                Fill = GetPaletteColor(sliceIndex)
+            };
+
+            PieSeriesData.Slices.Add(mergedSlice);
+            PieSeriesData.SliceInfoMap[mergedSlice] = new SkillPieSeries.SliceInfo(
+                PieMergedLabel,
+                0,
+                mergedTotalValue,
+                NumberFormatHelper.FormatHumanReadable(mergedTotalValue, displayMode, culture));
+        }
+
+        if (lowPercentSlices.Count > 0)
+        {
+            var showOutside = true;
+            foreach (var item in lowPercentSlices.OrderBy(item => item.Percent))
+            {
+                if (showOutside)
+                {
+                    PieSeriesData.HideInsideLabelSlices.Add(item.Slice);
+                }
+                else
+                {
+                    PieSeriesData.HideOutsideLabelSlices.Add(item.Slice);
+                }
+
+                showOutside = !showOutside;
+            }
         }
 
         RefreshPie();
+    }
+
+    private static double CalculatePieMergeThreshold(IReadOnlyList<(SkillItemViewModel Skill, double Percent)> sorted)
+    {
+        var cumulativePercent = 0.0;
+        var selectedPercents = new List<double>();
+
+        foreach (var item in sorted)
+        {
+            var nextCumulative = cumulativePercent + item.Percent;
+            if (nextCumulative >= PieMergeRangeStartPercent && cumulativePercent < PieMergeRangeEndPercent)
+            {
+                selectedPercents.Add(item.Percent);
+            }
+
+            cumulativePercent = nextCumulative;
+            if (cumulativePercent >= PieMergeRangeEndPercent)
+            {
+                break;
+            }
+        }
+
+        return selectedPercents.Count == 0 ? 0 : selectedPercents.Average();
     }
 
     public void SetHitTypeDistribution(double normalPercent, double criticalPercent, double luckyPercent)

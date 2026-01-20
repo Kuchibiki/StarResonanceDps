@@ -54,6 +54,10 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
         _dpsTabViewModel = new TabContentViewModel(CreatePlotViewModel(xAxis, StatisticType.Damage));
         _healingTabViewModel = new TabContentViewModel(CreatePlotViewModel(xAxis, StatisticType.Healing));
         _tankingTabViewModel = new TabContentViewModel(CreatePlotViewModel(xAxis, StatisticType.TakenDamage));
+
+        _dpsTabViewModel.Plot.DamageDisplayMode = _appConfig.DamageDisplayType;
+        _healingTabViewModel.Plot.DamageDisplayMode = _appConfig.DamageDisplayType;
+        _tankingTabViewModel.Plot.DamageDisplayMode = _appConfig.DamageDisplayType;
         
         // ? 初始化更新定时器
         InitializeUpdateTimer();

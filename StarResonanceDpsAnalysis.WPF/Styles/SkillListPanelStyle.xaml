@@ -64,7 +64,8 @@
             <Setter.Value>
                 <Style TargetType="DataGridRow">
                     <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="2" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="DataGridRow">
@@ -77,7 +78,7 @@
                                         <!-- Progress Bar Background Layer (behind cells) -->
                                         <Grid Height="48" VerticalAlignment="Top" Margin="4">
                                             <Border HorizontalAlignment="Left" 
-                                                    Background="SkyBlue" 
+                                                    Background="#F6FAFF" 
                                                     Height="48"
                                                     VerticalAlignment="Stretch"
                                                     CornerRadius="4">
@@ -116,21 +117,10 @@
                                     </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="DGR_Border" Property="Background" Value="#FAFAFA" />
-                                    </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="DGR_Border" Property="Background" Value="#E6F4FF" />
                                         <Setter TargetName="DGR_Border" Property="BorderBrush" Value="#1890FF" />
-                                        <Setter TargetName="DGR_Border" Property="BorderThickness" Value="0,0,3,0" />
                                     </Trigger>
-                                    <MultiTrigger>
-                                        <MultiTrigger.Conditions>
-                                            <Condition Property="IsSelected" Value="True" />
-                                            <Condition Property="IsMouseOver" Value="True" />
-                                        </MultiTrigger.Conditions>
-                                        <Setter TargetName="DGR_Border" Property="Background" Value="#D6EBFF" />
-                                    </MultiTrigger>
+                                    <!-- No hover styling -->
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
@@ -300,7 +290,15 @@
                                             <DataTemplate DataType="{x:Type viewModels:SkillItemViewModel}">
                                                 <Border Padding="16,8">
                                                     <TextBlock Style="{StaticResource StatColumnText}" 
-                                                               Text="{Binding TotalValue, StringFormat={}{0:N0}}" />
+                                                               FontSize="14"
+                                                               FontWeight="Bold">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">
+                                                                <Binding Path="TotalValue" />
+                                                                <Binding Path="DataContext.AppConfig.DamageDisplayType" RelativeSource="{RelativeSource AncestorType=Window}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                 </Border>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
@@ -320,8 +318,12 @@
                                             <DataTemplate DataType="{x:Type viewModels:SkillItemViewModel}">
                                                 <Border Padding="16,8">
                                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                                        <TextBlock Style="{StaticResource StatColumnText}" Text="{Binding HitCount, StringFormat={}{0:N0}}" />
-                                                        <TextBlock Style="{StaticResource StatColumnLightText}" Text="{lex:Loc Key=SkillBreakdown_Unit_Hits}" />
+                                                        <TextBlock
+                                                            Style="{StaticResource StatColumnText}"
+                                                            Text="{Binding HitCount, StringFormat={}{0:N0}}" />
+                                                        <TextBlock
+                                                            Style="{StaticResource StatColumnLightText}"
+                                                            Text="{lex:Loc Key=SkillBreakdown_Unit_Hits}" />
                                                     </StackPanel>
                                                 </Border>
                                             </DataTemplate>
@@ -342,9 +344,12 @@
                                             <DataTemplate DataType="{x:Type viewModels:SkillItemViewModel}">
                                                 <Border Padding="16,8">
                                                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                                        <TextBlock Style="{StaticResource StatColumnText}" Text="{Binding CritRate, StringFormat={}{0:P1}}" />
-                                                        <TextBlock Style="{StaticResource StatColumnLightText}"
-                                                                   Text="{Binding CritCount, StringFormat={}({0})}" />
+                                                        <TextBlock
+                                                            Style="{StaticResource StatColumnText}"
+                                                            Text="{Binding CritRate, StringFormat={}{0:P1}}" />
+                                                        <TextBlock
+                                                            Style="{StaticResource StatColumnLightText}"
+                                                            Text="{Binding CritCount, StringFormat={}({0})}" />
                                                     </StackPanel>
                                                 </Border>
                                             </DataTemplate>
@@ -364,9 +369,10 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type viewModels:SkillItemViewModel}">
                                                 <Border Padding="16,8">
-                                                    <TextBlock x:Name="AverageText"
-                                                               Style="{StaticResource StatColumnText}"
-                                                               Text="{Binding Average, StringFormat={}{0:N0}}" />
+                                                    <TextBlock
+                                                        x:Name="AverageText"
+                                                        Style="{StaticResource StatColumnText}"
+                                                        Text="{Binding Average, StringFormat={}{0:N0}}" />
                                                 </Border>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
@@ -384,9 +390,10 @@
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate DataType="{x:Type viewModels:SkillItemViewModel}">
                                                 <Border Padding="16,8">
-                                                    <TextBlock x:Name="PercentToTotalText"
-                                                               Style="{StaticResource StatColumnText}"
-                                                               Text="{Binding RateToTotal, StringFormat={}{0:P1}}" />
+                                                    <TextBlock
+                                                        x:Name="PercentToTotalText"
+                                                        Style="{StaticResource StatColumnText}"
+                                                        Text="{Binding RateToTotal, StringFormat={}{0:P1}}" />
                                                 </Border>
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
