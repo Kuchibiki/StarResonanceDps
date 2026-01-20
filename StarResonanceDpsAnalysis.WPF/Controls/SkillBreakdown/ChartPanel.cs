@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using OxyPlot;
 
 namespace StarResonanceDpsAnalysis.WPF.Controls.SkillBreakdown;
@@ -143,35 +142,4 @@ public class ChartPanel : Control
 
     #endregion
 
-    #region Commands
-
-
-    public static readonly DependencyProperty ZoomResetCommandProperty = DependencyProperty.Register(
-        nameof(ZoomResetCommand), typeof(ICommand), typeof(ChartPanel), new PropertyMetadata(default(ICommand)));
-
-    public ICommand ZoomResetCommand
-    {
-        get => (ICommand)GetValue(ZoomResetCommandProperty);
-        set => SetValue(ZoomResetCommandProperty, value);
-    }
-
-    public static readonly DependencyProperty ZoomOutCommandProperty = DependencyProperty.Register(
-        nameof(ZoomOutCommand), typeof(ICommand), typeof(ChartPanel), new PropertyMetadata(default(ICommand)));
-
-    public ICommand ZoomOutCommand
-    {
-        get => (ICommand)GetValue(ZoomOutCommandProperty);
-        set => SetValue(ZoomOutCommandProperty, value);
-    }
-
-    public static readonly DependencyProperty ZoomInCommandProperty = DependencyProperty.Register(
-        nameof(ZoomInCommand), typeof(ICommand), typeof(ChartPanel), new PropertyMetadata(default(ICommand)));
-
-    public ICommand ZoomInCommand
-    {
-        get => (ICommand)GetValue(ZoomInCommandProperty);
-        set => SetValue(ZoomInCommandProperty, value);
-    }
-
-    #endregion
 }

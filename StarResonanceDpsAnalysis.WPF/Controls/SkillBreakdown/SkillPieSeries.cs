@@ -12,6 +12,7 @@ public sealed class SkillPieSeries : PieSeries
     private double _total;
 
     public sealed record SliceInfo(string SkillName, long SkillId, long Value, string HumanReadableValue);
+    private sealed record InsideLabelInfo(ScreenPoint Position, string Text, OxyColor Color, double Angle);
 
     public IDictionary<PieSlice, SliceInfo> SliceInfoMap { get; } = new Dictionary<PieSlice, SliceInfo>();
     public ISet<PieSlice> HideInsideLabelSlices { get; } = new HashSet<PieSlice>();
@@ -83,6 +84,8 @@ public sealed class SkillPieSeries : PieSeries
         }
 
         _total = 0;
+        var insideLabels = new List<InsideLabelInfo>();
+
         foreach (var slice in Slices)
         {
             _total += slice.Value;
@@ -183,7 +186,7 @@ public sealed class SkillPieSeries : PieSeries
                 var tp2 = new ScreenPoint(tp1.X + (TickHorizontalLength * sign), tp1.Y);
 
                 // draw the tick line with the same color as the text
-                rc.DrawLine(new[] { tp0, tp1, tp2 }, ActualTextColor, 1, EdgeRenderingMode, null, LineJoin.Bevel);
+                rc.DrawLine([tp0, tp1, tp2], ActualTextColor, 1, EdgeRenderingMode, null, LineJoin.Bevel);
 
                 // label
                 var labelPosition = new ScreenPoint(tp2.X + (TickLabelDistance * sign), tp2.Y);
@@ -199,7 +202,7 @@ public sealed class SkillPieSeries : PieSeries
                     VerticalAlignment.Middle);
             }
 
-            // Render a label inside the slice
+            // Collect inside labels for drawing after all slices
             if (InsideLabelFormat != null && !HideInsideLabelSlices.Contains(slice) && !InsideLabelColor.IsUndefined())
             {
                 var label = string.Format(
@@ -223,17 +226,69 @@ public sealed class SkillPieSeries : PieSeries
 
                 var actualInsideLabelColor = InsideLabelColor.IsAutomatic() ? ActualTextColor : InsideLabelColor;
 
-                rc.DrawText(
-                    labelPosition,
-                    label,
-                    actualInsideLabelColor,
-                    ActualFont,
-                    ActualFontSize,
-                    ActualFontWeight,
-                    textAngle,
-                    HorizontalAlignment.Center,
-                    VerticalAlignment.Middle);
+                insideLabels.Add(new InsideLabelInfo(labelPosition, label, actualInsideLabelColor, textAngle));
             }
+        }
+
+        foreach (var label in insideLabels)
+        {
+            DrawTextShadow(
+                rc,
+                label.Position,
+                label.Text,
+                OxyColor.FromArgb(160, 0, 0, 0),
+                ActualFont,
+                ActualFontSize,
+                ActualFontWeight,
+                label.Angle,
+                HorizontalAlignment.Center,
+                VerticalAlignment.Middle);
+
+            rc.DrawText(
+                label.Position,
+                label.Text,
+                label.Color,
+                ActualFont,
+                ActualFontSize,
+                ActualFontWeight,
+                label.Angle,
+                HorizontalAlignment.Center,
+                VerticalAlignment.Middle);
+        }
+    }
+
+    private static void DrawTextShadow(
+        IRenderContext rc,
+        ScreenPoint position,
+        string text,
+        OxyColor shadowColor,
+        string font,
+        double fontSize,
+        double fontWeight,
+        double angle,
+        HorizontalAlignment horizontalAlignment,
+        VerticalAlignment verticalAlignment)
+    {
+        var offsets = new[]
+        {
+            new ScreenPoint(1, 0),
+            new ScreenPoint(-1, 0),
+            new ScreenPoint(0, 1),
+            new ScreenPoint(0, -1)
+        };
+
+        foreach (var offset in offsets)
+        {
+            rc.DrawText(
+                new ScreenPoint(position.X + offset.X, position.Y + offset.Y),
+                text,
+                shadowColor,
+                font,
+                fontSize,
+                fontWeight,
+                angle,
+                horizontalAlignment,
+                verticalAlignment);
         }
     }
 }

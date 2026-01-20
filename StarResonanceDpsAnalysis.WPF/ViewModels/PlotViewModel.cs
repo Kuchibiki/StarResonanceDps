@@ -61,7 +61,11 @@ public partial class PlotViewModel : BaseViewModel
                     Position = AxisPosition.Bottom,
                     Title = options?.XAxisTitle,
                     MajorGridlineStyle = LineStyle.Solid,
-                    MajorGridlineColor = OxyColor.FromRgb(240, 240, 240)
+                    MajorGridlineColor = OxyColor.FromRgb(240, 240, 240),
+                    AbsoluteMinimum = 0,
+                    Minimum = 0,
+                    MinimumPadding = 0,
+                    MaximumPadding = 0.01
                 },
                 new LinearAxis
                 {
@@ -69,8 +73,16 @@ public partial class PlotViewModel : BaseViewModel
                     Title = options?.YAxisTitle,
                     MajorGridlineStyle = LineStyle.Solid,
                     MajorGridlineColor = OxyColor.FromRgb(240, 240, 240),
+                    AbsoluteMinimum = 0,
+                    Minimum = 0,
+                    MinimumPadding = 0,
+                    MaximumPadding = 0.2,
                     // ⭐ 添加自定义格式化器，避免科学计数法显示
-                    LabelFormatter = value => FormatAxisValue(value)
+                    LabelFormatter = value =>
+                        NumberFormatHelper.FormatHumanReadable(
+                            value,
+                            DamageDisplayMode,
+                            SeriesPlotModel?.ActualCulture ?? CultureInfo.CurrentUICulture)
                 }
             },
             Series = { LineSeriesData }
@@ -79,7 +91,7 @@ public partial class PlotViewModel : BaseViewModel
         PieSeriesData = new SkillPieSeries
         {
             StrokeThickness = 2,
-            InsideLabelPosition = 0.5,
+            InsideLabelPosition = 0.78,
             AngleSpan = 360,
             StartAngle = -90,
             InsideLabelColor = OxyColors.White,
@@ -88,7 +100,7 @@ public partial class PlotViewModel : BaseViewModel
             TickDistance = 2,
             TickRadialLength = 8,
             TickHorizontalLength = 8,
-            TickLabelDistance = 2,
+            TickLabelDistance = 4,
             Stroke = OxyColors.White,
             FontSize = 11,
             FontWeight = 600,
@@ -131,26 +143,6 @@ public partial class PlotViewModel : BaseViewModel
     /// </summary>
     public StatisticType StatisticType => _statisticType;
 
-    /// <summary>
-    /// ⭐ 格式化坐标轴数值，避免科学计数法
-    /// </summary>
-    private static string FormatAxisValue(double value)
-    {
-        if (value == 0) return "0";
-        
-        var absValue = Math.Abs(value);
-        
-        // 使用K/M/B格式化
-        if (absValue >= 1_000_000_000)
-            return $"{value / 1_000_000_000:0.#}B";
-        if (absValue >= 1_000_000)
-            return $"{value / 1_000_000:0.#}M";
-        if (absValue >= 1_000)
-            return $"{value / 1_000:0.#}K";
-        
-        return value.ToString("0.#");
-    }
-
     private const double PieMergeRangeStartPercent = 60.0;
     private const double PieMergeRangeEndPercent = 90.0;
     private const double PieMergeMinKeepPercent = 6.0;
@@ -162,12 +154,14 @@ public partial class PlotViewModel : BaseViewModel
         Core idea: Sort items by percentage,
         compute the average value within the [PieMergeRangeStartPercent] ~ [PieMergeRangeEndPercent] range, round it up,
         then merge items whose percentage is below this threshold and below [PieMergeMinKeepPercent] into "Others",
-        stopping when the merged slice would exceed [PieMergedMaxPercent].
+        stopping when the merged slice would exceed [PieMergedMaxPercent],
+        and for slices below [PieMergeMinKeepPercent], alternate hiding inside/outside labels to reduce overlap.
 
         核心思路: 先按占比排序,
-        计算 [PieMergeRangeStartPercent] ~ [PieMergeRangeEndPercent] 段的平均值在向上取整后，
+        计算 [PieMergeRangeStartPercent] ~ [PieMergeRangeEndPercent] 段的平均值在向上取整后,
         将低于该阈值且占比低于 [PieMergeMinKeepPercent] 的项合并为 "其它",
-        合并过程中若将超过 [PieMergedMaxPercent] 则停止合并
+        合并过程中若将超过 [PieMergedMaxPercent] 则停止合并,
+        对于占比低于 [PieMergeMinKeepPercent] 的项, 内外标签交替隐藏以减少重叠
 
          */
 
@@ -208,7 +202,8 @@ public partial class PlotViewModel : BaseViewModel
         for (var i = sortedByPercent.Count - 1; i >= 0; i--)
         {
             var candidate = sortedByPercent[i];
-            if (candidate.Percent >= PieMergeMinKeepPercent || candidate.Percent >= roundedThreshold)
+            if (candidate.Percent >= PieMergeMinKeepPercent ||
+                candidate.Percent >= roundedThreshold)
             {
                 continue;
             }
@@ -405,7 +400,7 @@ public partial class PlotViewModel : BaseViewModel
         var model = new PlotModel
         {
             Background = OxyColors.Transparent,
-            PlotAreaBorderColor = OxyColor.FromRgb(224, 224, 224)
+            PlotAreaBorderColor = OxyColor.FromRgb(224, 224, 224),
         };
 
         // Categories on Y axis (required by BarSeriesBase)
