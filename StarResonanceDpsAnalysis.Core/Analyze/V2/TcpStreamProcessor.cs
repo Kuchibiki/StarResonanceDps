@@ -1,13 +1,11 @@
 using System.Buffers;
 using System.Buffers.Binary;
 using System.Diagnostics;
-using System.Net;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 using PacketDotNet;
 using SharpPcap;
 using StarResonanceDpsAnalysis.Core.Collections;
-using System.IO.Pipelines;
 using StarResonanceDpsAnalysis.Core.Data;
 using StarResonanceDpsAnalysis.Core.Logging;
 
@@ -19,40 +17,39 @@ namespace StarResonanceDpsAnalysis.Core.Analyze;
 /// </summary>
 internal sealed class TcpStreamProcessor : IDisposable
 {
-    private readonly IDataStorage _storage;
-    private readonly MessageAnalyzerV2 _messageAnalyzer;
-    private readonly ILogger? _logger;
-
     private readonly TimeSpan _gapTimeout = TimeSpan.FromSeconds(2);
     private readonly TimeSpan _idleTimeout = TimeSpan.FromSeconds(10);
+    private readonly ILogger? _logger;
 
     private readonly byte[] _loginReturnSignature =
     [
         0x00, 0x00, 0x00, 0x62, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01,
         0x00, 0x11, 0x45, 0x14, 0x00, 0x00, 0x00, 0x00, 0x0a, 0x4e, 0x08, 0x01, 0x22, 0x24
     ];
+
+    private readonly MessageAnalyzerV2 _messageAnalyzer;
     private readonly byte[] _serverSignature = [0x00, 0x63, 0x33, 0x53, 0x42, 0x00];
+    private readonly IDataStorage _storage;
+    private readonly BoundedConcurrentCache<uint, byte[]> _tcpCache = new(1000, TimeSpan.FromSeconds(30));
 
     // State
     private DateTime _lastAnyPacketAt = DateTime.MinValue;
-    private DateTime? _waitingGapSince;
-    private uint? _tcpNextSeq;
-    private readonly BoundedConcurrentCache<uint, byte[]> _tcpCache = new(1000, TimeSpan.FromSeconds(30));
     private DateTime _tcpLastTime = DateTime.MinValue;
-
-    // Pipe replaces the previous MemoryStream staging buffer
-    private Pipe _pipe;
-    private readonly object _pipeLock = new();
-
-    public string CurrentServer => CurrentServerEndpoint.ToString();
-    public ServerEndpoint CurrentServerEndpoint { get; private set; }
+    private uint? _tcpNextSeq;
+    private DateTime? _waitingGapSince;
 
     public TcpStreamProcessor(IDataStorage storage, MessageAnalyzerV2 messageAnalyzer, ILogger? logger)
     {
         _storage = storage;
         _messageAnalyzer = messageAnalyzer;
         _logger = logger;
-        _pipe = new Pipe(new PipeOptions(useSynchronizationContext: false));
+    }
+
+    public string CurrentServer => CurrentServerEndpoint.ToString();
+    public ServerEndpoint CurrentServerEndpoint { get; private set; }
+
+    public void Dispose()
+    {
     }
 
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
@@ -175,7 +172,11 @@ internal sealed class TcpStreamProcessor : IDisposable
 
                 Buffer.BlockCopy(cachedData, 0, messageBuffer, messageLength, cachedData.Length);
                 messageLength += cachedData.Length;
-                unchecked { _tcpNextSeq += (uint)cachedData.Length; }
+                unchecked
+                {
+                    _tcpNextSeq += (uint)cachedData.Length;
+                }
+
                 _tcpLastTime = now;
             }
 
@@ -247,9 +248,9 @@ internal sealed class TcpStreamProcessor : IDisposable
     private bool DetectLoginReturnSignature(ReadOnlySpan<byte> data)
     {
         return data.Slice(0, 10)
-                    .SequenceEqual(_loginReturnSignature.AsSpan(0, 10)) &&
-                data.Slice(14, 6)
-                    .SequenceEqual(_loginReturnSignature.AsSpan(14, 6));
+                   .SequenceEqual(_loginReturnSignature.AsSpan(0, 10)) &&
+               data.Slice(14, 6)
+                   .SequenceEqual(_loginReturnSignature.AsSpan(14, 6));
     }
 
     private bool DetectFromData(ReadOnlySpan<byte> data)
@@ -326,29 +327,6 @@ internal sealed class TcpStreamProcessor : IDisposable
         _lastAnyPacketAt = DateTime.MinValue;
         _waitingGapSince = null;
         _tcpCache.Clear();
-
-        lock (_pipeLock)
-        {
-            try
-            {
-                _pipe.Writer.Complete();
-            }
-            catch
-            {
-                //Ignore
-            }
-
-            try
-            {
-                _pipe.Reader.Complete();
-            }
-            catch
-            {
-                //Ignore
-            }
-
-            _pipe = new Pipe(new PipeOptions(useSynchronizationContext: false));
-        }
         _storage.IsServerConnected = false;
         _logger?.LogInformation(CoreLogEvents.Reconnect, "Capture state reset, previous server was {Prev}", prev);
     }
@@ -383,26 +361,5 @@ internal sealed class TcpStreamProcessor : IDisposable
     private static int SeqCmp(uint a, uint b)
     {
         return (int)(a - b);
-    }
-
-    public void Dispose()
-    {
-        try
-        {
-            _pipe.Writer.Complete();
-        }
-        catch
-        {
-            //Ignore
-        }
-
-        try
-        {
-            _pipe.Reader.Complete();
-        }
-        catch
-        {
-            //Ignore
-        }
     }
 }

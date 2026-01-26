@@ -25,7 +25,6 @@
     <PackageReference Include="Newtonsoft.Json.Bson" />
     <PackageReference Include="PacketDotNet" />
     <PackageReference Include="SharpPcap" />
-    <PackageReference Include="System.IO.Pipelines" />
     <PackageReference Include="System.Threading.Channels" />
     <PackageReference Include="ZstdNet" />
   </ItemGroup>
