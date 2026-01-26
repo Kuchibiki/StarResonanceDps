@@ -10,48 +10,81 @@ using StarResonanceDpsAnalysis.WPF.Logging;
 
 namespace StarResonanceDpsAnalysis.WPF.Services;
 
-public sealed class ApplicationStartup(
-    ILogger<ApplicationStartup> logger,
-    IConfigManager configManager,
-    IDeviceManagementService deviceManagementService,
-    IGlobalHotkeyService hotkeyService,
-    IPacketAnalyzer packetAnalyzer,
-    IDataStorage dataStorage,
-    LocalizationManager localization) : IApplicationStartup
+public sealed class ApplicationStartup : IApplicationStartup
 {
+    private readonly ILogger<ApplicationStartup> _logger;
+    private readonly IConfigManager _configManager;
+    private readonly IDeviceManagementService _deviceManagementService;
+    private readonly IGlobalHotkeyService _hotkeyService;
+    private readonly IPacketAnalyzer _packetAnalyzer;
+    private readonly IDataStorage _dataStorage;
+    private readonly LocalizationManager _localization;
+    private AppConfig _appConfig;
+
+    public ApplicationStartup(ILogger<ApplicationStartup> logger,
+        IConfigManager configManager,
+        IDeviceManagementService deviceManagementService,
+        IGlobalHotkeyService hotkeyService,
+        IPacketAnalyzer packetAnalyzer,
+        IDataStorage dataStorage,
+        LocalizationManager localization)
+    {
+        _logger = logger;
+        _configManager = configManager;
+        _deviceManagementService = deviceManagementService;
+        _hotkeyService = hotkeyService;
+        _packetAnalyzer = packetAnalyzer;
+        _dataStorage = dataStorage;
+        _localization = localization;
+        _configManager.ConfigurationUpdated += ConfigManagerOnConfigurationUpdated;
+        _appConfig = _configManager.CurrentConfig;
+        ConfigManagerOnConfigurationUpdated(_configManager, _configManager.CurrentConfig);
+    }
+
+    private void ConfigManagerOnConfigurationUpdated(object? sender, AppConfig newConfig)
+    {
+        _appConfig = newConfig;
+        ConfigDeviceManagementService();
+    }
+
+    private void ConfigDeviceManagementService()
+    {
+        _deviceManagementService.SetUseProcessPortsFilter(_appConfig.UseProcessPortsFilter);
+    }
+
     public async Task InitializeAsync()
     {
         try
         {
-            logger.LogInformation(WpfLogEvents.StartupInit, "Startup initialization started");
-            
+            _logger.LogInformation(WpfLogEvents.StartupInit, "Startup initialization started");
+
             // ? Configure time series sample capacity from config
-            StatisticsConfiguration.TimeSeriesSampleCapacity = configManager.CurrentConfig.TimeSeriesSampleCapacity;
-            logger.LogInformation("Time series sample capacity configured: {Capacity}", 
+            StatisticsConfiguration.TimeSeriesSampleCapacity = _configManager.CurrentConfig.TimeSeriesSampleCapacity;
+            _logger.LogInformation("Time series sample capacity configured: {Capacity}",
                 StatisticsConfiguration.TimeSeriesSampleCapacity);
-            
+
             // ? Configure sample recording interval from DpsUpdateInterval
-            if (dataStorage is DataStorageV2 storageV2)
+            if (_dataStorage is DataStorageV2 storageV2)
             {
-                storageV2.SampleRecordingInterval = configManager.CurrentConfig.DpsUpdateInterval;
-                logger.LogInformation("Sample recording interval configured: {Interval}ms", 
+                storageV2.SampleRecordingInterval = _configManager.CurrentConfig.DpsUpdateInterval;
+                _logger.LogInformation("Sample recording interval configured: {Interval}ms",
                     storageV2.SampleRecordingInterval);
             }
-            
+
             // Apply localization
-            localization.Initialize(configManager.CurrentConfig.Language);
+            _localization.Initialize(_configManager.CurrentConfig.Language);
 
             await TryFindBestNetworkAdapter().ConfigureAwait(false);
 
-            dataStorage.LoadPlayerInfoFromFile();
+            _dataStorage.LoadPlayerInfoFromFile();
             // Start analyzer
-            packetAnalyzer.Start();
-            hotkeyService.Start();
-            logger.LogInformation(WpfLogEvents.StartupInit, "Startup initialization completed");
+            _packetAnalyzer.Start();
+            _hotkeyService.Start();
+            _logger.LogInformation(WpfLogEvents.StartupInit, "Startup initialization completed");
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Startup initialization encountered an issue");
+            _logger.LogWarning(ex, "Startup initialization encountered an issue");
             throw;
         }
     }
@@ -59,9 +92,9 @@ public sealed class ApplicationStartup(
     private async Task TryFindBestNetworkAdapter()
     {
         // Activate preferred/first network adapter
-        var adapters = await deviceManagementService.GetNetworkAdaptersAsync();
+        var adapters = await _deviceManagementService.GetNetworkAdaptersAsync();
         NetworkAdapterInfo? target = null;
-        var pref = configManager.CurrentConfig.PreferredNetworkAdapter;
+        var pref = _configManager.CurrentConfig.PreferredNetworkAdapter;
         if (pref != null)
         {
             var match = adapters.FirstOrDefault(a => a.name == pref.Name);
@@ -74,7 +107,7 @@ public sealed class ApplicationStartup(
         // If preferred not found, try automatic selection via routing
         if (target == null)
         {
-            target = await deviceManagementService.GetAutoSelectedNetworkAdapterAsync();
+            target = await _deviceManagementService.GetAutoSelectedNetworkAdapterAsync();
         }
 
         target ??= adapters.Count > 0
@@ -83,14 +116,14 @@ public sealed class ApplicationStartup(
 
         if (target != null)
         {
-            logger.LogInformation(WpfLogEvents.StartupAdapter, "Activating adapter: {Name}", target.Name);
-            deviceManagementService.SetActiveNetworkAdapter(target);
-            configManager.CurrentConfig.PreferredNetworkAdapter = target;
-            _ = configManager.SaveAsync();
+            _logger.LogInformation(WpfLogEvents.StartupAdapter, "Activating adapter: {Name}", target.Name);
+            _deviceManagementService.SetActiveNetworkAdapter(target);
+            _configManager.CurrentConfig.PreferredNetworkAdapter = target;
+            _ = _configManager.SaveAsync();
         }
         else
         {
-            logger.LogWarning(WpfLogEvents.StartupAdapter, "No adapters available for activation");
+            _logger.LogWarning(WpfLogEvents.StartupAdapter, "No adapters available for activation");
         }
     }
 
@@ -98,15 +131,15 @@ public sealed class ApplicationStartup(
     {
         try
         {
-            logger.LogInformation(WpfLogEvents.Shutdown, "Application shutdown");
-            deviceManagementService.StopActiveCapture();
-            packetAnalyzer.Stop();
-            hotkeyService.Stop();
-            dataStorage.SavePlayerInfoToFile();
+            _logger.LogInformation(WpfLogEvents.Shutdown, "Application shutdown");
+            _deviceManagementService.StopActiveCapture();
+            _packetAnalyzer.Stop();
+            _hotkeyService.Stop();
+            _dataStorage.SavePlayerInfoToFile();
         }
         catch (Exception ex)
         {
-            logger.LogWarning(ex, "Shutdown encountered an issue");
+            _logger.LogWarning(ex, "Shutdown encountered an issue");
         }
     }
 }

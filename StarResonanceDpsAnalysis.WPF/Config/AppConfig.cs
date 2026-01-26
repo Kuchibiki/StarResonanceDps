@@ -261,6 +261,8 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty]
     private bool _useConverterBasedDps = true;
 
+    public bool UseProcessPortsFilter { get; set; }
+
     /// <summary>
     /// Partial method called after BackgroundImagePath has changed.
     /// Ensures empty strings are converted to null.
