@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using OxyPlot;
 using OxyPlot.Series;
@@ -18,7 +16,7 @@ public sealed class SkillPieSeries : PieSeries
     public ISet<PieSlice> HideInsideLabelSlices { get; } = new HashSet<PieSlice>();
     public ISet<PieSlice> HideOutsideLabelSlices { get; } = new HashSet<PieSlice>();
 
-    public override TrackerHitResult GetNearestPoint(ScreenPoint point, bool interpolate)
+    public override TrackerHitResult? GetNearestPoint(ScreenPoint point, bool interpolate)
     {
         for (var i = 0; i < _slicePoints.Count; i++)
         {
