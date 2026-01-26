@@ -156,7 +156,7 @@ public partial class App : Application
     static readonly Dictionary<Type, ServiceLifetime> LifeTimeOverrides = new()
     {
         { typeof(DpsStatisticsViewModel), ServiceLifetime.Singleton },
-        { typeof(DpsStatisticsView), ServiceLifetime.Transient },
+        { typeof(DpsStatisticsView), ServiceLifetime.Singleton },
         { typeof(SkillBreakdownViewModel), ServiceLifetime.Transient },
         { typeof(SkillBreakdownView), ServiceLifetime.Transient },
     };
