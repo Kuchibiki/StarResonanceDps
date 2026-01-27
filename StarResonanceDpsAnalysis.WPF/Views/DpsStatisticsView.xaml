@@ -28,6 +28,7 @@
     lex:ResxLocalizationProvider.DefaultDictionary="Resources"
     lex:LocalizeDictionary.DesignCulture="zh-CN"
     ResizeMode="CanResize"
+    WindowState="Normal"
     Style="{StaticResource TransparentWindow}"
     Topmost="{Binding AppConfig.TopmostEnabled, Mode=OneWay}"
     mc:Ignorable="d">
