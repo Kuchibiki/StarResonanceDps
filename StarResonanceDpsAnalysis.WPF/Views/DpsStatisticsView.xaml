@@ -400,7 +400,6 @@
                             <MultiBinding Converter="{StaticResource ThemeColorWithOpacityConverter}">
                                 <Binding Path="AppConfig.ThemeColor" />
                                 <Binding Path="AppConfig.Opacity" />
-                                <Binding Path="AppConfig.MouseThroughEnabled" />
                             </MultiBinding>
                         </SolidColorBrush.Color>
                     </SolidColorBrush>
@@ -879,7 +878,6 @@
                             <MultiBinding Converter="{StaticResource ThemeColorWithOpacityConverter}">
                                 <Binding Path="AppConfig.ThemeColor" />
                                 <Binding Path="AppConfig.Opacity" />
-                                <Binding Path="AppConfig.MouseThroughEnabled" />
                             </MultiBinding>
                         </SolidColorBrush.Color>
                     </SolidColorBrush>

@@ -37,27 +37,11 @@ public sealed class ThemeColorWithOpacityConverter : IMultiValueConverter
             opacity = opacityValue;
         }
 
-        // 解析鼠标穿透状态
-        bool isMouseThrough = false;
-        if (values.Length > 2 && values[2] is bool mouseThroughValue)
-        {
-            isMouseThrough = mouseThroughValue;
-        }
-
         // 计算最终的Alpha值
-        byte alpha;
-        if (isMouseThrough)
-        {
-            // 鼠标穿透时，使用非常低的透明度
-            alpha = 1;
-        }
-        else
-        {
-            // 正常模式，根据滑块值计算透明度
-            // opacity: 5-95 -> alpha: 13-242 (约 5%-95%)
-            var normalizedOpacity = Math.Clamp(opacity, 5, 95) / 100.0;
-            alpha = (byte)(normalizedOpacity * 255);
-        }
+        // 正常模式，根据滑块值计算透明度
+        // opacity: 5-95 -> alpha: 13-242 (约 5%-95%)
+        var normalizedOpacity = Math.Clamp(opacity, 5, 95) / 100.0;
+        var alpha = (byte)(normalizedOpacity * 255);
 
         // 返回带透明度的颜色
         return Color.FromArgb(alpha, themeColor.R, themeColor.G, themeColor.B);
