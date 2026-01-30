@@ -29,7 +29,6 @@ public class DpsTimerService : IDpsTimerService
         };
         _updateTimer.Tick += (s, e) =>
         {
-            BattleDuration = _stopwatch.Elapsed;
             DurationChanged?.Invoke(this, BattleDuration);
         };
     }

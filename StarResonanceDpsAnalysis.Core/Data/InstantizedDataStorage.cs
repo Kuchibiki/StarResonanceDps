@@ -422,7 +422,7 @@ public class InstantizedDataStorage : IDataStorage, IDisposable
     public void SetPlayerLevel(long playerUid, int tmpLevel)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].Level = tmpLevel;
+        DataStorage.SetPlayerLevel(playerUid, tmpLevel);
     }
 
     public bool EnsurePlayer(long playerUid)
@@ -433,24 +433,25 @@ public class InstantizedDataStorage : IDataStorage, IDisposable
     public void SetPlayerHP(long playerUid, long hp)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].HP = hp;
+        DataStorage.SetPlayerHP(playerUid, hp);
     }
 
     public void SetPlayerMaxHP(long playerUid, long maxHp)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].MaxHP = maxHp;
+        DataStorage.SetPlayerMaxHP(playerUid, maxHp);
     }
 
     public void SetPlayerCombatState(long uid, bool combatState)
     {
-        throw new NotImplementedException();
+        EnsurePlayer(uid);
+        DataStorage.SetPlayerCombatState(uid, combatState);
     }
 
     public void SetPlayerName(long playerUid, string playerName)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].Name = playerName;
+        DataStorage.SetPlayerName(playerUid, playerName);
     }
 
     public void SetPlayerCombatPower(long playerUid, int combatPower)
@@ -473,19 +474,19 @@ public class InstantizedDataStorage : IDataStorage, IDisposable
     public void SetPlayerRankLevel(long playerUid, int readInt32)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].RankLevel = readInt32;
+        DataStorage.SetPlayerRankLevel(playerUid, readInt32);
     }
 
     public void SetPlayerCritical(long playerUid, int readInt32)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].Critical = readInt32;
+        DataStorage.SetPlayerCritical(playerUid, readInt32);
     }
 
     public void SetPlayerLucky(long playerUid, int readInt32)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].Lucky = readInt32;
+        DataStorage.SetPlayerLucky(playerUid, readInt32);
     }
 
     public void SetPlayerElementFlag(long playerUid, int readInt32)
@@ -509,51 +510,45 @@ public class InstantizedDataStorage : IDataStorage, IDisposable
     public void SetNpcTemplateId(long playerUid, int templateId)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].NpcTemplateId = templateId;
+        DataStorage.SetNpcTemplateId(playerUid, templateId);
     }
 
     public void SetPlayerSeasonLevel(long playerUid, int seasonLevel)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].SeasonLevel = seasonLevel;
+        DataStorage.SetPlayerSeasonLevel(playerUid, seasonLevel);
     }
 
     public void SetPlayerSeasonStrength(long playerUid, int seasonStrength)
     {
         EnsurePlayer(playerUid);
-        DataStorage.ReadOnlyPlayerInfoDatas[playerUid].SeasonStrength = seasonStrength;
+        DataStorage.SetPlayerSeasonStrength(playerUid, seasonStrength);
     }
 
     public IReadOnlyList<BattleLog> GetBattleLogsForPlayer(long uid, bool fullSession)
     {
-        throw new NotSupportedException("GetBattleLogsForPlayer is not supported in InstantizedDataStorage. Use DataStorageV2 instead.");
+        return DataStorage.GetBattleLogsForPlayer(uid, fullSession);
     }
 
     public IReadOnlyList<BattleLog> GetBattleLogs(bool fullSession)
     {
-        throw new NotSupportedException("GetBattleLogs is not supported in InstantizedDataStorage. Use DataStorageV2 instead.");
+        return DataStorage.GetBattleLogs(fullSession);
     }
 
     public IReadOnlyDictionary<long, PlayerStatistics> GetStatistics(bool fullSession)
     {
-        throw new NotSupportedException();
+        return DataStorage.GetStatistics(fullSession);
     }
 
     public int GetStatisticsCount(bool fullSession)
     {
-        throw new NotSupportedException();
+        return DataStorage.GetStatisticsCount(fullSession);
     }
 
     public event Action? BeforeSectionCleared;
     public void SetPlayerCombatStateTime(long uid, int readInt32)
     {
-        throw new NotImplementedException();
-    }
-
-    public void RecordSamples(TimeSpan sectionDuration)
-    {
-        // InstantizedDataStorage forwards to static DataStorage which doesn't support this
-        // This is intentional as it's a legacy adapter
-        throw new NotSupportedException("RecordSamples is not supported in InstantizedDataStorage. Use DataStorageV2 instead.");
+        EnsurePlayer(uid);
+        DataStorage.SetPlayerCombatStateTime(uid, readInt32);
     }
 }

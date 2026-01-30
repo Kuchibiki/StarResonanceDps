@@ -32,7 +32,7 @@ public partial class DpsStatisticsViewModel
 
             if (_combatState.AwaitingSectionStart)
             {
-                var hasSectionDamage = HasData(_storage.GetStatistics(false));
+                var hasSectionDamage = _storage.GetStatisticsCount(false) > 0;
                 _logger.LogDebug("Awaiting section start - has section damage: {HasSectionDamage}", hasSectionDamage);
 
                 if (hasSectionDamage)
