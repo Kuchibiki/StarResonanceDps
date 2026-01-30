@@ -20,6 +20,7 @@
  - [ ] Export DPS statistics image
  - [ ] Not to update port filter if the ports are same
  - [ ] Process DreamStrength info
+ - [ ] 第一次可能会调用Converter方法来计算DPS
 
 ### Issues
 
