@@ -397,6 +397,7 @@ public static class DataStorage
             }
         }
 
+        _engine.ProcessBattleLog(log);
         // 最后一个日志赋值
         UpdateLastLogState(log);
 
@@ -544,7 +545,6 @@ public static class DataStorage
             skillData.LuckyTimes += log.IsLucky ? 1 : 0;
         });
 
-        _engine.ProcessBattleLog(log);
 
         return (fullData, sectionedData);
     }
