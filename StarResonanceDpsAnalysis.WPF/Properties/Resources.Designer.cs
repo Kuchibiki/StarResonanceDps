@@ -241,6 +241,24 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This application is already running with administrator privileges..
+        /// </summary>
+        public static string App_AlreadyAdmin_Message {
+            get {
+                return ResourceManager.GetString("App_AlreadyAdmin_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Already Administrator.
+        /// </summary>
+        public static string App_AlreadyAdmin_Title {
+            get {
+                return ResourceManager.GetString("App_AlreadyAdmin_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close application?.
         /// </summary>
         public static string App_Exit_Confirm_Content {
@@ -264,6 +282,44 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string App_Name {
             get {
                 return ResourceManager.GetString("App_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Administrator.
+        /// </summary>
+        public static string App_PrivilegeLevel_Admin {
+            get {
+                return ResourceManager.GetString("App_PrivilegeLevel_Admin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard User.
+        /// </summary>
+        public static string App_PrivilegeLevel_Standard {
+            get {
+                return ResourceManager.GetString("App_PrivilegeLevel_Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some features may require administrator privileges.
+        ///
+        ///Would you like to restart the application as administrator?.
+        /// </summary>
+        public static string App_RestartAsAdmin_Message {
+            get {
+                return ResourceManager.GetString("App_RestartAsAdmin_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Administrator Privileges.
+        /// </summary>
+        public static string App_RestartAsAdmin_Title {
+            get {
+                return ResourceManager.GetString("App_RestartAsAdmin_Title", resourceCulture);
             }
         }
         
@@ -493,6 +549,15 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open skill log window.
+        /// </summary>
+        public static string Command_OpenSkillLog {
+            get {
+                return ResourceManager.GetString("Command_OpenSkillLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Launch.
         /// </summary>
         public static string Common_Action_Open {
@@ -534,6 +599,33 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string Common_HitType_Normal {
             get {
                 return ResourceManager.GetString("Common_HitType_Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill display limit set to.
+        /// </summary>
+        public static string Common_SkillDisplayLimitChanged {
+            get {
+                return ResourceManager.GetString("Common_SkillDisplayLimitChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill display limit saved to config:.
+        /// </summary>
+        public static string Common_SkillDisplayLimitSaved {
+            get {
+                return ResourceManager.GetString("Common_SkillDisplayLimitSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill list refreshed for all slots.
+        /// </summary>
+        public static string Common_SkillListRefreshed {
+            get {
+                return ResourceManager.GetString("Common_SkillListRefreshed", resourceCulture);
             }
         }
         
@@ -853,6 +945,35 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please configure your character UID in Settings before using personal training mode.
+        ///
+        ///How to get UID: in game, the bottom-left player number is your UID..
+        /// </summary>
+        public static string Dialog_UidRequired_Message {
+            get {
+                return ResourceManager.GetString("Dialog_UidRequired_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character UID required.
+        /// </summary>
+        public static string Dialog_UidRequired_Title {
+            get {
+                return ResourceManager.GetString("Dialog_UidRequired_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CurrentPlayerRank.
+        /// </summary>
+        public static string DpsStatistics_CurrentPlayerRank {
+            get {
+                return ResourceManager.GetString("DpsStatistics_CurrentPlayerRank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mouse click-through enabled.
         /// </summary>
         public static string DpsStatistics_Indicator_ClickThrough_Tooltip {
@@ -871,6 +992,87 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [Snapshot].
+        /// </summary>
+        public static string DpsStatistics_Snapshot_Label {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Snapshot_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No battle snapshot data available..
+        /// </summary>
+        public static string DpsStatistics_Snapshot_ViewCurrent_EmptyMessage {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Snapshot_ViewCurrent_EmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View battle snapshot.
+        /// </summary>
+        public static string DpsStatistics_Snapshot_ViewCurrent_Title {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Snapshot_ViewCurrent_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No full snapshot data available..
+        /// </summary>
+        public static string DpsStatistics_Snapshot_ViewFull_EmptyMessage {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Snapshot_ViewFull_EmptyMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View full snapshot.
+        /// </summary>
+        public static string DpsStatistics_Snapshot_ViewFull_Title {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Snapshot_ViewFull_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team DPS.
+        /// </summary>
+        public static string DpsStatistics_TeamTotal_Damage {
+            get {
+                return ResourceManager.GetString("DpsStatistics_TeamTotal_Damage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Healing.
+        /// </summary>
+        public static string DpsStatistics_TeamTotal_Healing {
+            get {
+                return ResourceManager.GetString("DpsStatistics_TeamTotal_Healing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Damage Taken.
+        /// </summary>
+        public static string DpsStatistics_TeamTotal_NpcTakenDamage {
+            get {
+                return ResourceManager.GetString("DpsStatistics_TeamTotal_NpcTakenDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Damage Taken.
+        /// </summary>
+        public static string DpsStatistics_TeamTotal_TakenDamage {
+            get {
+                return ResourceManager.GetString("DpsStatistics_TeamTotal_TakenDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to T.
         /// </summary>
         public static string DpsStatistics_TestButton_Content {
@@ -885,6 +1087,15 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string DpsStatistics_TestButton_Tooltip {
             get {
                 return ResourceManager.GetString("DpsStatistics_TestButton_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opening personal training mode.
+        /// </summary>
+        public static string Info_OpeningPersonalDps {
+            get {
+                return ResourceManager.GetString("Info_OpeningPersonalDps", resourceCulture);
             }
         }
         
@@ -1542,6 +1753,60 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string NumberDisplay_Wan {
             get {
                 return ResourceManager.GetString("NumberDisplay_Wan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to B.
+        /// </summary>
+        public static string NumberSuffix_B {
+            get {
+                return ResourceManager.GetString("NumberSuffix_B", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to K.
+        /// </summary>
+        public static string NumberSuffix_K {
+            get {
+                return ResourceManager.GetString("NumberSuffix_K", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to M.
+        /// </summary>
+        public static string NumberSuffix_M {
+            get {
+                return ResourceManager.GetString("NumberSuffix_M", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to W.
+        /// </summary>
+        public static string NumberSuffix_Wan {
+            get {
+                return ResourceManager.GetString("NumberSuffix_Wan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Y.
+        /// </summary>
+        public static string NumberSuffix_Yi {
+            get {
+                return ResourceManager.GetString("NumberSuffix_Yi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Z.
+        /// </summary>
+        public static string NumberSuffix_Zhao {
+            get {
+                return ResourceManager.GetString("NumberSuffix_Zhao", resourceCulture);
             }
         }
         
@@ -2523,6 +2788,15 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Others.
+        /// </summary>
+        public static string SkillBreakdown_Label_Others {
+            get {
+                return ResourceManager.GetString("SkillBreakdown_Label_Others", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Percentage.
         /// </summary>
         public static string SkillBreakdown_Label_Percentage {
@@ -3131,6 +3405,15 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string Tooltip_ToggleScope {
             get {
                 return ResourceManager.GetString("Tooltip_ToggleScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tried to open personal training mode without UID configured.
+        /// </summary>
+        public static string Warning_UidNotConfigured {
+            get {
+                return ResourceManager.GetString("Warning_UidNotConfigured", resourceCulture);
             }
         }
         

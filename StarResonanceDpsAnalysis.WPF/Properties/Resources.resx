@@ -1285,4 +1285,7 @@ Would you like to restart the application as administrator?</value>
   <data name="App_PrivilegeLevel_Standard" xml:space="preserve">
     <value>Standard User</value>
   </data>
+  <data name="DpsStatistics_CurrentPlayerRank" xml:space="preserve">
+      <value>CurrentPlayerRank</value>
+  </data>
 </root>
