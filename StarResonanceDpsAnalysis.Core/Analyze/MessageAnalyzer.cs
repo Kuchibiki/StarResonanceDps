@@ -206,7 +206,7 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
             var vData = syncContainerData.VData;
             if (vData.CharId == null || vData.CharId == 0) return;
 
-            var playerUid = vData.CharId.ShiftRight16();
+            var playerUid = vData.CharId;
             DataStorage.CurrentPlayerUUID = playerUid;
             DataStorage.CurrentPlayerInfo.UID = playerUid;
             DataStorage.TestCreatePlayerInfoByUID(playerUid);
