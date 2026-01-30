@@ -209,7 +209,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
         }
 
         var duration = TimeSpan.FromTicks(_playerStatistics.LastTick - (_playerStatistics.StartTick ?? 0));
-        var skillLists = _playerStatistics.ToSkillItemVmList();
+        var skillLists = _playerStatistics.ToSkillItemVmList(_localizationManager);
 
         // Update damage statistics 
         UpdateStatisticSet(DpsTabViewModel,

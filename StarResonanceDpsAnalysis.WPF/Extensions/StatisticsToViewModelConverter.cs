@@ -1,5 +1,6 @@
 using StarResonanceDpsAnalysis.Core;
 using StarResonanceDpsAnalysis.Core.Statistics;
+using StarResonanceDpsAnalysis.WPF.Localization;
 using StarResonanceDpsAnalysis.WPF.ViewModels;
 
 namespace StarResonanceDpsAnalysis.WPF.Extensions;
@@ -29,11 +30,11 @@ public static class StatisticsToViewModelConverter
     }
 
     public static SkillViewModelCollection
-        ToSkillItemVmList(this PlayerStatistics playerStats)
+        ToSkillItemVmList(this PlayerStatistics playerStats, LocalizationManager localizationManager)
     {
-        var damageSkills = BuildSkillList(playerStats.AttackDamage);
-        var healingSkills = BuildSkillList(playerStats.Healing);
-        var takenSkills = BuildSkillList(playerStats.TakenDamage);
+        var damageSkills = BuildSkillList(playerStats.AttackDamage, localizationManager);
+        var healingSkills = BuildSkillList(playerStats.Healing, localizationManager);
+        var takenSkills = BuildSkillList(playerStats.TakenDamage, localizationManager);
 
         return new SkillViewModelCollection(damageSkills, healingSkills, takenSkills);
     }
@@ -42,7 +43,7 @@ public static class StatisticsToViewModelConverter
     /// Generic method to build skill list from skill statistics
     /// </summary>
     private static List<SkillItemViewModel> BuildSkillList(
-        StatisticValues stat)
+        StatisticValues stat, LocalizationManager localizationManager)
     {
         var skills = stat.Skills;
         var totalValue = stat.Total;
@@ -53,10 +54,11 @@ public static class StatisticsToViewModelConverter
             var totalLucky = skillStats.LuckyTimes + skillStats.CritAndLuckyTimes;
             var luckyValue = skillStats.LuckValue + skillStats.CritAndLuckyValue;
             var normalValue = skillStats.TotalValue - skillStats.CritValue - luckyValue;
+            //SkillName = EmbeddedSkillConfig.GetName((int)skillId),
             var skillVm = new SkillItemViewModel
             {
                 SkillId = skillId,
-                SkillName = EmbeddedSkillConfig.GetName((int)skillId),
+                SkillName = localizationManager.GetString($"JsonDictionary:Skills:{skillId}"),
                 TotalValue = skillStats.TotalValue,
                 HitCount = skillStats.UseTimes,
                 CritCount = skillStats.CritTimes,

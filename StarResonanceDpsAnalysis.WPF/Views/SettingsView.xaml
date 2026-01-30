@@ -1092,8 +1092,8 @@
                                             <Border Grid.Column="2" HorizontalAlignment="Right">
                                                 <ctrl:SwitchControl
                                                     IsChecked="{Binding AppConfig.UseConverterBasedDps, Mode=TwoWay}"
-                                                    OffContent="全程秒伤"
-                                                    OnContent="累计/时长"
+                                                    OnContent="全程秒伤"
+                                                    OffContent="累计/时长"
                                                     ToolTip="开启=累计伤害除以时长, 关闭=全程平均秒伤(ValuePerSecond)" />
                                             </Border>
                                         </Grid>

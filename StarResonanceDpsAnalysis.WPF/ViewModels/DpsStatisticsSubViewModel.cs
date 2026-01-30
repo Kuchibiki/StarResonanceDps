@@ -221,7 +221,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
         var found = ret.TryGetValue(playerUid, out var value);
         Debug.Assert(found, $"PlayerNotFound with {playerUid}");
         Debug.Assert(value != null, nameof(value) + " != null");
-        var list = value.ToSkillItemVmList();
+        var list = value.ToSkillItemVmList(_localizationManager);
         return list;
     }
 
@@ -235,7 +235,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
             slot.Player.Spec = playerInfo.Spec;
             slot.Player.PowerLevel = playerInfo.CombatPower ?? 0;
             slot.Player.SeasonLevel = playerInfo.SeasonLevel;
-            slot.Player.SeasonStrength = playerInfo.SeasonStrength;
+            slot.Player.SeasonStrength = playerInfo.SeasonStrength ?? 0;
         }
         else
         {

@@ -13,6 +13,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:StarResonanceDpsAnalysis.WPF.ViewModels"
+    xmlns:properties="clr-namespace:StarResonanceDpsAnalysis.Assets.Properties;assembly=StarResonanceDpsAnalysis.Assets"
     Title="{lex:Loc Key={x:Static loc:ResourcesKeys.Window_DpsStatistics_Title}}"
     Width="380"
     Height="360"
@@ -32,7 +33,6 @@
     Topmost="{Binding AppConfig.TopmostEnabled, Mode=OneWay}"
     mc:Ignorable="d">
 
-    <!--  WindowChrome: 开启可拉伸边界  -->
     <WindowChrome.WindowChrome>
         <WindowChrome
             CaptionHeight="0"
@@ -549,9 +549,10 @@
                                         IsChecked="{Binding ShowTeamTotalDamage}"
                                         Style="{StaticResource CheckableMenuItem}" />
 
-                                    <MenuItem
+                                    <!--Disable personal dps temporarily-->
+                                    <!--<MenuItem
                                         Command="{Binding OpenPersonalDpsViewCommand}"
-                                        Header="{lex:Loc Key={x:Static loc:ResourcesKeys.Menu_Personal_Training_Mode}}" />
+                                        Header="{lex:Loc Key={x:Static loc:ResourcesKeys.Menu_Personal_Training_Mode}}" />-->
 
                                     <MenuItem
                                         Command="{Binding OpenSkillLogCommand}"
@@ -894,7 +895,8 @@
                     <TextBlock
                         Grid.Column="0"
                         HorizontalAlignment="Left"
-                        Style="{StaticResource FooterTextContent}">
+                        Style="{StaticResource FooterTextContent}"
+                        ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.DpsStatistics_CurrentPlayerRank}}">
                         <!-- 快照模式下显示[快照],战斗模式下显示排名 -->
                         <TextBlock.Text>
                             <MultiBinding Converter="{StaticResource SnapshotOrRankConverter}" StringFormat="{}[{0}]">

@@ -27,14 +27,8 @@ public sealed class SnapshotOrRankConverter : IMultiValueConverter
                 "[Snapshot]");
         }
 
-        // 第二个参数: CurrentPlayerRank (玩家排名字符串,格式已经是"[01]"或"[--]")
-        if (values[1] == null || values[1] == DependencyProperty.UnsetValue)
-        {
-            return null;
-        }
-
         // 战斗模式下,直接返回排名字符串(已经包含方括号)
-        var rank = values[1]?.ToString();
+        var rank = values[1]?.ToString() ?? "--";
         return rank;
     }
 

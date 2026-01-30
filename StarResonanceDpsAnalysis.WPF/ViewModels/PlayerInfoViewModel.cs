@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using StarResonanceDpsAnalysis.Core.Models;
@@ -17,34 +16,36 @@ public partial class PlayerInfoViewModel : BaseViewModel
     [ObservableProperty] private Classes _class = Classes.Unknown;
 
     /// <summary>
-    /// 赛季强度 Season Strength
+    /// 自定义格式字符串
     /// </summary>
-    [ObservableProperty] private int _seasonStrength;
+    [ObservableProperty] private string _formatString = "{Name} - {Spec} ({PowerLevel}-{SeasonStrength})";
+
+    [ObservableProperty] private string _guild = string.Empty;
+    [ObservableProperty] private bool _isNpc;
+    [ObservableProperty] private bool _mask;
+    [ObservableProperty] private string? _name;
+    [ObservableProperty] private int _npcTemplateId;
+
+    [ObservableProperty] private string _playerInfo = string.Empty;
+    [ObservableProperty] private int _powerLevel;
+
     /// <summary>
     /// 赛季等级 Season Level
     /// </summary>
     [ObservableProperty] private int _seasonLevel;
 
-    [ObservableProperty] private string _guild = string.Empty;
-    [ObservableProperty] private bool _isNpc;
-    [ObservableProperty] private string? _name;
+    /// <summary>
+    /// 赛季强度 Season Strength
+    /// </summary>
+    [ObservableProperty] private int _seasonStrength;
 
-    [ObservableProperty] private string _playerInfo = string.Empty;
-    [ObservableProperty] private int _powerLevel;
     [ObservableProperty] private ClassSpec _spec = ClassSpec.Unknown;
     [ObservableProperty] private long _uid;
-    [ObservableProperty] private bool _mask;
-    [ObservableProperty] private int _npcTemplateId;
-
-    /// <summary>
-    /// 自定义格式字符串
-    /// </summary>
-    [ObservableProperty] private string _formatString = "{Name} - {Spec} ({PowerLevel}-{SeasonStrength})";
 
     /// <summary>
     /// 是否使用自定义格式
     /// </summary>
-    [ObservableProperty] private bool _useCustomFormat = false;
+    [ObservableProperty] private bool _useCustomFormat;
 
     public PlayerInfoViewModel(LocalizationManager localizationManager)
     {
@@ -60,7 +61,7 @@ public partial class PlayerInfoViewModel : BaseViewModel
 
     private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is not ("PlayerInfo"))
+        if (e.PropertyName is not "PlayerInfo")
         {
             UpdatePlayerInfo();
         }
@@ -70,7 +71,8 @@ public partial class PlayerInfoViewModel : BaseViewModel
     {
         if (IsNpc)
         {
-            PlayerInfo = _localizationManager.GetString($"JsonDictionary:Monster:{NpcTemplateId}", null, "UnknownMonster");
+            PlayerInfo =
+                _localizationManager.GetString($"JsonDictionary:Monster:{NpcTemplateId}", null, "UnknownMonster");
             return;
         }
 
@@ -93,20 +95,20 @@ public partial class PlayerInfoViewModel : BaseViewModel
         var result = format;
 
         // 替换占位符
-        result = Regex.Replace(result, @"\{Name\}", GetName(), RegexOptions.IgnoreCase);
-        result = Regex.Replace(result, @"\{Spec\}", GetSpec(), RegexOptions.IgnoreCase);
-        result = Regex.Replace(result, @"\{PowerLevel\}", PowerLevel.ToString(), RegexOptions.IgnoreCase);
-        result = Regex.Replace(result, @"\{SeasonStrength\}", SeasonStrength.ToString(), RegexOptions.IgnoreCase);
-        result = Regex.Replace(result, @"\{SeasonLevel\}", SeasonLevel.ToString(), RegexOptions.IgnoreCase);
-        result = Regex.Replace(result, @"\{Guild\}", Guild ?? "", RegexOptions.IgnoreCase);
-        result = Regex.Replace(result, @"\{Uid\}", Uid.ToString(), RegexOptions.IgnoreCase);
+        result = GetNameRegex().Replace(result, GetName());
+        result = GetSpecRegex().Replace(result, GetSpec());
+        result = GetPowerLevelRegex().Replace(result, PowerLevel.ToString());
+        result = GetSeasonStrengthRegex().Replace(result, SeasonStrength.ToString());
+        result = GetSeasonLevelRegex().Replace(result, SeasonLevel.ToString());
+        result = GetGuildRegex().Replace(result, Guild);
+        result = GetUidRegex().Replace(result, Uid.ToString());
 
         // 清理多余的空格、括号等
-        result = Regex.Replace(result, @"\s+", " "); // 多个空格变为一个
-        result = Regex.Replace(result, @"\(\s*\)", ""); // 空括号
-        result = Regex.Replace(result, @"\[\s*\]", ""); // 空方括号
-        result = Regex.Replace(result, @"\s*-\s*-\s*", " - "); // 多个连字符
-        result = Regex.Replace(result, @"^\s*-\s*|\s*-\s*$", ""); // 开头结尾的连字符
+        result = GetCollapseWhitespaceRegex().Replace(result, " "); // 多个空格变为一个
+        result = GetEmptyParenthesisRegex().Replace(result, ""); // 空括号
+        result = GetEmptyBracketRegex().Replace(result, ""); // 空方括号
+        result = GetRepeatedHyphensRegex().Replace(result, " - "); // 多个连字符
+        result = GetLeadingOrTrailingHyphenRegex().Replace(result, ""); // 开头结尾的连字符
         result = result.Trim();
 
         return result;
@@ -118,7 +120,7 @@ public partial class PlayerInfoViewModel : BaseViewModel
         var name = hasName switch
         {
             true => Mask ? NameMasker.Mask(Name!) : Name!,
-            false => $"UID:{(Mask ? NameMasker.Mask(Uid.ToString()) : Uid.ToString())}",
+            false => $"UID:{(Mask ? NameMasker.Mask(Uid.ToString()) : Uid.ToString())}"
         };
         Debug.Assert(name != null);
         return name;
@@ -129,4 +131,39 @@ public partial class PlayerInfoViewModel : BaseViewModel
         var rr = _localizationManager.GetString("ClassSpec_" + Spec);
         return rr;
     }
+
+    #region Regex
+
+    [GeneratedRegex(@"\{Name\}", RegexOptions.IgnoreCase)]
+    private static partial Regex GetNameRegex();
+
+    [GeneratedRegex(@"\{Spec\}", RegexOptions.IgnoreCase)]
+    private static partial Regex GetSpecRegex();
+
+    [GeneratedRegex(@"\{PowerLevel\}", RegexOptions.IgnoreCase)]
+    private static partial Regex GetPowerLevelRegex();
+
+    [GeneratedRegex(@"\{SeasonStrength\}", RegexOptions.IgnoreCase)]
+    private static partial Regex GetSeasonStrengthRegex();
+
+    [GeneratedRegex(@"\{SeasonLevel\}", RegexOptions.IgnoreCase)]
+    private static partial Regex GetSeasonLevelRegex();
+
+    [GeneratedRegex(@"\{Guild\}", RegexOptions.IgnoreCase)]
+    private static partial Regex GetGuildRegex();
+
+    [GeneratedRegex(@"\{Uid\}", RegexOptions.IgnoreCase)]
+    private static partial Regex GetUidRegex();
+    [GeneratedRegex(@"\s+")]
+    private static partial Regex GetCollapseWhitespaceRegex();
+    [GeneratedRegex(@"\(\s*\)")]
+    private static partial Regex GetEmptyParenthesisRegex();
+    [GeneratedRegex(@"\[\s*\]")]
+    private static partial Regex GetEmptyBracketRegex();
+    [GeneratedRegex(@"\s*-\s*-\s*")]
+    private static partial Regex GetRepeatedHyphensRegex();
+    [GeneratedRegex(@"^\s*-\s*|\s*-\s*$")]
+    private static partial Regex GetLeadingOrTrailingHyphenRegex();
+
+    #endregion
 }
