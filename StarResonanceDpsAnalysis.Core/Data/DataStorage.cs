@@ -172,6 +172,7 @@ public static class DataStorage
     public static event ServerChangedEventHandler? ServerChanged;
 
     public static event SectionEndedEventHandler? SectionEnded;
+    public static event Action? BeforeSectionCleared;
 
     /// <summary>
     /// 从文件加载缓存玩家信息
@@ -901,6 +902,11 @@ public static class DataStorage
         }
 
     }
+
+    private static void RaiseBeforeSectionCleared()
+    {
+        BeforeSectionCleared?.Invoke();
+    }
     #endregion
 
     public static IReadOnlyDictionary<long, PlayerStatistics> GetStatistics(bool fullSession)
@@ -928,5 +934,4 @@ public static class DataStorage
     {
         return fullSession ? _engine.GetFullStatisticsCount() : _engine.GetSectionStatisticsCount();
     }
-
 }

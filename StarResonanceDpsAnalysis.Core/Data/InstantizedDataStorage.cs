@@ -373,6 +373,13 @@ public class InstantizedDataStorage : IDataStorage, IDisposable
         }
     }
 
+    public event Action? BeforeSectionCleared
+    {
+        add => DataStorage.BeforeSectionCleared += value;
+        remove => DataStorage.BeforeSectionCleared -= value;
+    }
+
+
     // Public methods (forward to DataStorage)
     public void LoadPlayerInfoFromFile()
     {
@@ -545,7 +552,6 @@ public class InstantizedDataStorage : IDataStorage, IDisposable
         return DataStorage.GetStatisticsCount(fullSession);
     }
 
-    public event Action? BeforeSectionCleared;
     public void SetPlayerCombatStateTime(long uid, int readInt32)
     {
         EnsurePlayer(uid);
