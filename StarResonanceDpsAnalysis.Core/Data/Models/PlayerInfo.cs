@@ -26,7 +26,7 @@ public class PlayerInfo
         }
     }
 
-    public Classes Class => Spec.GetClasses();
+    public Classes Class => Spec != ClassSpec.Unknown ? Spec.GetClasses() : ProfessionID.GetClassNameById();
 
     public int? CombatPower { get; internal set; }
     public int? Level { get; internal set; }
@@ -39,7 +39,7 @@ public class PlayerInfo
     public int ReductionLevel { get; internal set; }
     public int EnergyFlag { get; internal set; }
     public int NpcTemplateId { get; internal set; }
-    public int SeasonStrength { get; internal set; }
+    public int? SeasonStrength { get; internal set; }
     public int SeasonLevel { get; internal set; }
     public bool CombatState { get; internal set; }
     public int CombatStateTime { get; internal set; }

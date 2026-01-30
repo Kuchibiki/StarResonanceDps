@@ -134,7 +134,7 @@ public sealed class StatisticsContext
             _sectionBattleLogs.Clear();
         }
     }
-    
+
     /// <summary>
     /// Get all full statistics (returns snapshot)
     /// </summary>

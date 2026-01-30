@@ -206,7 +206,8 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
             var vData = syncContainerData.VData;
             if (vData.CharId == null || vData.CharId == 0) return;
 
-            var playerUid = vData.CharId;
+            var playerUid = vData.CharId.ShiftRight16();
+            DataStorage.CurrentPlayerUUID = playerUid;
             DataStorage.CurrentPlayerInfo.UID = playerUid;
             DataStorage.TestCreatePlayerInfoByUID(playerUid);
 
@@ -263,6 +264,9 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
             try
             {
                 if (DataStorage.CurrentPlayerUUID == 0) return;
+                var playerUid = DataStorage.CurrentPlayerUUID.ShiftRight16();
+                DataStorage.TestCreatePlayerInfoByUID(playerUid);
+
                 //var dirty = Zproto.WorldNtf.Types.SyncContainerDirtyData.Parser.ParseFrom(payloadBuffer);
                 var dirty = Zproto.WorldNtf.Types.SyncContainerDirtyData.Parser.ParseFrom(payloadBuffer);
                 if (dirty?.VData?.Buffer == null || dirty.VData.Buffer.Length == 0) return;
@@ -276,9 +280,6 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
                 var fieldIndex = br.ReadUInt32();
                 _ = br.ReadInt32();
 
-                var playerUid = DataStorage.CurrentPlayerUUID.ShiftRight16();
-
-                DataStorage.TestCreatePlayerInfoByUID(playerUid);
 
                 switch (fieldIndex)
                 {
@@ -449,7 +450,7 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
                 if (isTargetPlayer)
                 {
                     //玩家
-                    ProcessPlayerAttrs(targetUuidRaw, attrCollection.Attrs, []);
+                    ProcessPlayerAttrs(targetUuid, attrCollection.Attrs, []);
                 }
                 else
                 {
@@ -557,46 +558,52 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
                 if (attr.Id == 0 || attr.RawData == null || attr.RawData.Length == 0) continue;
                 var reader = new CodedInputStream(attr.RawData.ToByteArray());
 
-                switch (attr.Id)
+                switch ((EAttrType)attr.Id)
                 {
-                    case (int)AttrType.AttrName:
+                    case EAttrType.AttrName:
                         var playerName = reader.ReadString();
                         DataStorage.SetPlayerName(playerUid, playerName);
                         Debug.WriteLine($"SyncNearEntitiesV1: SetPlayerName:{playerUid}@{playerName}");
                         break;
-                    case (int)AttrType.AttrProfessionId:
+                    case EAttrType.AttrProfessionId:
                         DataStorage.SetPlayerProfessionID(playerUid, reader.ReadInt32());
                         break;
-                    case (int)AttrType.AttrFightPoint:
+                    case EAttrType.AttrFightPoint:
                         DataStorage.SetPlayerCombatPower(playerUid, reader.ReadInt32());
                         break;
-                    case (int)AttrType.AttrLevel:
+                    case EAttrType.AttrLevel:
                         DataStorage.SetPlayerLevel(playerUid, reader.ReadInt32());
                         break;
-                    case (int)AttrType.AttrRankLevel:
+                    case EAttrType.AttrRankLevel:
                         DataStorage.SetPlayerRankLevel(playerUid, reader.ReadInt32());
                         break;
-                    case (int)AttrType.AttrCri:
+                    case EAttrType.AttrCri:
                         DataStorage.SetPlayerCritical(playerUid, reader.ReadInt32());
                         break;
-                    case (int)AttrType.AttrLucky:
+                    case EAttrType.AttrLuck:
                         DataStorage.SetPlayerLucky(playerUid, reader.ReadInt32());
                         break;
-                    case (int)AttrType.AttrHp:
+                    case EAttrType.AttrHp:
                         DataStorage.SetPlayerHP(playerUid, reader.ReadInt32());
                         break;
 
-                    case (int)AttrType.AttrMaxHp:
+                    case EAttrType.AttrMaxHp:
                         _ = reader.ReadInt32();
                         break;
-                    case (int)AttrType.AttrElementFlag:
-                        _ = reader.ReadInt32();
+                    case EAttrType.AttrSeasonStrength:
+                    case EAttrType.AttrSeasonStrengthTotal:
+                    case EAttrType.AttrSeasonStrengthAdd:
+                    case EAttrType.AttrSeasonStrengthExAdd:
+                    case EAttrType.AttrSeasonStrengthPer:
+                    case EAttrType.AttrSeasonStrengthExPer:
+                        //_logger?.LogWarning("[BaseDeltaInfoProcessor] Test for get AttrDreamIntensity: targetUuid[{targetUuid}], intensity[{value}]", targetUuid, reader.ReadInt32());
+                        var strength = reader.ReadInt32();
+                        DataStorage.SetPlayerSeasonStrength(playerUid, strength);
                         break;
-                    case (int)AttrType.AttrEnergyFlag:
-                        _ = reader.ReadInt32();
-                        break;
-                    case (int)AttrType.AttrReductionLevel:
-                        _ = reader.ReadInt32();
+
+                    case EAttrType.AttrSeasonLevel:
+                        var level = reader.ReadInt32();
+                        DataStorage.SetPlayerSeasonLevel(playerUid, level);
                         break;
                     default:
                         break;
