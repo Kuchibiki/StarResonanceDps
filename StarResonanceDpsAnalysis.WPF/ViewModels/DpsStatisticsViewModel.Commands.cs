@@ -118,7 +118,6 @@ public partial class DpsStatisticsViewModel
         }
 
         _logger.LogDebug(WpfLogEvents.VmLoaded, "DpsStatisticsViewModel loaded");
-        LoadPlayerCache();
 
         EnsureDurationTimerStarted();
         UpdateBattleDuration();
