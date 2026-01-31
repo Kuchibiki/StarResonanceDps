@@ -179,7 +179,17 @@ public static class DataStorage
     /// </summary>
     public static void LoadPlayerInfoFromFile()
     {
-        var playerInfoCaches = PlayerInfoCacheReader.ReadFile();
+        PlayerInfoCacheFileV3_0_0 playerInfoCaches;
+        try
+        {
+            playerInfoCaches = PlayerInfoCacheReader.ReadFile();
+        }
+        catch (FileNotFoundException e)
+        {
+            // 缓存文件不存在, 直接忽略
+            Console.WriteLine($"Player info cache file not found: {e.Message}");
+            return;
+        }
 
         foreach (var playerInfoCache in playerInfoCaches.PlayerInfos)
         {
@@ -213,7 +223,6 @@ public static class DataStorage
     /// <summary>
     /// 保存缓存玩家信息到文件
     /// </summary>
-    /// <param name="relativeFilePath"></param>
     public static void SavePlayerInfoToFile()
     {
         try
