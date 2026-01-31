@@ -195,6 +195,27 @@ public partial class AppConfig : ObservableObject
     private bool _showTeamTotalDamage = true;
 
     /// <summary>
+    /// DPS统计页面 - 是否显示总伤害数值
+    /// 默认值：true
+    /// </summary>
+    [ObservableProperty]
+    private bool _showDamage = true;
+
+    /// <summary>
+    /// DPS统计页面 - 是否显示DPS数值
+    /// 默认值：true
+    /// </summary>
+    [ObservableProperty]
+    private bool _showDps = true;
+
+    /// <summary>
+    /// DPS统计页面 - 是否显示百分比
+    /// 默认值：true
+    /// </summary>
+    [ObservableProperty]
+    private bool _showPercentage = true;
+
+    /// <summary>
     /// DPS统计页面 - 快照最小记录时长(秒)
     /// 默认值：5秒
     /// 范围：0 - 300秒

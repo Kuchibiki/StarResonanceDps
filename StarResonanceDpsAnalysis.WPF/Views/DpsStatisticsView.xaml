@@ -142,11 +142,17 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" MinWidth="42" />
                 </Grid.ColumnDefinitions>
                 <Grid.Resources>
                     <Style TargetType="TextBlock" BasedOn="{StaticResource NormalTextBlockBaseStyle}">
                         <Setter Property="FontSize" Value="12" />
+                    </Style>
+
+                    <Style x:Key="ValueTextStyle" TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="pack://application:,,,/Assets/Fonts/#HarmonyOS Sans SC" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
 
                     <Style x:Key="ProfessionImage" TargetType="Image">
@@ -233,46 +239,49 @@
                 </StackPanel>
 
                 <!--  数值  -->
-                <TextBlock
+                <StackPanel
                     Grid.Column="3"
+                    Orientation="Horizontal"
                     HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    FontFamily="pack://application:,,,/Assets/Fonts/#HarmonyOS Sans SC"
-                    FontWeight="Bold"
-                    Foreground="White">
-                    <Run>
-                        <Run.Text>
-                            <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">
-                                <Binding Path="Value" />
-                                <Binding Path="DataContext.AppConfig.DamageDisplayType"
-                                         RelativeSource="{RelativeSource AncestorType=Window}" />
-                            </MultiBinding>
-                        </Run.Text>
-                    </Run>
-                    <Run>
-                        <Run.Text>
-                            <MultiBinding Converter="{StaticResource DpsConverter}" StringFormat="{}({0})">
-                                <Binding Path="Value" />
-                                <Binding Path="DataContext.BattleDuration"
-                                         RelativeSource="{RelativeSource AncestorType=Window}" />
-                                <Binding Path="DataContext.AppConfig.DamageDisplayType"
-                                         RelativeSource="{RelativeSource AncestorType=Window}" />
-                                <Binding Path="ValuePerSecond" />
-                                <Binding Path="DataContext.AppConfig.UseConverterBasedDps"
-                                         RelativeSource="{RelativeSource AncestorType=Window}" />
-                            </MultiBinding>
-                        </Run.Text>
-                    </Run>
-                </TextBlock>
-                <TextBlock
-                    Grid.Column="4"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    FontFamily="pack://application:,,,/Assets/Fonts/#HarmonyOS Sans SC"
-                    FontWeight="Bold"
-                    Foreground="White"
-                    Margin="0,0,4,0"
-                    Text="{Binding Percent, StringFormat={}{0:N1}%}" />
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        Style="{StaticResource ValueTextStyle}"
+                        Visibility="{Binding DataContext.AppConfig.ShowDamage, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Run>
+                            <Run.Text>
+                                <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">
+                                    <Binding Path="Value" />
+                                    <Binding Path="DataContext.AppConfig.DamageDisplayType"
+                                             RelativeSource="{RelativeSource AncestorType=Window}" />
+                                </MultiBinding>
+                            </Run.Text>
+                        </Run>
+                    </TextBlock>
+                    <TextBlock
+                        Margin="4,0,0,0"
+                        Style="{StaticResource ValueTextStyle}"
+                        Visibility="{Binding DataContext.AppConfig.ShowDps, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Run>
+                            <Run.Text>
+                                <MultiBinding Converter="{StaticResource DpsConverter}" StringFormat="{}({0})">
+                                    <Binding Path="Value" />
+                                    <Binding Path="DataContext.BattleDuration"
+                                             RelativeSource="{RelativeSource AncestorType=Window}" />
+                                    <Binding Path="DataContext.AppConfig.DamageDisplayType"
+                                             RelativeSource="{RelativeSource AncestorType=Window}" />
+                                    <Binding Path="ValuePerSecond" />
+                                    <Binding Path="DataContext.AppConfig.UseConverterBasedDps"
+                                             RelativeSource="{RelativeSource AncestorType=Window}" />
+                                </MultiBinding>
+                            </Run.Text>
+                        </Run>
+                    </TextBlock>
+                    <TextBlock
+                        Margin="4,0,4,0"
+                        Style="{StaticResource ValueTextStyle}"
+                        Text="{Binding Percent, StringFormat={}{0:N1}%}"
+                        Visibility="{Binding DataContext.AppConfig.ShowPercentage, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </StackPanel>
 
             </Grid>
         </DataTemplate>
