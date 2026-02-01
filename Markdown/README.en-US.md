@@ -77,8 +77,8 @@ Open source should stay open.
 Contributions are always welcome!
 If you’d like to help improve the project:
 
-- Open an [Issue](../../issues) for bug reports or suggestions
-- Submit a [Pull Request](../../pulls) with enhancements or fixes
+- Open an [Issue](../../../issues) for bug reports or suggestions
+- Submit a [Pull Request](../../../pulls) with enhancements or fixes
 
 Before contributing, please make sure your code follows the project’s structure and respects the AGPL license.
 
