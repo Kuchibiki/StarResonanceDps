@@ -2,7 +2,7 @@
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-brightgreen.svg)](https://www.gnu.org/licenses/agpl-3.0.txt)
 
-[🇨🇳 Chinese](README.md)
+[🇨🇳 Chinese README](../README.md)
 
 This project’s core data extraction and analysis modules are adapted from the [StarResonanceDamageCounter](https://github.com/dmlgzs/StarResonanceDamageCounter) project.
 Special thanks to the original author for their great work and support.
@@ -20,22 +20,26 @@ Before using, please ensure that your use of this tool and its data does **not c
 
 ### Prerequisites
 
-* [.NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-* Windows 10 or later
+- SDK
+  - [.NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) or
+  - [.NET 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+- Windows 10 or later
 
 ### Build & Run
 
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/yourusername/StarResonanceToolBox.git
-   cd StarResonanceToolBox
+   git clone https://github.com/anying1073/StarResonanceDps.git
+   cd StarResonanceDps
    ```
+
 2. Build:
 
    ```bash
    dotnet build -c Release
    ```
+
 3. Run:
 
    ```bash
@@ -44,17 +48,15 @@ Before using, please ensure that your use of this tool and its data does **not c
 
 ### Features
 
-* ✅ Real-time combat data analysis
-* 📊 Performance tracking and visualization
-* 🔍 Class-specific damage breakdowns
-* ⚙️ Customizable UI and chart settings
-* 💾 Local data storage for long-term trend analysis
-
-*(More features are under active development!)*
+- ✅ Real-time combat data analysis
+- 📊 Performance tracking and visualization
+- 🔍 Class-specific damage breakdowns
+- ⚙️ Customizable UI and chart settings
+- 💾 Local data storage for long-term trend analysis
 
 ### Screenshots
 
-![SC](SC.jpg)
+![Screenshot](image/screenshot.jpg)
 
 ---
 
@@ -62,7 +64,7 @@ Before using, please ensure that your use of this tool and its data does **not c
 
 [![AGPLv3](https://www.gnu.org/graphics/agplv3-with-text-162x68.png)](LICENSE.txt)
 
-This project is licensed under the **GNU Affero General Public License v3**.
+This project is licensed under the **[GNU AFFERO GENERAL PUBLIC LICENSE version 3](../LICENSE.txt)**.
 By using or contributing to this project, you agree to the terms of this license.
 
 We **do not welcome** those who take open-source code, modify it, and release it as **closed-source** without compliance with the license.
@@ -75,8 +77,8 @@ Open source should stay open.
 Contributions are always welcome!
 If you’d like to help improve the project:
 
-* Open an [Issue](../../issues) for bug reports or suggestions
-* Submit a [Pull Request](../../pulls) with enhancements or fixes
+- Open an [Issue](../../issues) for bug reports or suggestions
+- Submit a [Pull Request](../../pulls) with enhancements or fixes
 
 Before contributing, please make sure your code follows the project’s structure and respects the AGPL license.
 
