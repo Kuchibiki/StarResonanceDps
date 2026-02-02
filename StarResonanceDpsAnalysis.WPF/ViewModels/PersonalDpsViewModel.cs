@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Threading;
@@ -9,10 +8,8 @@ using Microsoft.Extensions.Logging;
 using StarResonanceDpsAnalysis.Core.Data;
 using StarResonanceDpsAnalysis.Core.Data.Models;
 using StarResonanceDpsAnalysis.WPF.Config;
-using StarResonanceDpsAnalysis.WPF.Converters;
 using StarResonanceDpsAnalysis.WPF.Extensions;
 using StarResonanceDpsAnalysis.WPF.Services;
-using StarResonanceDpsAnalysis.WPF.Helpers;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
 
@@ -44,9 +41,9 @@ public partial class PersonalDpsViewModel : BaseViewModel
     private Timer? _remainingTimer;
 
     // 缓存上一次的显示数据（脱战后保持显示）
-    private string _cachedDpsDisplay = "0 (0)";
+    private double _cachedTotalDamage = 0;
+    private double _cachedDps = 0;
     private double _cachedTeamPercent = 0;
-    private string _cachedPercentDisplay = "0%";
 
     // 标记是否正在等待新战斗开始
     private bool _awaitingNewBattle = false;
@@ -68,6 +65,7 @@ public partial class PersonalDpsViewModel : BaseViewModel
         _configManager = configManager;
         _appControlService = appControlService;
         _logger = logger;
+        AppConfig = _configManager.CurrentConfig;
 
         // ⭐ 订阅配置更新事件以响应主题颜色变化
         _configManager.ConfigurationUpdated += OnConfigurationUpdated;
@@ -82,13 +80,15 @@ public partial class PersonalDpsViewModel : BaseViewModel
     /// </summary>
     public string ThemeColor => _configManager.CurrentConfig.ThemeColor;
 
+    [ObservableProperty] private AppConfig _appConfig = new();
+
     [ObservableProperty] private bool _startTraining;
     [ObservableProperty] private bool _enableTrainingMode;
     [ObservableProperty] private DateTime? _startTime;
 
-    [ObservableProperty] private string _currentDpsDisplay = "0 (0)";
+    [ObservableProperty] private double _totalDamage;
+    [ObservableProperty] private double _dps;
     [ObservableProperty] private double _teamDamagePercent = 0;
-    [ObservableProperty] private string _teamPercentDisplay = "0%";
 
     // 木桩类型选择（默认为中间木桩）
     [ObservableProperty] private DummyTargetType _selectedDummyTarget = DummyTargetType.Center;
@@ -123,15 +123,7 @@ public partial class PersonalDpsViewModel : BaseViewModel
             // ⭐ 功能2：开启打桩模式时清空伤害统计
             _logger?.LogInformation("打桩模式开启，清空伤害统计");
             
-            // 清空缓存数据
-            _cachedDpsDisplay = "0 (0)";
-            _cachedTeamPercent = 0;
-            _cachedPercentDisplay = "0%";
-            
-            // 清空当前显示
-            CurrentDpsDisplay = "0 (0)";
-            TeamDamagePercent = 0;
-            TeamPercentDisplay = "0%";
+            ResetDisplay();
             
             // 清空DataStorage的当前段落数据（只清空section，不清空full）
             _dataStorage.ClearDpsData();
@@ -258,9 +250,7 @@ public partial class PersonalDpsViewModel : BaseViewModel
             _logger?.LogInformation("个人模式检测到新战斗开始，清空上一场缓存数据");
 
             // 清空缓存的显示数据
-            _cachedDpsDisplay = "0 (0)";
-            _cachedTeamPercent = 0;
-            _cachedPercentDisplay = "0%";
+            ResetDisplay();
 
             // 重置等待标记
             _awaitingNewBattle = false;
@@ -323,9 +313,7 @@ public partial class PersonalDpsViewModel : BaseViewModel
             if (currentPlayerUid == 0)
             {
                 // ⭐ 修改: 无UID时使用缓存值（而不是直接清零）
-                CurrentDpsDisplay = _cachedDpsDisplay;
-                TeamDamagePercent = _cachedTeamPercent;
-                TeamPercentDisplay = _cachedPercentDisplay;
+                ApplyCachedDisplay();
                 _logger?.LogWarning("CurrentPlayerUUID is still 0, using cached values");
                 return;
             }
@@ -335,9 +323,7 @@ public partial class PersonalDpsViewModel : BaseViewModel
             if (!dpsDataDict.TryGetValue(currentPlayerUid, out var currentPlayerData))
             {
                 // ⭐ 修改: 找不到玩家数据时使用缓存值（脱战后数据被清空会走这里）
-                CurrentDpsDisplay = _cachedDpsDisplay;
-                TeamDamagePercent = _cachedTeamPercent;
-                TeamPercentDisplay = _cachedPercentDisplay;
+                ApplyCachedDisplay();
                 _logger?.LogDebug("Player UID {UID} not found, using cached values (normal after disengagement)", currentPlayerUid);
                 return;
             }
@@ -398,8 +384,6 @@ public partial class PersonalDpsViewModel : BaseViewModel
             _logger?.LogDebug("Player DPS: TotalDamage={Damage}, ElapsedTicks={Ticks}, ElapsedSeconds={Elapsed:F1}, DPS={DPS:F0}",
                 totalDamage, elapsedTicks, elapsedSeconds, dps);
 
-            var formattedDisplay = $"{FormatNumberByConfig(totalDamage)} ({FormatNumberByConfig((ulong)dps)})";
-
             // 计算团队总伤害占比
             var allPlayerData = dpsDataDict.Values.Where(d => !d.IsNpc).ToList();
             var teamTotalDamage = (ulong)allPlayerData.Sum(d => Math.Max(0, d.AttackDamage.Total));
@@ -408,47 +392,48 @@ public partial class PersonalDpsViewModel : BaseViewModel
                 teamTotalDamage, allPlayerData.Count);
 
             double percent = 0;
-            string percentDisplay = "0%";
-
             if (teamTotalDamage > 0)
             {
-                percent = (double)totalDamage / teamTotalDamage * 100.0;
-                percent = Math.Min(100, Math.Max(0, percent));
-                percentDisplay = $"{percent:F1}%";
+                percent = (double)totalDamage / teamTotalDamage;
+                percent = Math.Min(1, Math.Max(0, percent));
             }
 
             // ⭐ 更新缓存（战斗中的最新数据）
-            _cachedDpsDisplay = formattedDisplay;
-            _cachedTeamPercent = percent;
-            _cachedPercentDisplay = percentDisplay;
+            SetDisplay(totalDamage, dps, percent);
 
-            // 更新UI显示
-            CurrentDpsDisplay = formattedDisplay;
-            TeamDamagePercent = percent;
-            TeamPercentDisplay = percentDisplay;
-
-            _logger?.LogDebug("Display Updated: DPS={Display}, Percent={Percent}",
-                CurrentDpsDisplay, TeamPercentDisplay);
+            _logger?.LogDebug("Display Updated: TotalDamage={Damage}, DPS={Dps}, Percent={Percent:P1}",
+                totalDamage, dps, percent);
         }
         catch (Exception ex)
         {
             // 出错时使用缓存值
-            CurrentDpsDisplay = _cachedDpsDisplay;
-            TeamDamagePercent = _cachedTeamPercent;
-            TeamPercentDisplay = _cachedPercentDisplay;
+            ApplyCachedDisplay();
             _logger?.LogError(ex, "Error updating personal DPS, using cached values");
             Console.WriteLine($"Error updating personal DPS: {ex.Message}\n{ex.StackTrace}");
         }
     }
 
-    /// <summary>
-    /// ⭐ 根据配置格式化数字显示
-    /// </summary>
-    private string FormatNumberByConfig(ulong value)
+    private void ResetDisplay()
     {
-        var damageDisplayType = _configManager.CurrentConfig.DamageDisplayType;
+        SetDisplay(0, 0, 0);
+    }
 
-        return NumberFormatHelper.FormatHumanReadable(value, damageDisplayType, CultureInfo.CurrentCulture);
+    private void SetDisplay(double totalDamage, double dps, double percent)
+    {
+        _cachedTotalDamage = totalDamage;
+        _cachedDps = dps;
+        _cachedTeamPercent = percent;
+
+        TotalDamage = totalDamage;
+        Dps = dps;
+        TeamDamagePercent = percent;
+    }
+
+    private void ApplyCachedDisplay()
+    {
+        TotalDamage = _cachedTotalDamage;
+        Dps = _cachedDps;
+        TeamDamagePercent = _cachedTeamPercent;
     }
 
     private void RemainingTimerOnTick(object? state)
@@ -571,6 +556,7 @@ public partial class PersonalDpsViewModel : BaseViewModel
     {
         _dispatcher.BeginInvoke(() =>
         {
+            AppConfig = newConfig;
             OnPropertyChanged(nameof(ThemeColor));
         });
     }
@@ -584,15 +570,8 @@ public partial class PersonalDpsViewModel : BaseViewModel
         _dataStorage.ClearDpsData();
 
         // ⭐ 修复问题2：立即清空显示，不等待下一次战斗
-        _cachedDpsDisplay = "0 (0)";
-        _cachedTeamPercent = 0;
-        _cachedPercentDisplay = "0%";
+        ResetDisplay();
         _awaitingNewBattle = false;
-        
-        // 立即更新UI显示为0
-        CurrentDpsDisplay = "0 (0)";
-        TeamDamagePercent = 0;
-        TeamPercentDisplay = "0%";
 
         // 重置计时器和训练状态
         StartTime = null;

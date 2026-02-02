@@ -19,6 +19,9 @@
     <converters:BrushWithOpacityConverter x:Key="BrushWithOpacityConverter" />
     <converters:DivisionMultiValueConverter x:Key="DivisionMultiValueConverter" />
     <converters:DpsConverter x:Key="DpsConverter" />
+    <converters:NumberClipValueConverter x:Key="NumberClipValueConverter" />
+    <converters:NumberClipUnitConverter x:Key="NumberClipUnitConverter" />
+    <converters:NumberClipUnitVisibilityConverter x:Key="NumberClipUnitVisibilityConverter" />
     <converters:ClassSpecToStringConverter x:Key="ClassSpecToStringConverter" />
     <converters:EnumToLocalizedStringConverter x:Key="EnumToLocalizedStringConverter" />
     <converters:ClassesColorConverter x:Key="ClassesColorConverter" />

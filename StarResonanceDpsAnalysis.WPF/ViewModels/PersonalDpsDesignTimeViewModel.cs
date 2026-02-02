@@ -1,0 +1,47 @@
+using System;
+using System.Windows.Threading;
+using Microsoft.Extensions.Logging.Abstractions;
+using StarResonanceDpsAnalysis.Core.Data;
+using StarResonanceDpsAnalysis.WPF.Services;
+using StarResonanceDpsAnalysis.WPF.Views;
+
+namespace StarResonanceDpsAnalysis.WPF.ViewModels;
+
+public sealed class PersonalDpsDesignTimeViewModel : PersonalDpsViewModel
+{
+    public PersonalDpsDesignTimeViewModel() : base(
+        new DesignWindowManagementService(),
+        new DesignDataStorage(),
+        Dispatcher.CurrentDispatcher,
+        new DesignConfigManager(),
+        new DesignAppControlService(),
+        NullLogger<PersonalDpsViewModel>.Instance)
+    {
+        StartTraining = true;
+
+        TotalDamage = 52_224_900d;
+        Dps = 9_526_200d;
+        TeamDamagePercent = 0.375;
+    }
+
+    private sealed class DesignAppControlService : IApplicationControlService
+    {
+        public void Shutdown()
+        {
+        }
+    }
+
+    private sealed class DesignWindowManagementService : IWindowManagementService
+    {
+        public PersonalDpsView PersonalDpsView => throw new NotSupportedException();
+        public DpsStatisticsView DpsStatisticsView => throw new NotSupportedException();
+        public SettingsView SettingsView => throw new NotSupportedException();
+        public SkillBreakdownView SkillBreakdownView => throw new NotSupportedException();
+        public AboutView AboutView => throw new NotSupportedException();
+        public DamageReferenceView DamageReferenceView => throw new NotSupportedException();
+        public ModuleSolveView ModuleSolveView => throw new NotSupportedException();
+        public BossTrackerView BossTrackerView => throw new NotSupportedException();
+        public MainView MainView => throw new NotSupportedException();
+        public SkillLogView SkillLogView => throw new NotSupportedException();
+    }
+}
