@@ -174,9 +174,6 @@
   <data name="Menu_ExitSnapshotMode" xml:space="preserve">
     <value>退出快照模式</value>
   </data>
-  <data name="DpsStatistics_Snapshot_Label" xml:space="preserve">
-    <value>[快照]</value>
-  </data>
   <data name="DpsStatistics_Snapshot_ViewFull_Title" xml:space="preserve">
     <value>查看全程快照</value>
   </data>
@@ -188,6 +185,9 @@
   </data>
   <data name="DpsStatistics_Snapshot_ViewCurrent_EmptyMessage" xml:space="preserve">
     <value>当前没有可用的战斗快照数据。</value>
+  </data>
+  <data name="DpsStatistics_Snapshot_Label" xml:space="preserve">
+    <value>[快照]</value>
   </data>
   <data name="Menu_Exit" xml:space="preserve">
     <value>退出</value>
@@ -663,56 +663,29 @@
   <data name="SkillBreakdown_Label_TotalDamage" xml:space="preserve">
     <value>总伤害</value>
   </data>
-  <data name="SkillBreakdown_Value_TotalDamage" xml:space="preserve">
-    <value>42.64K</value>
-  </data>
   <data name="SkillBreakdown_Label_Dps" xml:space="preserve">
     <value>秒伤</value>
-  </data>
-  <data name="SkillBreakdown_Value_Dps" xml:space="preserve">
-    <value>29.01K</value>
   </data>
   <data name="SkillBreakdown_Label_HitCount" xml:space="preserve">
     <value>命中次数</value>
   </data>
-  <data name="SkillBreakdown_Value_HitCount" xml:space="preserve">
-    <value>6</value>
-  </data>
   <data name="SkillBreakdown_Label_CritRate" xml:space="preserve">
     <value>暴击率</value>
-  </data>
-  <data name="SkillBreakdown_Value_CritRate" xml:space="preserve">
-    <value>16.67%</value>
   </data>
   <data name="SkillBreakdown_Label_LuckRate" xml:space="preserve">
     <value>幸运率</value>
   </data>
-  <data name="SkillBreakdown_Value_LuckRate" xml:space="preserve">
-    <value>0%</value>
-  </data>
   <data name="SkillBreakdown_Label_CritCount" xml:space="preserve">
     <value>暴击次数</value>
-  </data>
-  <data name="SkillBreakdown_Value_CritCount" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="SkillBreakdown_Label_NormalDamage" xml:space="preserve">
     <value>普通伤害</value>
   </data>
-  <data name="SkillBreakdown_Value_NormalDamage" xml:space="preserve">
-    <value>28.71K</value>
-  </data>
   <data name="SkillBreakdown_Label_CritDamage" xml:space="preserve">
     <value>暴击伤害</value>
   </data>
-  <data name="SkillBreakdown_Value_CritDamage" xml:space="preserve">
-    <value>13.92K</value>
-  </data>
   <data name="SkillBreakdown_Label_LuckCount" xml:space="preserve">
     <value>幸运次数</value>
-  </data>
-  <data name="SkillBreakdown_Value_LuckCount" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="SkillBreakdown_Label_LuckDamage" xml:space="preserve">
     <value>幸运伤害</value>
@@ -720,38 +693,14 @@
   <data name="SkillBreakdown_Label_Others" xml:space="preserve">
     <value>其它</value>
   </data>
-  <data name="SkillBreakdown_Value_LuckDamage" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="SkillBreakdown_Label_AverageDamage" xml:space="preserve">
     <value>平均伤害</value>
-  </data>
-  <data name="SkillBreakdown_Value_AverageDamage" xml:space="preserve">
-    <value>7106</value>
   </data>
   <data name="SkillBreakdown_Label_DamageTakenCount" xml:space="preserve">
     <value>受击次数</value>
   </data>
-  <data name="SkillBreakdown_Value_DamageTakenCount" xml:space="preserve">
-    <value>3</value>
-  </data>
   <data name="SkillBreakdown_Placeholder_Form" xml:space="preserve">
     <value>假装这里有个表单</value>
-  </data>
-  <data name="SkillBreakdown_Info_Name" xml:space="preserve">
-    <value>--测试名称--</value>
-  </data>
-  <data name="SkillBreakdown_Info_Uid" xml:space="preserve">
-    <value>UID: 123456</value>
-  </data>
-  <data name="SkillBreakdown_Info_Power" xml:space="preserve">
-    <value>战力: 25000</value>
-  </data>
-  <data name="SkillBreakdown_Info_Level" xml:space="preserve">
-    <value>等级: 60</value>
-  </data>
-  <data name="SkillBreakdown_Info_Badge" xml:space="preserve">
-    <value>臂章: 190</value>
   </data>
   <data name="SkillBreakdown_Tab_Output" xml:space="preserve">
     <value>输出</value>
@@ -763,7 +712,7 @@
     <value>承伤</value>
   </data>
   <data name="SkillBreakdown_Tab_Summary" xml:space="preserve">
-    <value>Summary</value>
+    <value>总结</value>
   </data>
   <data name="SkillBreakdown_Tab_Details" xml:space="preserve">
     <value>详情</value>
@@ -799,7 +748,7 @@
     <value>尝试打开个人打桩模式但UID未设置</value>
   </data>
   <data name="Dialog_UidRequired_Title" xml:space="preserve">
-    <value>需要设置角色UID</value>
+    <value>需要设置角色 UID</value>
   </data>
   <data name="Dialog_UidRequired_Message" xml:space="preserve">
     <value>请先在设置中配置您的角色UID，才能使用个人打桩模式。
@@ -1168,6 +1117,12 @@
   <data name="Settings_PlayerInfo_Preview" xml:space="preserve">
     <value>实时预览</value>
   </data>
+  <data name="SkillBreakdown_Suffix_Crits" xml:space="preserve">
+    <value>暴击次数</value>
+  </data>
+  <data name="SkillBreakdown_Suffix_Lucky" xml:space="preserve">
+    <value>幸运率</value>
+  </data>
   <data name="SkillBreakdown_Label_Average" xml:space="preserve">
     <value>平均</value>
   </data>
@@ -1221,12 +1176,6 @@
   </data>
   <data name="SkillBreakdown_Label_Percentage" xml:space="preserve">
     <value>占比</value>
-  </data>
-  <data name="SkillBreakdown_Suffix_Crits" xml:space="preserve">
-    <value>暴击次数</value>
-  </data>
-  <data name="SkillBreakdown_Suffix_Lucky" xml:space="preserve">
-    <value>幸运率</value>
   </data>
   <data name="SkillBreakdown_Label_SkillName" xml:space="preserve">
     <value>技能(名称)</value>

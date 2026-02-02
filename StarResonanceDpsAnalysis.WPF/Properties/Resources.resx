@@ -663,56 +663,29 @@
   <data name="SkillBreakdown_Label_TotalDamage" xml:space="preserve">
     <value>Total damage</value>
   </data>
-  <data name="SkillBreakdown_Value_TotalDamage" xml:space="preserve">
-    <value>42.64K</value>
-  </data>
   <data name="SkillBreakdown_Label_Dps" xml:space="preserve">
     <value>DPS</value>
-  </data>
-  <data name="SkillBreakdown_Value_Dps" xml:space="preserve">
-    <value>29.01K</value>
   </data>
   <data name="SkillBreakdown_Label_HitCount" xml:space="preserve">
     <value>Hits</value>
   </data>
-  <data name="SkillBreakdown_Value_HitCount" xml:space="preserve">
-    <value>6</value>
-  </data>
   <data name="SkillBreakdown_Label_CritRate" xml:space="preserve">
     <value>Crit rate</value>
-  </data>
-  <data name="SkillBreakdown_Value_CritRate" xml:space="preserve">
-    <value>16.67%</value>
   </data>
   <data name="SkillBreakdown_Label_LuckRate" xml:space="preserve">
     <value>Luck rate</value>
   </data>
-  <data name="SkillBreakdown_Value_LuckRate" xml:space="preserve">
-    <value>0%</value>
-  </data>
   <data name="SkillBreakdown_Label_CritCount" xml:space="preserve">
     <value>Critical hits</value>
-  </data>
-  <data name="SkillBreakdown_Value_CritCount" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="SkillBreakdown_Label_NormalDamage" xml:space="preserve">
     <value>Normal damage</value>
   </data>
-  <data name="SkillBreakdown_Value_NormalDamage" xml:space="preserve">
-    <value>28.71K</value>
-  </data>
   <data name="SkillBreakdown_Label_CritDamage" xml:space="preserve">
     <value>Critical damage</value>
   </data>
-  <data name="SkillBreakdown_Value_CritDamage" xml:space="preserve">
-    <value>13.92K</value>
-  </data>
   <data name="SkillBreakdown_Label_LuckCount" xml:space="preserve">
     <value>Lucky hits</value>
-  </data>
-  <data name="SkillBreakdown_Value_LuckCount" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="SkillBreakdown_Label_LuckDamage" xml:space="preserve">
     <value>Lucky damage</value>
@@ -720,38 +693,14 @@
   <data name="SkillBreakdown_Label_Others" xml:space="preserve">
     <value>Others</value>
   </data>
-  <data name="SkillBreakdown_Value_LuckDamage" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="SkillBreakdown_Label_AverageDamage" xml:space="preserve">
     <value>Average hit</value>
-  </data>
-  <data name="SkillBreakdown_Value_AverageDamage" xml:space="preserve">
-    <value>7106</value>
   </data>
   <data name="SkillBreakdown_Label_DamageTakenCount" xml:space="preserve">
     <value>Times hit</value>
   </data>
-  <data name="SkillBreakdown_Value_DamageTakenCount" xml:space="preserve">
-    <value>3</value>
-  </data>
   <data name="SkillBreakdown_Placeholder_Form" xml:space="preserve">
     <value>Imagine a data table here</value>
-  </data>
-  <data name="SkillBreakdown_Info_Name" xml:space="preserve">
-    <value>--Sample Name--</value>
-  </data>
-  <data name="SkillBreakdown_Info_Uid" xml:space="preserve">
-    <value>UID: 123456</value>
-  </data>
-  <data name="SkillBreakdown_Info_Power" xml:space="preserve">
-    <value>Power: 25000</value>
-  </data>
-  <data name="SkillBreakdown_Info_Level" xml:space="preserve">
-    <value>Level: 60</value>
-  </data>
-  <data name="SkillBreakdown_Info_Badge" xml:space="preserve">
-    <value>Badge: 190</value>
   </data>
   <data name="SkillBreakdown_Tab_Output" xml:space="preserve">
     <value>DPS</value>
@@ -1286,6 +1235,6 @@ Would you like to restart the application as administrator?</value>
     <value>Standard User</value>
   </data>
   <data name="DpsStatistics_CurrentPlayerRank" xml:space="preserve">
-      <value>CurrentPlayerRank</value>
+    <value>CurrentPlayerRank</value>
   </data>
 </root>

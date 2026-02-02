@@ -174,9 +174,6 @@
   <data name="Menu_ExitSnapshotMode" xml:space="preserve">
     <value>Sair do modo de instantâneo</value>
   </data>
-  <data name="DpsStatistics_Snapshot_Label" xml:space="preserve">
-    <value>[Instantâneo]</value>
-  </data>
   <data name="DpsStatistics_Snapshot_ViewFull_Title" xml:space="preserve">
     <value>Ver instantâneo completo</value>
   </data>
@@ -188,6 +185,9 @@
   </data>
   <data name="DpsStatistics_Snapshot_ViewCurrent_EmptyMessage" xml:space="preserve">
     <value>Não há dados de instantâneo de batalha disponíveis.</value>
+  </data>
+  <data name="DpsStatistics_Snapshot_Label" xml:space="preserve">
+    <value>[Instantâneo]</value>
   </data>
   <data name="Menu_Exit" xml:space="preserve">
     <value>Sair</value>
@@ -663,56 +663,29 @@
   <data name="SkillBreakdown_Label_TotalDamage" xml:space="preserve">
     <value>Dano total</value>
   </data>
-  <data name="SkillBreakdown_Value_TotalDamage" xml:space="preserve">
-    <value>42.64K</value>
-  </data>
   <data name="SkillBreakdown_Label_Dps" xml:space="preserve">
     <value>DPS</value>
-  </data>
-  <data name="SkillBreakdown_Value_Dps" xml:space="preserve">
-    <value>29.01K</value>
   </data>
   <data name="SkillBreakdown_Label_HitCount" xml:space="preserve">
     <value>Acertos</value>
   </data>
-  <data name="SkillBreakdown_Value_HitCount" xml:space="preserve">
-    <value>6</value>
-  </data>
   <data name="SkillBreakdown_Label_CritRate" xml:space="preserve">
     <value>Taxa de crítico</value>
-  </data>
-  <data name="SkillBreakdown_Value_CritRate" xml:space="preserve">
-    <value>16.67%</value>
   </data>
   <data name="SkillBreakdown_Label_LuckRate" xml:space="preserve">
     <value>Taxa de sorte</value>
   </data>
-  <data name="SkillBreakdown_Value_LuckRate" xml:space="preserve">
-    <value>0%</value>
-  </data>
   <data name="SkillBreakdown_Label_CritCount" xml:space="preserve">
     <value>Acertos críticos</value>
-  </data>
-  <data name="SkillBreakdown_Value_CritCount" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="SkillBreakdown_Label_NormalDamage" xml:space="preserve">
     <value>Dano normal</value>
   </data>
-  <data name="SkillBreakdown_Value_NormalDamage" xml:space="preserve">
-    <value>28.71K</value>
-  </data>
   <data name="SkillBreakdown_Label_CritDamage" xml:space="preserve">
     <value>Dano Crítico</value>
   </data>
-  <data name="SkillBreakdown_Value_CritDamage" xml:space="preserve">
-    <value>13.92K</value>
-  </data>
   <data name="SkillBreakdown_Label_LuckCount" xml:space="preserve">
     <value>Acertos de sorte</value>
-  </data>
-  <data name="SkillBreakdown_Value_LuckCount" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="SkillBreakdown_Label_LuckDamage" xml:space="preserve">
     <value>Dano de sorte</value>
@@ -720,38 +693,14 @@
   <data name="SkillBreakdown_Label_Others" xml:space="preserve">
     <value>Outros</value>
   </data>
-  <data name="SkillBreakdown_Value_LuckDamage" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="SkillBreakdown_Label_AverageDamage" xml:space="preserve">
     <value>Acerto médio</value>
-  </data>
-  <data name="SkillBreakdown_Value_AverageDamage" xml:space="preserve">
-    <value>7106</value>
   </data>
   <data name="SkillBreakdown_Label_DamageTakenCount" xml:space="preserve">
     <value>Vezes atingido</value>
   </data>
-  <data name="SkillBreakdown_Value_DamageTakenCount" xml:space="preserve">
-    <value>3</value>
-  </data>
   <data name="SkillBreakdown_Placeholder_Form" xml:space="preserve">
     <value>Imagine uma tabela de dados aqui</value>
-  </data>
-  <data name="SkillBreakdown_Info_Name" xml:space="preserve">
-    <value>--Nome de Exemplo--</value>
-  </data>
-  <data name="SkillBreakdown_Info_Uid" xml:space="preserve">
-    <value>UID: 123456</value>
-  </data>
-  <data name="SkillBreakdown_Info_Power" xml:space="preserve">
-    <value>Poder: 25000</value>
-  </data>
-  <data name="SkillBreakdown_Info_Level" xml:space="preserve">
-    <value>Nível: 60</value>
-  </data>
-  <data name="SkillBreakdown_Info_Badge" xml:space="preserve">
-    <value>Emblema: 190</value>
   </data>
   <data name="SkillBreakdown_Tab_Output" xml:space="preserve">
     <value>DPS</value>
@@ -1220,6 +1169,15 @@ Como obter: Após uma luta, seu personagem aparecerá automaticamente na janela 
   <data name="SkillLog_Popup_LuckyDamage" xml:space="preserve">
     <value>Dano de sorte</value>
   </data>
+  <data name="SkillBreakdown_Label_Percentage" xml:space="preserve">
+    <value>Proporção</value>
+  </data>
+  <data name="SkillBreakdown_Label_SkillName" xml:space="preserve">
+    <value>Habilidade(Nome)</value>
+  </data>
+  <data name="SkillBreakdown_Label_ValuePercentToTotal" xml:space="preserve">
+    <value>Por cento</value>
+  </data>
   <data name="Menu_Training_Personal" xml:space="preserve">
     <value>Treino Solo</value>
   </data>
@@ -1228,14 +1186,5 @@ Como obter: Após uma luta, seu personagem aparecerá automaticamente na janela 
   </data>
   <data name="Menu_Training_Extreme" xml:space="preserve">
     <value>Treino Extremo</value>
-  </data>
-  <data name="SkillBreakdown_Label_ValuePercentToTotal" xml:space="preserve">
-    <value>Por cento</value>
-  </data>
-  <data name="SkillBreakdown_Label_Percentage" xml:space="preserve">
-    <value>Proporção</value>
-  </data>
-  <data name="SkillBreakdown_Label_SkillName" xml:space="preserve">
-    <value>Habilidade(Nome)</value>
   </data>
 </root>
