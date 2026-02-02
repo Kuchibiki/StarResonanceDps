@@ -14,9 +14,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Logging\**" />
+    <Compile Remove="Utilities\**" />
     <EmbeddedResource Remove="Logging\**" />
+    <EmbeddedResource Remove="Utilities\**" />
     <None Remove="Logging\**" />
+    <None Remove="Utilities\**" />
     <Page Remove="Logging\**" />
+    <Page Remove="Utilities\**" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ApplicationIcon.ico" />
@@ -119,9 +123,6 @@
     <None Update="Data\Skill\skills.zh-CN.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
