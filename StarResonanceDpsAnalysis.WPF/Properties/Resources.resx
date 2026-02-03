@@ -1014,7 +1014,7 @@ How to get: After a fight, your character will automatically appear in the stats
     <value>Skill Diary</value>
   </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
-    <value>Korean</value>
+    <value>한국어</value>
   </data>
   <data name="SkillBreakdown_Label_Total" xml:space="preserve">
     <value>Total</value>

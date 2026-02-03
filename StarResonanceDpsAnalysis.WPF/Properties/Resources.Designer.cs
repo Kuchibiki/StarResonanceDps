@@ -2050,7 +2050,7 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Korean 的本地化字符串。
+        ///   查找类似 한국어 的本地化字符串。
         /// </summary>
         public static string Settings_Language_Korean {
             get {
@@ -3315,6 +3315,15 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string Window_ModuleSolve_Title {
             get {
                 return ResourceManager.GetString("Window_ModuleSolve_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Training 的本地化字符串。
+        /// </summary>
+        public static string Window_PersonalDps_Title {
+            get {
+                return ResourceManager.GetString("Window_PersonalDps_Title", resourceCulture);
             }
         }
         
