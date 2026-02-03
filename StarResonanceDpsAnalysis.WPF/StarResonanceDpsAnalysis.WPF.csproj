@@ -13,16 +13,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Logging\**" />
-    <Compile Remove="Utilities\**" />
-    <EmbeddedResource Remove="Logging\**" />
-    <EmbeddedResource Remove="Utilities\**" />
-    <None Remove="Logging\**" />
-    <None Remove="Utilities\**" />
-    <Page Remove="Logging\**" />
-    <Page Remove="Utilities\**" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="ApplicationIcon.ico" />
     <Content Include="appsettings.Development.json">
       <CopyToOutputDirectory Condition="'$(Configuration)'!='Release'">PreserveNewest</CopyToOutputDirectory>
@@ -39,7 +29,6 @@
   <ItemGroup>
     <ApplicationDefinition Remove="App.xaml" />
     <None Remove="Assets\Fonts\HarmonyOS_Sans_SC_Black.ttf" />
-    <Compile Include="Logging\WpfLogEvents.cs" />
     <Page Include="App.xaml" />
   </ItemGroup>
   <ItemGroup>
