@@ -42,5 +42,5 @@ public class PlayerInfo
     public int? SeasonStrength { get; internal set; }
     public int SeasonLevel { get; internal set; }
     public bool CombatState { get; internal set; }
-    public int CombatStateTime { get; internal set; }
+    public long CombatStateTime { get; internal set; }
 }

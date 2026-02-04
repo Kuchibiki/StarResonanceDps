@@ -89,7 +89,7 @@ public interface IDataStorage : IDisposable
     int GetStatisticsCount(bool fullSession);
 
     event Action? BeforeSectionCleared;
-    void SetPlayerCombatStateTime(long uid, int readInt32);
+    void SetPlayerCombatStateTime(long uid, long time);
 }
 
 public delegate void ServerConnectionStateChangedEventHandler(bool serverConnectionState);

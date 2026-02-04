@@ -552,9 +552,9 @@ public sealed partial class DataStorageV2(ILogger<DataStorageV2> logger) : IData
         TriggerPlayerInfoUpdatedImmediate(uid);
     }
 
-    public void SetPlayerCombatStateTime(long uid, int readInt32)
+    public void SetPlayerCombatStateTime(long uid, long time)
     {
-        PlayerInfoData[uid].CombatStateTime = readInt32;
+        PlayerInfoData[uid].CombatStateTime = time;
         TriggerPlayerInfoUpdatedImmediate(uid);
     }
 

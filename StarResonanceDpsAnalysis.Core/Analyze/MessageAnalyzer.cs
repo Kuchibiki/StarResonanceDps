@@ -605,6 +605,14 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
                         var level = reader.ReadInt32();
                         DataStorage.SetPlayerSeasonLevel(playerUid, level);
                         break;
+                    case EAttrType.AttrCombatState:
+                        var state = reader.ReadBool();
+                        DataStorage.SetPlayerCombatState(playerUid, state);
+                        break;
+                    case EAttrType.AttrCombatStateTime:
+                        var time = reader.ReadInt64();
+                        DataStorage.SetPlayerCombatStateTime(playerUid, time);
+                        break;
                     default:
                         break;
                 }

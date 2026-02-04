@@ -878,10 +878,10 @@ public static class DataStorage
         TriggerPlayerInfoUpdated(playerUid);
     }
 
-    internal static void SetPlayerCombatStateTime(long uid, int readInt32)
+    internal static void SetPlayerCombatStateTime(long uid, long time)
     {
         TestCreatePlayerInfoByUID(uid);
-        PlayerInfoDatas[uid].CombatStateTime = readInt32;
+        PlayerInfoDatas[uid].CombatStateTime = time;
         TriggerPlayerInfoUpdated(uid);
     }
 

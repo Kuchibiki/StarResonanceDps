@@ -252,7 +252,7 @@ public sealed class DpsStatisticsDesignTimeViewModel : DpsStatisticsViewModel
         public IReadOnlyDictionary<long, PlayerStatistics> GetStatistics(bool fullSession) => null!;
         public int GetStatisticsCount(bool fullSession) => 0;
         public event Action? BeforeSectionCleared;
-        public void SetPlayerCombatStateTime(long uid, int readInt32) { } 
+        public void SetPlayerCombatStateTime(long uid, long time) { } 
         public void RecordSamples(TimeSpan sectionDuration) { }
         public void Dispose() { }
     }

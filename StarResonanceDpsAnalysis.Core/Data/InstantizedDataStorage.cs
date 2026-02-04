@@ -552,9 +552,9 @@ public class InstantizedDataStorage : IDataStorage, IDisposable
         return DataStorage.GetStatisticsCount(fullSession);
     }
 
-    public void SetPlayerCombatStateTime(long uid, int readInt32)
+    public void SetPlayerCombatStateTime(long uid, long time)
     {
         EnsurePlayer(uid);
-        DataStorage.SetPlayerCombatStateTime(uid, readInt32);
+        DataStorage.SetPlayerCombatStateTime(uid, time);
     }
 }
