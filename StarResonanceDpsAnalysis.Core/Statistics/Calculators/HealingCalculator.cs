@@ -13,7 +13,7 @@ public sealed class HealingCalculator : IStatisticsCalculator
     public void Calculate(BattleLog log, StatisticsContext context)
     {
         // Only process healing to players
-        if (!log.IsTargetPlayer || !log.IsHeal)
+        if (!log.IsTargetPlayer || !log.IsHeal || !context.CombatStarted)
             return;
 
         var fullStats = context.GetOrCreateFullStats(log.AttackerUuid);

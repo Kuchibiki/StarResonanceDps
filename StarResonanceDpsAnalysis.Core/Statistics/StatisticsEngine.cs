@@ -41,7 +41,7 @@ public sealed class StatisticsEngine
             calculator.Calculate(log, _context);
         }
     }
-    
+
     /// <summary>
     /// Reset section statistics for all calculators
     /// </summary>

@@ -66,6 +66,7 @@ public sealed class StatisticsContext
     /// </summary>
     public void AddBattleLog(BattleLog log)
     {
+        if (!CombatStarted) return;
         lock (_logsLock)
         {
             _fullBattleLogs.Add(log);
@@ -115,6 +116,8 @@ public sealed class StatisticsContext
         {
             _sectionBattleLogs.Clear();
         }
+
+        CombatStarted = false;
     }
     
     /// <summary>
@@ -133,7 +136,14 @@ public sealed class StatisticsContext
             _fullBattleLogs.Clear();
             _sectionBattleLogs.Clear();
         }
+
+        CombatStarted = false;
     }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether combat has started.
+    /// </summary>
+    public bool CombatStarted { get; set; }
 
     /// <summary>
     /// Get all full statistics (returns snapshot)

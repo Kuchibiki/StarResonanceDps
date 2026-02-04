@@ -16,6 +16,8 @@ public sealed class TakenDamageCalculator : IStatisticsCalculator
         if (!log.IsTargetPlayer || log.IsHeal)
             return;
 
+        context.CombatStarted = true;
+
         var fullStats = context.GetOrCreateFullStats(log.TargetUuid);
         var sectionStats = context.GetOrCreateSectionStats(log.TargetUuid);
 

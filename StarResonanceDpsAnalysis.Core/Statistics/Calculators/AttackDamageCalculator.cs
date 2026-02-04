@@ -17,6 +17,8 @@ public sealed class AttackDamageCalculator : IStatisticsCalculator
         if (!log.IsAttackerPlayer || log.IsTargetPlayer || log.IsHeal)
             return;
 
+        context.CombatStarted = true;
+
         var fullStats = context.GetOrCreateFullStats(log.AttackerUuid);
         var sectionStats = context.GetOrCreateSectionStats(log.AttackerUuid);
 
