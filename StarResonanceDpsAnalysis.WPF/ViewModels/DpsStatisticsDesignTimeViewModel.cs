@@ -33,6 +33,7 @@ public sealed class DpsStatisticsDesignTimeViewModel : DpsStatisticsViewModel
             new DesignOptionsMonitor(),
             null!,
             LocalizationManager.Instance,
+            null!,
             new DesignDataStorage()),
         new DesignBattleSnapshotService(),
         LocalizationManager.Instance,

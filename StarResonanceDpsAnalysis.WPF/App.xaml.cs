@@ -159,6 +159,8 @@ public partial class App : Application
         { typeof(DpsStatisticsView), ServiceLifetime.Singleton },
         { typeof(SkillBreakdownViewModel), ServiceLifetime.Transient },
         { typeof(SkillBreakdownView), ServiceLifetime.Transient },
+        { typeof(PlayerInfoDebugViewModel), ServiceLifetime.Transient },
+        { typeof(PlayerInfoDebugView), ServiceLifetime.Transient },
     };
 
     private static void RegisterViewModels(IServiceCollection services)

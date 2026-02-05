@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Win32;
@@ -26,6 +27,7 @@ public partial class DebugFunctions : BaseViewModel, IDisposable
 
     private readonly Dispatcher _dispatcher;
     private readonly LocalizationManager _localizationManager;
+    private readonly IServiceProvider _serviceProvider;
     private readonly IDataStorage _storage;
     private readonly ILogger<DebugFunctions> _logger;
     private readonly IDisposable? _logSubscription;
@@ -63,10 +65,12 @@ public partial class DebugFunctions : BaseViewModel, IDisposable
         IOptionsMonitor<AppConfig> options,
         IPacketAnalyzer packetAnalyzer,
         LocalizationManager localizationManager,
+        IServiceProvider serviceProvider,
         IDataStorage storage)
     {
         _dispatcher = dispatcher;
         _logger = logger;
+        _serviceProvider = serviceProvider;
 
         _logSubscription = observer.Subscribe(OnSerilogEvent);
 
@@ -263,6 +267,15 @@ public partial class DebugFunctions : BaseViewModel, IDisposable
     {
         var debugWindow = new DebugView(this);
         debugWindow.Show();
+    }
+
+    [RelayCommand]
+    private void CallPlayerInfoDebugWindow()
+    {
+        var view = _serviceProvider.GetRequiredService<PlayerInfoDebugView>();
+        var vm = _serviceProvider.GetRequiredService<PlayerInfoDebugViewModel>();
+        view.DataContext = vm;
+        view.Show();
     }
 
     [RelayCommand]
