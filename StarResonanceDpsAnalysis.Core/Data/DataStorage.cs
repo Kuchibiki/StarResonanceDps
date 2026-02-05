@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Threading;
 using Bokura;
 using StarResonanceDpsAnalysis.Core.Analyze;
@@ -773,6 +774,9 @@ public static class DataStorage
     internal static void SetPlayerCombatState(long uid, bool combatState)
     {
         TestCreatePlayerInfoByUID(uid);
+        var prev = PlayerInfoDatas[uid].CombatState;
+        if (prev == combatState) return;
+        Debug.WriteLine($"PlayerCombatState:[{uid}] {prev} -> {combatState}");
         PlayerInfoDatas[uid].CombatState = combatState;
         TriggerPlayerInfoUpdated(uid);
     }

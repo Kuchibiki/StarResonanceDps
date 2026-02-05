@@ -556,7 +556,8 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
             foreach (var attr in attrs)
             {
                 if (attr.Id == 0 || attr.RawData == null || attr.RawData.Length == 0) continue;
-                var reader = new CodedInputStream(attr.RawData.ToByteArray());
+                var data = attr.RawData.ToByteArray();
+                var reader = new CodedInputStream(data);
 
                 switch ((EAttrType)attr.Id)
                 {
@@ -607,11 +608,22 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
                         break;
                     case EAttrType.AttrCombatState:
                         var state = reader.ReadBool();
+                        Debug.WriteLine($"CombatState:[{BitConverter.ToString(data)}]");
                         DataStorage.SetPlayerCombatState(playerUid, state);
                         break;
                     case EAttrType.AttrCombatStateTime:
                         var time = reader.ReadInt64();
+                        Debug.WriteLine($"CombatStateTime:[{BitConverter.ToString(data)}]");
+                        var anotherState = DataStorage.ReadOnlyPlayerInfoDatas[playerUid].CombatState;
+                        if (anotherState) DataStorage.SetPlayerCombatState(playerUid, false);
+
                         DataStorage.SetPlayerCombatStateTime(playerUid, time);
+                        break;
+                    case EAttrType.AttrCanIntoCombat:
+                        Debug.WriteLine($"CanIntoCombat:{BitConverter.ToString(data)}");
+                        break;
+                    case EAttrType.AttrInBattleShow:
+                        Debug.WriteLine($"InBattleShow:[{BitConverter.ToString(data)}]");
                         break;
                     default:
                         break;
