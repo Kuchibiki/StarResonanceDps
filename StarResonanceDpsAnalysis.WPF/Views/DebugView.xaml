@@ -146,13 +146,13 @@
                     Padding="8,4"
                     Command="{Binding ClearPlayerInfoCacheCommand}"
                     Content="ClearPlayerInfoCache" />
-                 <Button
+				<Button
                     Margin="5,0"
                     Padding="8,4"
                     Command="{Binding CallPlayerInfoDebugWindowCommand}"
                     Content="Player Info" />
 
-                <Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+				<Separator Margin="5,0" Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
                 <CheckBox
                     Margin="5,0"

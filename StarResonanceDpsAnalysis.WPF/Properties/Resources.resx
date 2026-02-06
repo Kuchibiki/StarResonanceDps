@@ -1240,4 +1240,43 @@ Would you like to restart the application as administrator?</value>
   <data name="DpsStatistics_CurrentPlayerRank" xml:space="preserve">
     <value>CurrentPlayerRank</value>
   </data>
+  <data name="Menu_Battle_Log" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Settings_Display_LongPlayerNameScroll" xml:space="preserve">
+    <value>Scroll Long Names</value>
+  </data>
+  <data name="Settings_Display_LongPlayerNameScroll_ToolTip" xml:space="preserve">
+    <value>Enables automatic scrolling when a player's name exceeds the display area</value>
+  </data>
+  <data name="Settings_Display_Total_Damage" xml:space="preserve">
+    <value>Display total damage</value>
+  </data>
+  <data name="Settings_Display_DPS" xml:space="preserve">
+    <value>Display DPS</value>
+  </data>
+  <data name="Settings_Display_Damage_Contribution" xml:space="preserve">
+    <value>Display Damage Contribution</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode" xml:space="preserve">
+    <value>DPS mode</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_Tooltip" xml:space="preserve">
+    <value>Select DPS calculation method: Total Damage / Combat Duration OR Overall Average DPS</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_On" xml:space="preserve">
+    <value>Total DPS</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_Off" xml:space="preserve">
+    <value>Total/Duration</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_OnOff_Tooltip" xml:space="preserve">
+    <value>ON = Total Damage divided by Duration, OFF = Overall Average DPS (ValuePerSecond)</value>
+  </data>
+  <data name="Settings_Theme_ClearImage" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Menu_Team_Total_Damage" xml:space="preserve">
+    <value>Party:</value>
+  </data>
 </root>

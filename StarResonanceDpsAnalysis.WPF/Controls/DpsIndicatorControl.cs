@@ -236,34 +236,48 @@ public class DpsIndicatorControl : Control
         const double gap = 10;
         const double defOffsetY = -4;
         const double defPopupWidth = 250;
-
-        // Default: right side
         var preferred = new Point(targetSize.Width + gap, defOffsetY);
 
-        // If we cannot get placement target or screen info, use default
         if (_popup?.PlacementTarget is not UIElement target)
+            return [new CustomPopupPlacement(preferred, PopupPrimaryAxis.Horizontal)];
+
+        // 1. ListBoxItem 조상 찾기 (안전한 방식)
+        UIElement current = target;
+        while (current != null && current is not ListBoxItem)
+        {
+            // current = VisualTreeHelper.GetParent(current) as UIElement;
+            var parent = VisualTreeHelper.GetParent(current) as UIElement;
+            current = parent!; // Fix CS8600: Use null-forgiving operator to indicate we know parent may be null
+        }
+
+        // ListBoxItem을 못 찾았다면 원래 target 사용, 찾았다면 그것을 기준으로 계산
+        var calcTarget = (current as UIElement) ?? target;
+
+        // 2. 핵심: 소스 연결 및 로드 여부 확인 (예외 방지)
+        if (PresentationSource.FromVisual(calcTarget) == null || !(calcTarget as FrameworkElement)?.IsLoaded == true)
         {
             return [new CustomPopupPlacement(preferred, PopupPrimaryAxis.Horizontal)];
         }
 
-        while (target is not ListBoxItem)
+        try
         {
-            target = (UIElement)target.GetParent(true);
+            // 3. 화면 좌표 계산
+            var targetScreenPoint = calcTarget.PointToScreen(new Point(0, 0));
+            var screen = System.Windows.Forms.Screen.FromPoint(
+                new System.Drawing.Point((int)targetScreenPoint.X, (int)targetScreenPoint.Y));
+
+            var screenRight = screen.WorkingArea.Right;
+            var rightEdge = targetScreenPoint.X + calcTarget.RenderSize.Width + gap + defPopupWidth;
+
+            var useLeft = rightEdge > screenRight;
+            var placement = useLeft ? new Point(-popupSize.Width, defOffsetY) : preferred;
+
+            return [new CustomPopupPlacement(placement, PopupPrimaryAxis.Horizontal)];
         }
-
-        // Compute target top-left in screen coordinates
-        var targetScreenPoint = target.PointToScreen(new Point(0, 0));
-        var screenPoint = new System.Drawing.Point((int)targetScreenPoint.X, (int)targetScreenPoint.Y);
-        var screen = Forms.Screen.FromPoint(screenPoint);
-        var screenRight = screen.WorkingArea.Right;
-
-        // If showing on the right would overflow screen, flip to left
-        var rightEdge = targetScreenPoint.X + target.RenderSize.Width + gap + defPopupWidth;
-        var useLeft = rightEdge > screenRight;
-        var placement = useLeft
-            ? new Point(-popupSize.Width, defOffsetY)
-            : preferred;
-
-        return [new CustomPopupPlacement(placement, PopupPrimaryAxis.Horizontal)];
+        catch (InvalidOperationException)
+        {
+            // 만약의 경우를 대비한 2중 방어
+            return [new CustomPopupPlacement(preferred, PopupPrimaryAxis.Horizontal)];
+        }
     }
 }

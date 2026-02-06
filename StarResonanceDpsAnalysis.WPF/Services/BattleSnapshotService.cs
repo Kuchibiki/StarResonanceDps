@@ -504,7 +504,7 @@ public class BattleSnapshotData
     /// </summary>
     [JsonIgnore]
     public string DisplayLabel =>
-        $"{(ScopeType == ScopeType.Current ? "当前" : "全程")} {StartedAt:HH:mm:ss} ({Duration:mm\\:ss})";
+        $"{(ScopeType == ScopeType.Current ? "현재" : "전체")} {StartedAt:HH:mm:ss} ({Duration:mm\\:ss})";
 }
 
 /// <summary>

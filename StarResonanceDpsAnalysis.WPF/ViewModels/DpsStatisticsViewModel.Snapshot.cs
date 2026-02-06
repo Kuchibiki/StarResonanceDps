@@ -322,34 +322,41 @@ public partial class DpsStatisticsViewModel
         StatisticData[StatisticType.NpcTakenDamage].UpdateDataOptimized(npcTakenData, 0);
     }
 
-    /// <summary>
-    /// Convert snapshot skill data to ViewModel for UI display
-    /// </summary>
-    private List<SkillItemViewModel> ConvertSnapshotSkillsToViewModel(List<SnapshotSkillData> snapshotSkills,
-        StatisticType statisticType)
-    {
-        if (snapshotSkills.Count == 0)
-            return new List<SkillItemViewModel>();
+	/// <summary>
+	/// Convert snapshot skill data to ViewModel for UI display
+	/// </summary>
+	public List<SkillItemViewModel> ConvertSnapshotSkillsToViewModel(List<SnapshotSkillData> snapshotSkills,
+		StatisticType statisticType)
+	{
+		if (snapshotSkills.Count == 0)
+			return new List<SkillItemViewModel>();
 
-        return snapshotSkills.Select(s =>
-        {
-            var average = s.UseTimes > 0 ? Math.Round(s.TotalValue / (double)s.UseTimes) : 0d;
-            var avgValue = average > int.MaxValue ? int.MaxValue : (int)average;
-            var critRate = s.UseTimes > 0 ? (double)s.CritTimes / s.UseTimes : 0d;
+		return snapshotSkills.Select(s =>
+		{
+			// ⭐ 핵심: 파일에 저장된 s.SkillName(중국어)을 쓰지 않습니다.
+			// LocalizationManager를 통해 skills.ko-KR.json에 정의된 한국어 이름을 가져옵니다.
+			// 키 형식은 프로젝트 설정에 따라 "Skill_ID" 또는 "ID"일 수 있습니다.
+			string localizedName = _localizationManager.GetString($"Skill_{s.SkillId}", defaultValue: s.SkillName);
 
-            var vm = new SkillItemViewModel
-            {
-                SkillId = s.SkillId,
-                SkillName = s.SkillName,
-                TotalValue = (long)s.TotalValue,
-                HitCount = s.UseTimes,
-                CritCount = s.CritTimes,
-                LuckyCount = s.LuckyTimes,
-                Average = avgValue,
-                CritRate = critRate
-            };
+			// 만약 위 코드로 번역이 안 된다면, 아래처럼 직접 ID를 시도해 보세요.
+			if (localizedName == s.SkillName)
+				localizedName = _localizationManager.GetString(s.SkillId.ToString(), defaultValue: s.SkillName);
 
-            return vm;
-        }).ToList();
-    }
+			var average = s.UseTimes > 0 ? Math.Round(s.TotalValue / (double)s.UseTimes) : 0d;
+			var avgValue = average > int.MaxValue ? int.MaxValue : (int)average;
+			var critRate = s.UseTimes > 0 ? (double)s.CritTimes / s.UseTimes : 0d;
+
+			return new SkillItemViewModel
+			{
+				SkillId = s.SkillId,
+				SkillName = localizedName, // 여기서 한국어로 교체됨!
+				TotalValue = (long)s.TotalValue,
+				HitCount = s.UseTimes,
+				CritCount = s.CritTimes,
+				LuckyCount = s.LuckyTimes,
+				Average = avgValue,
+				CritRate = critRate
+			};
+		}).ToList();
+	}
 }

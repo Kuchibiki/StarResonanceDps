@@ -1212,4 +1212,43 @@
   <data name="App_PrivilegeLevel_Standard" xml:space="preserve">
     <value>标准用户</value>
   </data>
+  <data name="Menu_Battle_Log" xml:space="preserve">
+    <value>技能日记</value>
+  </data>
+  <data name="Settings_Display_LongPlayerNameScroll" xml:space="preserve">
+    <value>长名字滚动显示</value>
+  </data>
+  <data name="Settings_Display_LongPlayerNameScroll_ToolTip" xml:space="preserve">
+    <value>当玩家名字过长超出显示区域时，启用自动滚动效果</value>
+  </data>
+  <data name="Settings_Display_Total_Damage" xml:space="preserve">
+    <value>显示总伤害</value>
+  </data>
+  <data name="Settings_Display_DPS" xml:space="preserve">
+    <value>显示秒伤 (DPS)</value>
+  </data>
+  <data name="Settings_Display_Damage_Contribution" xml:space="preserve">
+    <value>显示伤害占比</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode" xml:space="preserve">
+    <value>DPS显示模式</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_Tooltip" xml:space="preserve">
+    <value>选择DPS显示的计算方式：累计伤害/战斗时长 或 全程平均秒伤"</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_On" xml:space="preserve">
+    <value>全程秒伤</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_Off" xml:space="preserve">
+    <value>累计/时长</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_OnOff_Tooltip" xml:space="preserve">
+    <value>开启=累计伤害除以时长, 关闭=全程平均秒伤(ValuePerSecond)</value>
+  </data>
+  <data name="Settings_Theme_ClearImage" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="Menu_Team_Total_Damage" xml:space="preserve">
+    <value>队伍:</value>
+  </data>
 </root>

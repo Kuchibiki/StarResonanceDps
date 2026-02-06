@@ -400,28 +400,28 @@
     <value>전체 직업</value>
   </data>
   <data name="Classes_Stormblade" xml:space="preserve">
-    <value>Stormblade</value>
+    <value>스톰 블레이드</value>
   </data>
   <data name="Classes_FrostMage" xml:space="preserve">
-    <value>Frost Mage</value>
+    <value>프로스트 메이지</value>
   </data>
   <data name="Classes_WindKnight" xml:space="preserve">
-    <value>Wind Knight</value>
+    <value>윈드 나이트</value>
   </data>
   <data name="Classes_VerdantOracle" xml:space="preserve">
-    <value>Verdant Oracle</value>
+    <value>실반 오라클</value>
   </data>
   <data name="Classes_HeavyGuardian" xml:space="preserve">
-    <value>Heavy Guardian</value>
+    <value>헤비 가디언</value>
   </data>
   <data name="Classes_Marksman" xml:space="preserve">
-    <value>Marksman</value>
+    <value>디바인 아처</value>
   </data>
   <data name="Classes_ShieldKnight" xml:space="preserve">
-    <value>Shield Knight</value>
+    <value>실드 나이트</value>
   </data>
   <data name="Classes_SoulMusician" xml:space="preserve">
-    <value>Soul Musician</value>
+    <value>피트 퍼포머</value>
   </data>
   <data name="DamageReference_Table_Title" xml:space="preserve">
     <value>피해 참고표</value>
@@ -810,55 +810,55 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
     <value>이 칸을 선택한 뒤 단축키를 누르세요 (예: Ctrl+F9). Delete 키로 삭제할 수 있습니다.</value>
   </data>
   <data name="ClassSpec_Unknown" xml:space="preserve">
-    <value>Unknown</value>
+    <value>알 수 없음</value>
   </data>
   <data name="ClassSpec_ShieldKnightRecovery" xml:space="preserve">
-    <value>Recovery</value>
+    <value>광휘</value>
   </data>
   <data name="ClassSpec_ShieldKnightShield" xml:space="preserve">
-    <value>Shield</value>
+    <value>신성</value>
   </data>
   <data name="ClassSpec_HeavyGuardianEarthfort" xml:space="preserve">
-    <value>Earthfort</value>
+    <value>암석</value>
   </data>
   <data name="ClassSpec_HeavyGuardianBlock" xml:space="preserve">
-    <value>Block</value>
+    <value>가드</value>
   </data>
   <data name="ClassSpec_StormbladeIaidoSlash" xml:space="preserve">
-    <value>IaidoSlash</value>
+    <value>발도</value>
   </data>
   <data name="ClassSpec_StormbladeMoonStrike" xml:space="preserve">
-    <value>MoonStrike</value>
+    <value>월광</value>
   </data>
   <data name="ClassSpec_WindKnightVanGuard" xml:space="preserve">
-    <value>VanGuard</value>
+    <value>질풍</value>
   </data>
   <data name="ClassSpec_WindKnightSkyward" xml:space="preserve">
-    <value>Skyward</value>
+    <value>난무</value>
   </data>
   <data name="ClassSpec_FrostMageIcicle" xml:space="preserve">
-    <value>Icicle</value>
+    <value>얼창</value>
   </data>
   <data name="ClassSpec_FrostMageFrostBeam" xml:space="preserve">
-    <value>FrostBeam</value>
+    <value>얼빔</value>
   </data>
   <data name="ClassSpec_MarksmanWildpack" xml:space="preserve">
-    <value>Wildpack</value>
+    <value>늑활</value>
   </data>
   <data name="ClassSpec_MarksmanFalconry" xml:space="preserve">
-    <value>Falconry</value>
+    <value>매활</value>
   </data>
   <data name="ClassSpec_VerdantOracleSmite" xml:space="preserve">
-    <value>Smite</value>
+    <value>심판</value>
   </data>
   <data name="ClassSpec_VerdantOracleLifeBind" xml:space="preserve">
-    <value>LifeBind</value>
+    <value>치유</value>
   </data>
   <data name="ClassSpec_SoulMusicianDissonance" xml:space="preserve">
-    <value>Dissonance</value>
+    <value>음파</value>
   </data>
   <data name="ClassSpec_SoulMusicianConcerto" xml:space="preserve">
-    <value>Concerto</value>
+    <value>협주</value>
   </data>
   <data name="Settings_NetworkAdapterAutoSelect_Failed" xml:space="preserve">
     <value>네트워크 어댑터 자동 선택에 실패했습니다. 적절한 네트워크 연결이 있는지 확인하세요.</value>
@@ -1120,6 +1120,12 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   <data name="Settings_PlayerInfo_Preview" xml:space="preserve">
     <value>실시간 미리보기</value>
   </data>
+  <data name="SkillBreakdown_Suffix_Progress" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SkillBreakdown_Suffix_Lucky" xml:space="preserve">
+    <value>행운률</value>
+  </data>
   <data name="SkillBreakdown_Label_Average" xml:space="preserve">
     <value>평균</value>
   </data>
@@ -1180,10 +1186,6 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   <data name="SkillBreakdown_Label_Uid" xml:space="preserve">
     <value>UID</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="SkillBreakdown_Label_Power" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="SkillBreakdown_Label_ValuePercentToTotal" xml:space="preserve">
     <value>퍼센트</value>
   </data>
@@ -1206,5 +1208,51 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   </data>
   <data name="App_PrivilegeLevel_Standard" xml:space="preserve">
     <value>표준 사용자</value>
+  </data>
+  <data name="Menu_Battle_Log" xml:space="preserve">
+    <value>전투 로그</value>
+  </data>
+  <data name="Settings_Display_LongPlayerNameScroll" xml:space="preserve">
+    <value>긴 이름 스크롤 표시</value>
+  </data>
+  <data name="Settings_Display_LongPlayerNameScroll_ToolTip" xml:space="preserve">
+    <value>플레이어 이름이 표시 영역보다 길면 자동 스크롤 효과를 활성화합니다</value>
+  </data>
+  <data name="Settings_Display_Total_Damage" xml:space="preserve">
+    <value>총 피해 보기</value>
+  </data>
+  <data name="Settings_Display_DPS" xml:space="preserve">
+    <value>DPS 표시</value>
+  </data>
+  <data name="Settings_Display_Damage_Contribution" xml:space="preserve">
+    <value>피해량 비율 표시</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode" xml:space="preserve">
+    <value>DPS 표시 모드</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_Tooltip" xml:space="preserve">
+    <value>DPS 표시 방식 선택: 누적 피해량/전투 시간 또는 전체 평균 초당 피해량</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_On" xml:space="preserve">
+    <value>전체 DPS</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_Off" xml:space="preserve">
+    <value>누적/시간</value>
+  </data>
+  <data name="Settings_Display_DPS_Mode_OnOff_Tooltip" xml:space="preserve">
+    <value>켜짐=누적 피해량÷시간, 꺼짐=전체 평균 초당 피해량(ValuePerSecond)</value>
+  </data>
+  <data name="Settings_Theme_ClearImage" xml:space="preserve">
+    <value>제거</value>
+  </data>
+  <data name="Menu_Team_Total_Damage" xml:space="preserve">
+    <value>파티:</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms" />
+  <data name="Menu_Training_Extreme" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="Snapshot_Current" xml:space="preserve">
+    <value>현재</value>
   </data>
 </root>

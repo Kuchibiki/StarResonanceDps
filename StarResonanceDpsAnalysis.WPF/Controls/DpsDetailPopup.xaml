@@ -76,7 +76,7 @@
                     FontWeight="Normal"
                     Foreground="#AAAAAA"
                     Style="{StaticResource FooterTextContent}"
-                    Text="技能详情" />
+                    Text="스킬 상세 정보" />
             </StackPanel>
 
             <!--  技能列表  -->
@@ -97,7 +97,7 @@
                                 Margin="0,2,0,0"
                                 FontSize="12"
                                 Style="{StaticResource FooterTextContent}">
-                                <Run Foreground="#CCCCCC" Text="总伤害：" />
+                                <Run Foreground="#CCCCCC" Text="총합：" />
                                 <Run Foreground="White" FontWeight="SemiBold">
                                     <Run.Text>
                                         <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">
@@ -109,17 +109,17 @@
                                 </Run>
                             </TextBlock>
 
-                            <!--  详细数据 (11px)  -->
+                            <!--  详细数据 (11px)  命中 暴击 平均-->
                             <TextBlock
                                 Margin="0,1,0,0"
                                 FontSize="11"
                                 Style="{StaticResource FooterTextContent}">
-                                <Run Foreground="#AAAAAA" Text="命中：" />
+                                <Run Foreground="#AAAAAA" Text="타수：" />
                                 <Run Foreground="#DDDDDD" Text="{Binding HitCount}" />
-                                <Run Foreground="#AAAAAA" Text="  暴击：" />
+                                <Run Foreground="#AAAAAA" Text="  치명타 확률：" />
                                 <Run Foreground="#DDDDDD" Text="{Binding CritCount}" />
                                 <Run Foreground="#DDDDDD" Text="{Binding CritRate, StringFormat={}({0:P1})}" />
-                                <Run Foreground="#AAAAAA" Text="  平均：" />
+                                <Run Foreground="#AAAAAA" Text="  평균：" />
                                 <Run Foreground="#DDDDDD" Text="{Binding Average, StringFormat={}{0:N1}}" />
                             </TextBlock>
                         </StackPanel>

@@ -55,10 +55,11 @@ public partial class SkillLogViewModel : ObservableObject
             Application.Current?.Dispatcher.BeginInvoke(() =>
             {
                 var result = MessageBox.Show(
-                    "检测到您还未设置角色 UID，技能日记需要 UID 才能正常工作。\n\n" +
-                    "如何获取 UID：进入游戏后，左下角玩家编号就是 UID\n\n" +
-                    "是否现在前往设置？",
-                    "需要设置 UID",
+					"某腐磐 UID甫 汲沥窍瘤 臼疽嚼聪促\n\n" +
+                                   "傈捧 肺弊啊 沥惑利栏肺 累悼 窍扁 困秦辑 UID啊 鞘夸钦聪促.\n\n" +
+                    "UID 犬牢 规过：霸烙 立加 饶 谅螟 窍窜狼 锅龋啊 UID涝聪促.\n\n" +
+                    "瘤陛 汲沥窍矫摆嚼聪鳖？",
+					"UID 汲沥 鞘夸",
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Information);
 

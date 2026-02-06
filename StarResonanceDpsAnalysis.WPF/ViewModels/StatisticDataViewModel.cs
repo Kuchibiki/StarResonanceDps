@@ -6,7 +6,10 @@ using StarResonanceDpsAnalysis.WPF.Localization;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
 
-public record struct SkillViewModelCollection(List<SkillItemViewModel> Damage, List<SkillItemViewModel> Healing, List<SkillItemViewModel> Taken);
+public record struct SkillViewModelCollection(List<SkillItemViewModel> Damage, List<SkillItemViewModel> Healing, List<SkillItemViewModel> Taken)
+{
+    public List<SkillItemViewModel> TotalSkillList { get; internal set; }
+}
 
 [DebuggerDisplay("Name:{Player?.Name};Value:{Value}")]
 public partial class StatisticDataViewModel(DebugFunctions debug, LocalizationManager localizationManager, Func<long , SkillViewModelCollection> fetchSkillListFunc) : BaseViewModel, IComparable<StatisticDataViewModel>
@@ -130,8 +133,16 @@ public partial class StatisticDataViewModel(DebugFunctions debug, LocalizationMa
         /// </summary>
         public void SortSkillList()
         {
-            TotalSkillList = TotalSkillList.OrderByDescending(s => s.TotalValue).ToList();
-        }
+			// 리스트가 null이면 빈 리스트로 만들어 버림 (에러 방지)
+			if (TotalSkillList == null)
+			{
+				TotalSkillList = new List<SkillItemViewModel>();
+				return;
+			}
+
+			// 정렬 수행
+			TotalSkillList = TotalSkillList.OrderByDescending(s => s.TotalValue).ToList();
+		}
 
         public event Action<IReadOnlyList<SkillItemViewModel>?>? SkillChanged;
 
