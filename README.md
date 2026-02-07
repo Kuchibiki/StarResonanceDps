@@ -1,3 +1,7 @@
+This project is a fork of [anying1073/StarResonanceDps](https://github.com/anying1073/StarResonanceDps)
+
+I have added Korean translations and Fixed several bugs using AI.
+
 # 🌟 星痕共鸣工具箱
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-brightgreen.svg)](https://www.gnu.org/licenses/agpl-3.0.txt)
