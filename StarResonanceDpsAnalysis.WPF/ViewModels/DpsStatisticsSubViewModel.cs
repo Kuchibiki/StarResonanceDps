@@ -217,39 +217,27 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 
 	private SkillViewModelCollection FetchSkillList(long playerUid)
 	{
-		// 1. 기본적으로 반환할 빈 리스트들
-		var emptyDamage = new List<SkillItemViewModel>();
-		var emptyHealing = new List<SkillItemViewModel>();
-		var emptyTaken = new List<SkillItemViewModel>();
-
-		// 2. 스냅샷 모드일 때 (_parent를 통해 부모 데이터에 접근)
+		// 1. 스냅샷 모드일 때 (이 부분만 따로 추가)
 		if (_parent.IsViewingSnapshot && _parent.CurrentSnapshot != null)
 		{
-			if (_parent.CurrentSnapshot.Players.TryGetValue(playerUid, out var playerData))
+			if (_parent.CurrentSnapshot.Players.TryGetValue(playerUid, out var snapshotData))
 			{
-				// 부모의 변환 메서드를 호출하여 3가지 데이터를 모두 가져옵니다.
-				// (주의: 부모 파일에서 이 메서드들을 public으로 바꿔야 합니다!)
-				var damage = _parent.ConvertSnapshotSkillsToViewModel(playerData.DamageSkills, StatisticType.Damage);
-				var healing = _parent.ConvertSnapshotSkillsToViewModel(playerData.HealingSkills, StatisticType.Healing);
-				var taken = _parent.ConvertSnapshotSkillsToViewModel(playerData.TakenSkills, StatisticType.TakenDamage);
-
+				// 스냅샷 전용 변환 (이 3줄이 필요한 이유는 스냅샷 데이터 구조가 실시간과 다르기 때문입니다)
+				var damage = _parent.ConvertSnapshotSkillsToViewModel(snapshotData.DamageSkills, StatisticType.Damage);
+				var healing = _parent.ConvertSnapshotSkillsToViewModel(snapshotData.HealingSkills, StatisticType.Healing);
+				var taken = _parent.ConvertSnapshotSkillsToViewModel(snapshotData.TakenSkills, StatisticType.TakenDamage);
 				return new SkillViewModelCollection(damage, healing, taken);
 			}
-			return new SkillViewModelCollection(emptyDamage, emptyHealing, emptyTaken);
+			return new SkillViewModelCollection(new List<SkillItemViewModel>(), new List<SkillItemViewModel>(), new List<SkillItemViewModel>());
 		}
 
-		// 3. 실시간 모드일 때
+		// 2. 실시간 모드일 때 (원본 코드 그대로 복사)
 		var ret = _storage.GetStatistics(ScopeTime == ScopeTime.Total);
-		if (ret.TryGetValue(playerUid, out var value))
-		{
-			// 실시간 데이터로부터 3가지 리스트를 모두 추출
-			var damageList = value.ToSkillItemVmList(_localizationManager).TotalSkillList;
-			// (참고: ToSkillItemVmList가 반환하는 객체 구조에 따라 위 코드는 수정이 필요할 수 있습니다. 
-			// 만약 에러가 난다면 일단 아래처럼 빈 값을 넘기세요.)
-			return new SkillViewModelCollection(damageList, emptyHealing, emptyTaken);
-		}
-
-		return new SkillViewModelCollection(emptyDamage, emptyHealing, emptyTaken);
+		var found = ret.TryGetValue(playerUid, out var value);
+		Debug.Assert(found, $"PlayerNotFound with {playerUid}");
+		Debug.Assert(value != null, nameof(value) + " != null");
+		var list = value.ToSkillItemVmList(_localizationManager);
+		return list;
 	}
 
 	private void UpdatePlayerInfo(StatisticDataViewModel slot, PlayerInfo? playerInfo)
