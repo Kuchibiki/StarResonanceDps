@@ -425,10 +425,18 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
         /// </summary>
         public static void ProcessSyncNearDeltaInfo(byte[] payloadBuffer, bool b)
         {
-            var syncNearDeltaInfo = WorldNtf.Types.SyncNearDeltaInfo.Parser.ParseFrom(payloadBuffer);
-            if (syncNearDeltaInfo.DeltaInfos == null || syncNearDeltaInfo.DeltaInfos.Count == 0) return;
+            try
+            {
+                var syncNearDeltaInfo = WorldNtf.Types.SyncNearDeltaInfo.Parser.ParseFrom(payloadBuffer);
+                if (syncNearDeltaInfo.DeltaInfos == null || syncNearDeltaInfo.DeltaInfos.Count == 0) return;
 
-            foreach (var aoiSyncDelta in syncNearDeltaInfo.DeltaInfos) ProcessAoiSyncDelta(aoiSyncDelta);
+                foreach (var aoiSyncDelta in syncNearDeltaInfo.DeltaInfos) ProcessAoiSyncDelta(aoiSyncDelta);
+            }
+            catch (InvalidProtocolBufferException)
+            {
+                // Ignore temporarily
+                // TODO: Add logger
+            }
         }
 
 
