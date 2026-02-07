@@ -114,7 +114,7 @@
                                 Margin="0,1,0,0"
                                 FontSize="11"
                                 Style="{StaticResource FooterTextContent}">
-                                <Run Foreground="#AAAAAA" Text="타수：" />
+                                <Run Foreground="#AAAAAA" Text="적중：" />
                                 <Run Foreground="#DDDDDD" Text="{Binding HitCount}" />
                                 <Run Foreground="#AAAAAA" Text="  치명타 확률：" />
                                 <Run Foreground="#DDDDDD" Text="{Binding CritCount}" />

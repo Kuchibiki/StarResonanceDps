@@ -13,7 +13,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:viewModels="clr-namespace:StarResonanceDpsAnalysis.WPF.ViewModels"
-    xmlns:properties="clr-namespace:StarResonanceDpsAnalysis.Assets.Properties;assembly=StarResonanceDpsAnalysis.Assets"
 	Title="{lex:Loc Key={x:Static loc:ResourcesKeys.Window_DpsStatistics_Title}}"
     Width="380"
     Height="360"
@@ -54,7 +53,15 @@
         <converters:DoubleNegateConverter x:Key="DoubleNegateConverter" />
         <converters:DoubleSumConverter x:Key="DoubleSumConverter" />
 
-        <Style
+		<Style
+            x:Key="PlayerInfoTextStyle"
+            BasedOn="{StaticResource NormalTextBlockBaseStyle}"
+            TargetType="TextBlock">
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="Foreground" Value="White" />
+		</Style>
+
+		<Style
             x:Key="StatisticTypeText"
             BasedOn="{StaticResource NormalTextBlockBaseStyle}"
             TargetType="TextBlock">
@@ -193,40 +200,43 @@
                     Margin="5,0,5,0"
                     Grid.Column="2">
 
-                    <Grid.Resources>
-                        <Style
+					<Grid.OpacityMask>
+						<!-- The indices [0] and [3] in C# refer to these stops -->
+						<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+							<GradientStop Offset="0" Color="Black" />
+							<!-- Index [0] -->
+							<GradientStop Offset="0.1" Color="Black" />
+							<!-- Index [1] -->
+							<GradientStop Offset="0.9" Color="Black" />
+							<!-- Index [2] -->
+							<GradientStop Offset="1" Color="Transparent" />
+							<!-- Index [3] -->
+						</LinearGradientBrush>
+					</Grid.OpacityMask>
+
+					<Grid.Resources>
+						<Style
                             x:Key="PlayerInfoTextStyle"
                             BasedOn="{StaticResource NormalTextBlockBaseStyle}"
                             TargetType="TextBlock">
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="Foreground" Value="White" />
-                        </Style>
-                    </Grid.Resources>
-                    <Grid.OpacityMask>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                            <GradientStop Color="#000" Offset="0"/>
-                            <GradientStop Color="#000" Offset="0.85"/>
-                            <GradientStop Color="Transparent" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Grid.OpacityMask>
-
-                    <Canvas 
-                        VerticalAlignment="Center"
-                        Height="{Binding ActualHeight, ElementName=PlayerInfoText}"
-                        ClipToBounds="True">
-                        
-                        <TextBlock x:Name="PlayerInfoText"
+							<Setter Property="VerticalAlignment" Value="Center" />
+							<Setter Property="Foreground" Value="White" />
+						</Style>
+					</Grid.Resources>
+					<Canvas VerticalAlignment="Center" Height="{Binding ActualHeight, ElementName=PlayerInfoText}"
+                            ClipToBounds="True">
+						<TextBlock x:Name="PlayerInfoText"
                                    Canvas.Left="0"
                                    Style="{StaticResource PlayerInfoTextStyle}"
                                    Text="{Binding Path=Player.PlayerInfo}">
-                             <b:Interaction.Behaviors>
-                                 <behaviors:MarqueeTextBehavior 
-                                     Container="{Binding ElementName=PlayerInfoContainer}"
-                                     IsAnimationEnabled="{Binding DataContext.AppConfig.EnableMarqueeText, RelativeSource={RelativeSource AncestorType=Window}}" />
-                             </b:Interaction.Behaviors>
-                        </TextBlock>
-                        
-                    </Canvas>
+                            <b:Interaction.Behaviors>
+                                <behaviors:MarqueeTextBehavior
+                                    x:Name="MarqueeTextBehavior"
+                                    Container="{Binding ElementName=PlayerInfoContainer}"
+                                    IsAnimationEnabled="{Binding DataContext.AppConfig.EnableMarqueeText, RelativeSource={RelativeSource AncestorType=Window}}" />
+                            </b:Interaction.Behaviors>
+						</TextBlock>
+					</Canvas>
                 </Grid>
 
                 <!--  数值  -->
@@ -519,8 +529,7 @@
                                     Style="{StaticResource ModernContextMenu}"
                                     PlacementTarget="{x:Reference ButtonSettings}"
                                     DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"
-                                             d:DataContext="{d:DesignInstance viewModels:DpsStatisticsViewModel}"
-                                             >
+                                    d:DataContext="{d:DesignInstance viewModels:DpsStatisticsViewModel}">
                                     <!--  只给 MenuItem 应用样式，Separator 不受影响  -->
                                     <ContextMenu.Resources>
                                         <Style BasedOn="{StaticResource ModernMenuItem}" TargetType="MenuItem" />

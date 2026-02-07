@@ -366,9 +366,6 @@
   <data name="About_Community_Invite" xml:space="preserve">
     <value>GitHub에 접속하기 어렵거나 파티원을 찾고 싶다면 QQ 그룹에 참여해 주세요:</value>
   </data>
-  <data name="About_Community_GroupOne" xml:space="preserve">
-    <value>678150498 (그룹 1)</value>
-  </data>
   <data name="About_Community_GroupTwo" xml:space="preserve">
     <value>1022797551 (그룹 2)</value>
   </data>
@@ -670,7 +667,7 @@
     <value>DPS</value>
   </data>
   <data name="SkillBreakdown_Label_HitCount" xml:space="preserve">
-    <value>타수</value>
+    <value>적중</value>
   </data>
   <data name="SkillBreakdown_Label_CritRate" xml:space="preserve">
     <value>치명타 확률</value>
@@ -1007,7 +1004,7 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
     <value>평균 DPS</value>
   </data>
   <data name="SkillBreakdown_Label_TotalHits" xml:space="preserve">
-    <value>총 타수</value>
+    <value>총 적중</value>
   </data>
   <data name="SkillBreakdown_Section_DamageSkillsAnalysis" xml:space="preserve">
     <value>공격 스킬 분석</value>
@@ -1254,5 +1251,8 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   </data>
   <data name="Snapshot_Current" xml:space="preserve">
     <value>현재</value>
+  </data>
+  <data name="About_Community_GroupOne" xml:space="preserve">
+    <value>678150498 (그룹 1)</value>
   </data>
 </root>
