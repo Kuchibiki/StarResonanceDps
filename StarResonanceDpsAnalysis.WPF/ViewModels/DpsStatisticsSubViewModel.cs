@@ -221,6 +221,12 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
         var found = ret.TryGetValue(playerUid, out var value);
         Debug.Assert(found, $"PlayerNotFound with {playerUid}");
         Debug.Assert(value != null, nameof(value) + " != null");
+        if (!found)
+        {
+            _logger.LogWarning("Player not found with {playerUid}", playerUid);
+            return SkillViewModelCollection.Empty;
+        }
+
         var list = value.ToSkillItemVmList(_localizationManager);
         return list;
     }
