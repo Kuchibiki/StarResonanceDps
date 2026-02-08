@@ -217,7 +217,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 
 	private SkillViewModelCollection FetchSkillList(long playerUid)
 	{
-		// 1. 질문자님이 추가하신 스냅샷 로직
+		// 임시 스냅샷 로직
 		if (_parent.IsViewingSnapshot && _parent.CurrentSnapshot != null)
 		{
 			if (_parent.CurrentSnapshot.Players.TryGetValue(playerUid, out var snapshotData))
@@ -227,18 +227,14 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 				var taken = _parent.ConvertSnapshotSkillsToViewModel(snapshotData.TakenSkills, StatisticType.TakenDamage);
 				return new SkillViewModelCollection(damage, healing, taken);
 			}
-			return SkillViewModelCollection.Empty; // 제작자가 쓴 방식대로 안전하게 빈 값 반환
+			return SkillViewModelCollection.Empty;
 		}
 
-		// 2. 제작자가 수정한 실시간 로직 (안전장치 포함)
 		var ret = _storage.GetStatistics(ScopeTime == ScopeTime.Total);
 		var found = ret.TryGetValue(playerUid, out var value);
 
 		Debug.Assert(found, $"PlayerNotFound with {playerUid}");
 		Debug.Assert(value != null, nameof(value) + " != null");
-
-		// 제작자가 추가한 부분
-		if (!found || value == null)
 		{
 			_logger.LogWarning("Player not found with {playerUid}", playerUid);
 			return SkillViewModelCollection.Empty;

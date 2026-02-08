@@ -142,8 +142,6 @@ public partial class StatisticDataViewModel(DebugFunctions debug, LocalizationMa
 				TotalSkillList = new List<SkillItemViewModel>();
 				return;
 			}
-
-			// 정렬 수행
 			TotalSkillList = TotalSkillList.OrderByDescending(s => s.TotalValue).ToList();
 		}
 

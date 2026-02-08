@@ -333,12 +333,9 @@ public partial class DpsStatisticsViewModel
 
 		return snapshotSkills.Select(s =>
 		{
-			// ⭐ 핵심: 파일에 저장된 s.SkillName(중국어)을 쓰지 않습니다.
 			// LocalizationManager를 통해 skills.ko-KR.json에 정의된 한국어 이름을 가져옵니다.
-			// 키 형식은 프로젝트 설정에 따라 "Skill_ID" 또는 "ID"일 수 있습니다.
 			string localizedName = _localizationManager.GetString($"Skill_{s.SkillId}", defaultValue: s.SkillName);
 
-			// 만약 위 코드로 번역이 안 된다면, 아래처럼 직접 ID를 시도해 보세요.
 			if (localizedName == s.SkillName)
 				localizedName = _localizationManager.GetString(s.SkillId.ToString(), defaultValue: s.SkillName);
 
@@ -349,7 +346,7 @@ public partial class DpsStatisticsViewModel
 			return new SkillItemViewModel
 			{
 				SkillId = s.SkillId,
-				SkillName = localizedName, // 여기서 한국어로 교체됨!
+				SkillName = localizedName,
 				TotalValue = (long)s.TotalValue,
 				HitCount = s.UseTimes,
 				CritCount = s.CritTimes,

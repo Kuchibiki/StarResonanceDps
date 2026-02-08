@@ -420,22 +420,30 @@ namespace StarResonanceDpsAnalysis.Core.Analyze
         }
 
 
-        /// <summary>
-        /// 同步周边增量伤害（范围内其他角色的技能/伤害）
-        /// </summary>
-        public static void ProcessSyncNearDeltaInfo(byte[] payloadBuffer, bool b)
-        {
-            var syncNearDeltaInfo = WorldNtf.Types.SyncNearDeltaInfo.Parser.ParseFrom(payloadBuffer);
-            if (syncNearDeltaInfo.DeltaInfos == null || syncNearDeltaInfo.DeltaInfos.Count == 0) return;
+		/// <summary>
+		/// 同步周边增量伤害（范围内其他角色的技能/伤害）
+		/// </summary>
+		public static void ProcessSyncNearDeltaInfo(byte[] payloadBuffer, bool b)
+		{
+			try
+			{
+				var syncNearDeltaInfo = WorldNtf.Types.SyncNearDeltaInfo.Parser.ParseFrom(payloadBuffer);
+				if (syncNearDeltaInfo.DeltaInfos == null || syncNearDeltaInfo.DeltaInfos.Count == 0) return;
 
-            foreach (var aoiSyncDelta in syncNearDeltaInfo.DeltaInfos) ProcessAoiSyncDelta(aoiSyncDelta);
-        }
+				foreach (var aoiSyncDelta in syncNearDeltaInfo.DeltaInfos) ProcessAoiSyncDelta(aoiSyncDelta);
+			}
+			catch (InvalidProtocolBufferException)
+			{
+				// Ignore temporarily
+				// TODO: Add logger
+			}
+		}
 
 
-        /// <summary>
-        /// 处理一条技能伤害/治疗记录
-        /// </summary>
-        public static void ProcessAoiSyncDelta(WorldNtf.Types.AoiSyncDelta delta)
+		/// <summary>
+		/// 处理一条技能伤害/治疗记录
+		/// </summary>
+		public static void ProcessAoiSyncDelta(WorldNtf.Types.AoiSyncDelta delta)
         {
             if (delta == null) return;
 

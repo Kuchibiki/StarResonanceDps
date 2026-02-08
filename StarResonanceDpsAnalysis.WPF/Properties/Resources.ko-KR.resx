@@ -366,6 +366,9 @@
   <data name="About_Community_Invite" xml:space="preserve">
     <value>GitHub에 접속하기 어렵거나 파티원을 찾고 싶다면 QQ 그룹에 참여해 주세요:</value>
   </data>
+  <data name="About_Community_GroupOne" xml:space="preserve">
+    <value>678150498 (그룹 1)</value>
+  </data>
   <data name="About_Community_GroupTwo" xml:space="preserve">
     <value>1022797551 (그룹 2)</value>
   </data>
@@ -1070,7 +1073,7 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
     <value>치명타</value>
   </data>
   <data name="Common_HitType_Normal" xml:space="preserve">
-    <value>일반</value>
+    <value>Normal</value>
   </data>
   <data name="Settings_PlayerInfoCustomization_Title" xml:space="preserve">
     <value>플레이어 정보 표시</value>
@@ -1121,7 +1124,7 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
     <value />
   </data>
   <data name="SkillBreakdown_Suffix_Lucky" xml:space="preserve">
-    <value>행운률</value>
+    <value>Luck rate</value>
   </data>
   <data name="SkillBreakdown_Label_Average" xml:space="preserve">
     <value>평균</value>
@@ -1251,8 +1254,5 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   </data>
   <data name="Snapshot_Current" xml:space="preserve">
     <value>현재</value>
-  </data>
-  <data name="About_Community_GroupOne" xml:space="preserve">
-    <value>678150498 (그룹 1)</value>
   </data>
 </root>
