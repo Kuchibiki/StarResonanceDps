@@ -813,10 +813,10 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
     <value>알 수 없음</value>
   </data>
   <data name="ClassSpec_ShieldKnightRecovery" xml:space="preserve">
-    <value>광휘</value>
+    <value>신성</value>
   </data>
   <data name="ClassSpec_ShieldKnightShield" xml:space="preserve">
-    <value>신성</value>
+    <value>광휘</value>
   </data>
   <data name="ClassSpec_HeavyGuardianEarthfort" xml:space="preserve">
     <value>암석</value>
