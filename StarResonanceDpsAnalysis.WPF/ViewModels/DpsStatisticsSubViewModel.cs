@@ -235,6 +235,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 
 		Debug.Assert(found, $"PlayerNotFound with {playerUid}");
 		Debug.Assert(value != null, nameof(value) + " != null");
+		if (!found)
 		{
 			_logger.LogWarning("Player not found with {playerUid}", playerUid);
 			return SkillViewModelCollection.Empty;

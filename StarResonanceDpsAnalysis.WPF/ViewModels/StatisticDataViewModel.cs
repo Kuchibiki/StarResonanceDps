@@ -7,11 +7,11 @@ using StarResonanceDpsAnalysis.WPF.Localization;
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
 
 public record struct SkillViewModelCollection(
-	List<SkillItemViewModel> Damage,
-	List<SkillItemViewModel> Healing,
-	List<SkillItemViewModel> Taken)
+    List<SkillItemViewModel> Damage,
+    List<SkillItemViewModel> Healing,
+    List<SkillItemViewModel> Taken)
 {
-	public static SkillViewModelCollection Empty => new([], [], []);
+    public static SkillViewModelCollection Empty => new([], [], []);
 }
 
 [DebuggerDisplay("Name:{Player?.Name};Value:{Value}")]
