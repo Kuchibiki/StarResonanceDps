@@ -1120,11 +1120,11 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   <data name="Settings_PlayerInfo_Preview" xml:space="preserve">
     <value>실시간 미리보기</value>
   </data>
-  <data name="SkillBreakdown_Suffix_Progress" xml:space="preserve">
-    <value />
+  <data name="SkillBreakdown_Suffix_Crits" xml:space="preserve">
+    <value>치명타 횟수</value>
   </data>
   <data name="SkillBreakdown_Suffix_Lucky" xml:space="preserve">
-    <value>Luck rate</value>
+    <value>행운 횟수</value>
   </data>
   <data name="SkillBreakdown_Label_Average" xml:space="preserve">
     <value>평균</value>
@@ -1185,6 +1185,9 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   </data>
   <data name="SkillBreakdown_Label_Uid" xml:space="preserve">
     <value>UID</value>
+  </data>
+  <data name="SkillBreakdown_Label_Power" xml:space="preserve">
+    <value>Power</value>
   </data>
   <data name="SkillBreakdown_Label_ValuePercentToTotal" xml:space="preserve">
     <value>퍼센트</value>
@@ -1247,12 +1250,5 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   </data>
   <data name="Menu_Team_Total_Damage" xml:space="preserve">
     <value>파티:</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms" />
-  <data name="Menu_Training_Extreme" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="Snapshot_Current" xml:space="preserve">
-    <value>현재</value>
   </data>
 </root>
