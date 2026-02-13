@@ -1178,16 +1178,10 @@ Como obter: Após uma luta, seu personagem aparecerá automaticamente na janela 
   <data name="SkillBreakdown_Label_SkillName" xml:space="preserve">
     <value>Habilidade(Nome)</value>
   </data>
+  <data name="SkillBreakdown_Label_Uid" xml:space="preserve">
+    <value>UID</value>
+  </data>
   <data name="SkillBreakdown_Label_ValuePercentToTotal" xml:space="preserve">
     <value>Por cento</value>
-  </data>
-  <data name="Menu_Training_Personal" xml:space="preserve">
-    <value>Treino Solo</value>
-  </data>
-  <data name="Menu_Training_Faction" xml:space="preserve">
-    <value>Treino de Facção</value>
-  </data>
-  <data name="Menu_Training_Extreme" xml:space="preserve">
-    <value>Treino Extremo</value>
   </data>
 </root>

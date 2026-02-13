@@ -974,7 +974,7 @@ Recommended: 500-2000 milliseconds</value>
     <value>Training</value>
   </data>
   <data name="MainView_Plugin_Training_Title" xml:space="preserve">
-    <value />
+    <value>Training mode</value>
   </data>
   <data name="MainView_Plugin_Training_Description" xml:space="preserve">
     <value />

@@ -1212,4 +1212,7 @@
   <data name="App_PrivilegeLevel_Standard" xml:space="preserve">
     <value>标准用户</value>
   </data>
+  <data name="DpsStatistics_CurrentPlayerRank" xml:space="preserve">
+    <value>当前玩家排名</value>
+  </data>
 </root>
