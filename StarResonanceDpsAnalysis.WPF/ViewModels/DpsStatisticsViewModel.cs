@@ -212,6 +212,10 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
             _logger.LogInformation("ResetAll: Stopped all existing update mechanisms (using DpsUpdateCoordinator)");
 
             UpdateBattleDuration();
+            if (IsViewingSnapshot)
+            {
+                ExitSnapshotViewMode();
+            }
 
             _logger.LogInformation(
                 "=== ResetAll COMPLETE === ScopeTime={ScopeTime}, Mode={Mode}, Event subscribed={Event}",
@@ -230,6 +234,10 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
 
         // Delegate to ResetCoordinator
         _resetCoordinator.ResetCurrentSection();
+        if (IsViewingSnapshot)
+        {
+            ExitSnapshotViewMode();
+        }
 
         _logger.LogInformation("=== ResetSection COMPLETE ===");
     }
