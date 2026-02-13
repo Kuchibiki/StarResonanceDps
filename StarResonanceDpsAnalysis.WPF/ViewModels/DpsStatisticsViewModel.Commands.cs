@@ -194,11 +194,11 @@ public partial class DpsStatisticsViewModel
         var vm = _windowManagement.SkillBreakdownView.DataContext as SkillBreakdownViewModel;
         Debug.Assert(vm != null, "vm!=null");
 
-        var playerStats = _storage.GetStatistics(ScopeTime == Models.ScopeTime.Total);
+        var playerStats = _dataSourceEngine.CurrentSource.GetRawData();
         if (!playerStats.TryGetValue(target.Player.Uid, out var stats)) return;
         _logger.LogInformation("Using PlayerStatistics for SkillBreakdown (accurate data)");
 
-        var playerInfo = _storage.ReadOnlyPlayerInfoDatas.TryGetValue(target.Player.Uid, out var info)
+        var playerInfo = _dataSourceEngine.GetPlayerInfoDictionary().TryGetValue(target.Player.Uid, out var info)
             ? info
             : null;
 
