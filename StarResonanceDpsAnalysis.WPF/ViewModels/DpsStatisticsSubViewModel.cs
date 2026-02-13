@@ -5,233 +5,210 @@ using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using StarResonanceDpsAnalysis.Core.Data;
 using StarResonanceDpsAnalysis.Core.Data.Models;
 using StarResonanceDpsAnalysis.Core.Models;
 using StarResonanceDpsAnalysis.Core.Statistics;
 using StarResonanceDpsAnalysis.WPF.Extensions;
 using StarResonanceDpsAnalysis.WPF.Localization;
 using StarResonanceDpsAnalysis.WPF.Models;
+using StarResonanceDpsAnalysis.WPF.ViewModels.DpsStatisticDataEngine;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
 
-/// <summary>
-/// Helper struct for pre-processed DPS data to avoid redundant calculations
-/// Immutable by design for thread-safety and performance
-/// </summary>
-public readonly record struct DpsDataProcessed(
-    PlayerStatistics OriginalData,
-    ulong Value,
-    long DurationTicks,
-    long Uid,
-    double ValuePerSecond);
-
 public partial class DpsStatisticsSubViewModel : BaseViewModel
 {
-    private readonly DebugFunctions _debugFunctions;
-    private readonly Dispatcher _dispatcher;
-    private readonly LocalizationManager _localizationManager;
-    private readonly ILogger<DpsStatisticsViewModel> _logger;
-    private readonly DpsStatisticsViewModel _parent;
-    private readonly IDataStorage _storage;
-    private readonly StatisticType _type;
-    [ObservableProperty] private int? _currentPlayerRank;
-    [ObservableProperty] private StatisticDataViewModel? _currentPlayerSlot;
-    [ObservableProperty] private BulkObservableCollection<StatisticDataViewModel> _data = new();
-    [ObservableProperty] private ScopeTime _scopeTime;
-    [ObservableProperty] private StatisticDataViewModel? _selectedSlot;
-    [ObservableProperty] private int _skillDisplayLimit = 8;
-    [ObservableProperty] private SortDirectionEnum _sortDirection = SortDirectionEnum.Descending;
-    [ObservableProperty] private string _sortMemberPath = "Value";
-    [ObservableProperty] private bool _suppressSorting;
+	private readonly DataSourceEngine _dataSourceEngine;
+	private readonly DebugFunctions _debugFunctions;
+	private readonly Dispatcher _dispatcher;
+	private readonly LocalizationManager _localizationManager;
+	private readonly ILogger<DpsStatisticsViewModel> _logger;
+	private readonly DpsStatisticsViewModel _parent;
+	private readonly StatisticType _type;
+	[ObservableProperty] private int? _currentPlayerRank;
+	[ObservableProperty] private StatisticDataViewModel? _currentPlayerSlot;
+	[ObservableProperty] private BulkObservableCollection<StatisticDataViewModel> _data = new();
+	[ObservableProperty] private ScopeTime _scopeTime;
+	[ObservableProperty] private StatisticDataViewModel? _selectedSlot;
+	[ObservableProperty] private int _skillDisplayLimit = 8;
+	[ObservableProperty] private SortDirectionEnum _sortDirection = SortDirectionEnum.Descending;
+	[ObservableProperty] private string _sortMemberPath = "Value";
+	[ObservableProperty] private bool _suppressSorting;
 
-    public DpsStatisticsSubViewModel(ILogger<DpsStatisticsViewModel> logger, Dispatcher dispatcher, StatisticType type,
-        IDataStorage storage,
-        DebugFunctions debugFunctions, DpsStatisticsViewModel parent, LocalizationManager localizationManager)
-    {
-        _logger = logger;
-        _dispatcher = dispatcher;
-        _type = type;
-        _storage = storage;
-        _debugFunctions = debugFunctions;
-        _parent = parent;
-        _localizationManager = localizationManager;
-        _data.CollectionChanged += DataChanged;
-        return;
+	public DpsStatisticsSubViewModel(ILogger<DpsStatisticsViewModel> logger, Dispatcher dispatcher, StatisticType type,
+		DebugFunctions debugFunctions, DpsStatisticsViewModel parent, LocalizationManager localizationManager,
+		DataSourceEngine dataSourceEngine)
+	{
+		_logger = logger;
+		_dispatcher = dispatcher;
+		_type = type;
+		_debugFunctions = debugFunctions;
+		_parent = parent;
+		_localizationManager = localizationManager;
+		_dataSourceEngine = dataSourceEngine;
+		_data.CollectionChanged += DataChanged;
+		return;
 
-        void DataChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    Debug.Assert(e.NewItems != null, "e.NewItems != null");
-                    LocalIterate(e.NewItems, item => DataDictionary[item.Player.Uid] = item);
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    Debug.Assert(e.OldItems != null, "e.OldItems != null");
-                    LocalIterate(e.OldItems, itm => DataDictionary.Remove(itm.Player.Uid));
-                    LocalIterate(e.OldItems, itm =>
-                    {
-                        if (ReferenceEquals(CurrentPlayerSlot, itm))
-                        {
-                            CurrentPlayerSlot = null;
-                        }
-                    });
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    Debug.Assert(e.NewItems != null, "e.NewItems != null");
-                    LocalIterate(e.NewItems, item => DataDictionary[item.Player.Uid] = item);
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    DataDictionary.Clear();
-                    CurrentPlayerSlot = null;
-                    break;
-                case NotifyCollectionChangedAction.Move:
-                    // just ignore
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+		void DataChanged(object? sender, NotifyCollectionChangedEventArgs e)
+		{
+			switch (e.Action)
+			{
+				case NotifyCollectionChangedAction.Add:
+					Debug.Assert(e.NewItems != null, "e.NewItems != null");
+					LocalIterate(e.NewItems, item => DataDictionary[item.Player.Uid] = item);
+					break;
+				case NotifyCollectionChangedAction.Remove:
+					Debug.Assert(e.OldItems != null, "e.OldItems != null");
+					LocalIterate(e.OldItems, itm => DataDictionary.Remove(itm.Player.Uid));
+					LocalIterate(e.OldItems, itm =>
+					{
+						if (ReferenceEquals(CurrentPlayerSlot, itm))
+						{
+							CurrentPlayerSlot = null;
+						}
+					});
+					break;
+				case NotifyCollectionChangedAction.Replace:
+					Debug.Assert(e.NewItems != null, "e.NewItems != null");
+					LocalIterate(e.NewItems, item => DataDictionary[item.Player.Uid] = item);
+					break;
+				case NotifyCollectionChangedAction.Reset:
+					DataDictionary.Clear();
+					CurrentPlayerSlot = null;
+					break;
+				case NotifyCollectionChangedAction.Move:
+					// just ignore
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
 
-            return;
+			return;
 
-            void LocalIterate(IList list, Action<StatisticDataViewModel> action)
-            {
-                foreach (StatisticDataViewModel item in list)
-                {
-                    action.Invoke(item);
-                }
-            }
-        }
-    }
+			void LocalIterate(IList list, Action<StatisticDataViewModel> action)
+			{
+				foreach (StatisticDataViewModel item in list)
+				{
+					action.Invoke(item);
+				}
+			}
+		}
+	}
 
-    public Dictionary<long, StatisticDataViewModel> DataDictionary { get; } = new();
-    public bool Initialized { get; set; }
+	public Dictionary<long, StatisticDataViewModel> DataDictionary { get; } = new();
+	public bool Initialized { get; set; }
 
-    public void SetPlayerInfoMask(bool mask)
-    {
-        foreach (var value in DataDictionary.Values)
-        {
-            value.Player.Mask = mask;
-        }
-    }
+	public void SetPlayerInfoMask(bool mask)
+	{
+		foreach (var value in DataDictionary.Values)
+		{
+			value.Player.Mask = mask;
+		}
+	}
 
-    public void SetUsePlayerInfoFormat(bool useFormat)
-    {
-        foreach (var value in Data)
-        {
-            value.Player.UseCustomFormat = useFormat;
-        }
-    }
+	public void SetUsePlayerInfoFormat(bool useFormat)
+	{
+		foreach (var value in Data)
+		{
+			value.Player.UseCustomFormat = useFormat;
+		}
+	}
 
-    public void SetPlayerInfoFormat(string formatString)
-    {
-        foreach (var value in Data)
-        {
-            value.Player.FormatString = formatString;
-        }
-    }
+	public void SetPlayerInfoFormat(string formatString)
+	{
+		foreach (var value in Data)
+		{
+			value.Player.FormatString = formatString;
+		}
+	}
 
-    /// <summary>
-    /// Sorts the slots collection in-place based on the current sort criteria
-    /// </summary>
-    public void SortSlotsInPlace(bool force = false)
-    {
-        if (Data.Count == 0 || string.IsNullOrWhiteSpace(SortMemberPath))
-            return;
+	/// <summary>
+	/// Sorts the slots collection in-place based on the current sort criteria
+	/// </summary>
+	public void SortSlotsInPlace(bool force = false)
+	{
+		if (Data.Count == 0 || string.IsNullOrWhiteSpace(SortMemberPath))
+			return;
 
-        if (!force && SuppressSorting)
-        {
-            UpdateItemIndices();
-            return;
-        }
+		if (!force && SuppressSorting)
+		{
+			UpdateItemIndices();
+			return;
+		}
 
-        try
-        {
-            // Sort the collection based on the current criteria
-            _dispatcher.Invoke(() =>
-            {
-                switch (SortMemberPath)
-                {
-                    case "Value":
-                        Data.SortBy(x => x.Value, SortDirection == SortDirectionEnum.Descending);
-                        break;
-                    case "Name":
-                        Data.SortBy(x => x.Player.PlayerInfo, SortDirection == SortDirectionEnum.Descending);
-                        break;
-                    case "Classes":
-                        Data.SortBy(x => (int)x.Player.Class, SortDirection == SortDirectionEnum.Descending);
-                        break;
-                    case "PercentOfMax":
-                        Data.SortBy(x => x.PercentOfMax, SortDirection == SortDirectionEnum.Descending);
-                        break;
-                    case "Percent":
-                        Data.SortBy(x => x.Percent, SortDirection == SortDirectionEnum.Descending);
-                        break;
-                }
-            });
-            // Update the Index property to reflect the new order (1-based index)
-            UpdateItemIndices();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogDebug($"Error during sorting: {ex.Message}");
-        }
-    }
+		try
+		{
+			// Sort the collection based on the current criteria
+			_dispatcher.Invoke(() =>
+			{
+				switch (SortMemberPath)
+				{
+					case "Value":
+						Data.SortBy(x => x.Value, SortDirection == SortDirectionEnum.Descending);
+						break;
+					case "Name":
+						Data.SortBy(x => x.Player.PlayerInfo, SortDirection == SortDirectionEnum.Descending);
+						break;
+					case "Classes":
+						Data.SortBy(x => (int)x.Player.Class, SortDirection == SortDirectionEnum.Descending);
+						break;
+					case "PercentOfMax":
+						Data.SortBy(x => x.PercentOfMax, SortDirection == SortDirectionEnum.Descending);
+						break;
+					case "Percent":
+						Data.SortBy(x => x.Percent, SortDirection == SortDirectionEnum.Descending);
+						break;
+				}
+			});
+			// Update the Index property to reflect the new order (1-based index)
+			UpdateItemIndices();
+		}
+		catch (Exception ex)
+		{
+			_logger.LogDebug($"Error during sorting: {ex.Message}");
+		}
+	}
 
-    /// <summary>
-    /// Get or add StatisticDataViewModel from PlayerStatistics (new architecture)
-    /// </summary>
-    protected StatisticDataViewModel GetOrAddStatisticDataViewModel(PlayerStatistics playerStats)
-    {
-        if (DataDictionary.TryGetValue(playerStats.Uid, out var slot))
-            return slot;
+	/// <summary>
+	/// Get or add StatisticDataViewModel from PlayerStatistics (new architecture)
+	/// </summary>
+	protected StatisticDataViewModel GetOrAddStatisticDataViewModel(PlayerStatistics playerStats)
+	{
+		if (DataDictionary.TryGetValue(playerStats.Uid, out var slot))
+			return slot;
 
-        var ret = _storage.ReadOnlyPlayerInfoDatas.TryGetValue(playerStats.Uid, out var playerInfo);
-        slot = new StatisticDataViewModel(_debugFunctions, _localizationManager, FetchSkillList)
-        {
-            Index = 999,
-            Value = 0,
-            DurationTicks = playerStats.LastTick - (playerStats.StartTick ?? 0),
-            Player = new PlayerInfoViewModel(_localizationManager)
-            {
-                Uid = playerStats.Uid,
-                Guild = "Unknown",
-                Name = playerInfo?.Name,
-                Spec = playerInfo?.Spec ?? ClassSpec.Unknown,
-                IsNpc = playerStats.IsNpc,
-                NpcTemplateId = playerInfo?.NpcTemplateId ?? 0,
-                Mask = _parent.AppConfig.MaskPlayerName,
-                // ⭐ 应用自定义格式字符串配置
-                UseCustomFormat = _parent.AppConfig.UseCustomFormat,
-                FormatString = _parent.AppConfig.PlayerInfoFormatString
-            },
-            SetHoverStateAction = isHovering => _parent.SetIndicatorHover(isHovering)
-        };
+		var playerInfoDict = _dataSourceEngine.GetPlayerInfoDictionary();
+		var ret = playerInfoDict.TryGetValue(playerStats.Uid, out var playerInfo);
+		slot = new StatisticDataViewModel(_debugFunctions, _localizationManager, FetchSkillList)
+		{
+			Index = 999,
+			Value = 0,
+			DurationTicks = playerStats.LastTick - (playerStats.StartTick ?? 0),
+			Player = new PlayerInfoViewModel(_localizationManager)
+			{
+				Uid = playerStats.Uid,
+				Guild = "Unknown",
+				Name = playerInfo?.Name,
+				Spec = playerInfo?.Spec ?? ClassSpec.Unknown,
+				IsNpc = playerStats.IsNpc,
+				NpcTemplateId = playerInfo?.NpcTemplateId ?? 0,
+				Mask = _parent.AppConfig.MaskPlayerName,
+				// ⭐ 应用自定义格式字符串配置
+				UseCustomFormat = _parent.AppConfig.UseCustomFormat,
+				FormatString = _parent.AppConfig.PlayerInfoFormatString
+			},
+			SetHoverStateAction = isHovering => _parent.SetIndicatorHover(isHovering)
+		};
 
 
-        _dispatcher.Invoke(() => { Data.Add(slot); });
+		_dispatcher.Invoke(() => { Data.Add(slot); });
 
-        return slot;
-    }
+		return slot;
+	}
 
 	private SkillViewModelCollection FetchSkillList(long playerUid)
 	{
-		// 임시 스냅샷 로직
-		if (_parent.IsViewingSnapshot && _parent.CurrentSnapshot != null)
-		{
-			if (_parent.CurrentSnapshot.Players.TryGetValue(playerUid, out var snapshotData))
-			{
-				var damage = _parent.ConvertSnapshotSkillsToViewModel(snapshotData.DamageSkills, StatisticType.Damage);
-				var healing = _parent.ConvertSnapshotSkillsToViewModel(snapshotData.HealingSkills, StatisticType.Healing);
-				var taken = _parent.ConvertSnapshotSkillsToViewModel(snapshotData.TakenSkills, StatisticType.TakenDamage);
-				return new SkillViewModelCollection(damage, healing, taken);
-			}
-			return SkillViewModelCollection.Empty;
-		}
-
-		var ret = _storage.GetStatistics(ScopeTime == ScopeTime.Total);
-		var found = ret.TryGetValue(playerUid, out var value);
+		var data = _dataSourceEngine.CurrentSource.GetRawData();
+		var found = data.TryGetValue(playerUid, out var value);
 
 		Debug.Assert(found, $"PlayerNotFound with {playerUid}");
 		Debug.Assert(value != null, nameof(value) + " != null");
@@ -246,337 +223,338 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 	}
 
 	private void UpdatePlayerInfo(StatisticDataViewModel slot, PlayerInfo? playerInfo)
-    {
-        if (playerInfo != null)
-        {
-            Debug.Assert(playerInfo != null, nameof(playerInfo) + " != null");
-            slot.Player.Name = playerInfo.Name;
-            slot.Player.Class = playerInfo.Class;
-            slot.Player.Spec = playerInfo.Spec;
-            slot.Player.PowerLevel = playerInfo.CombatPower ?? 0;
-            slot.Player.SeasonLevel = playerInfo.SeasonLevel;
-            slot.Player.SeasonStrength = playerInfo.SeasonStrength ?? 0;
-        }
-        else
-        {
-            slot.Player.Name = null;
-            slot.Player.Class = Classes.Unknown;
-            slot.Player.Spec = ClassSpec.Unknown;
-            slot.Player.PowerLevel = 0;
-            slot.Player.SeasonLevel = 0;
-            slot.Player.SeasonStrength = 0;
-        }
-    }
+	{
+		if (playerInfo != null)
+		{
+			Debug.Assert(playerInfo != null, nameof(playerInfo) + " != null");
+			slot.Player.Name = playerInfo.Name;
+			slot.Player.Class = playerInfo.Class;
+			slot.Player.Spec = playerInfo.Spec;
+			slot.Player.PowerLevel = playerInfo.CombatPower ?? 0;
+			slot.Player.SeasonLevel = playerInfo.SeasonLevel;
+			slot.Player.SeasonStrength = playerInfo.SeasonStrength ?? 0;
+		}
+		else
+		{
+			slot.Player.Name = null;
+			slot.Player.Class = Classes.Unknown;
+			slot.Player.Spec = ClassSpec.Unknown;
+			slot.Player.PowerLevel = 0;
+			slot.Player.SeasonLevel = 0;
+			slot.Player.SeasonStrength = 0;
+		}
+	}
 
-    /// <summary>
-    /// ⭐ 更新当前玩家排名(使用用户在设置中配置的UID)
-    /// </summary>
-    /// <param name="currentPlayerUid"></param>
-    private void UpdateCurrentPlayerRank(long currentPlayerUid)
-    {
-        var found = false;
-        int i;
-        for (i = 0; i < Data.Count; i++)
-        {
-            if (Data[i].Player.Uid != currentPlayerUid) continue;
-            found = true;
-            break;
-        }
+	/// <summary>
+	/// ⭐ 更新当前玩家排名(使用用户在设置中配置的UID)
+	/// </summary>
+	/// <param name="currentPlayerUid"></param>
+	private void UpdateCurrentPlayerRank(long currentPlayerUid)
+	{
+		var found = false;
+		int i;
+		for (i = 0; i < Data.Count; i++)
+		{
+			if (Data[i].Player.Uid != currentPlayerUid) continue;
+			found = true;
+			break;
+		}
 
-        var prevRank = CurrentPlayerRank;
-        if (found)
-            CurrentPlayerRank = i + 1;
-        else
-            CurrentPlayerRank = null;
+		var prevRank = CurrentPlayerRank;
+		if (found)
+			CurrentPlayerRank = i + 1;
+		else
+			CurrentPlayerRank = null;
 
-        if (prevRank != CurrentPlayerRank)
-        {
-            // ⭐ 调试日志
-            _logger.LogDebug(
-                "排名更新: UserUID={UserUid}, Rank={Rank}, Total={Total}, Type={Type}",
-                currentPlayerUid,
-                CurrentPlayerRank ?? -1,
-                Data.Count,
-                _type);
-        }
-    }
+		if (prevRank != CurrentPlayerRank)
+		{
+			// ⭐ 调试日志
+			_logger.LogDebug(
+				"排名更新: UserUID={UserUid}, Rank={Rank}, Total={Total}, Type={Type}",
+				currentPlayerUid,
+				CurrentPlayerRank ?? -1,
+				Data.Count,
+				_type);
+		}
+	}
 
-    /// <summary>
-    /// Updates data with pre-computed values for efficient batch processing
-    /// </summary>
-    internal void UpdateDataOptimized(Dictionary<long, DpsDataProcessed> processedData, long currentPlayerUid)
-    {
-        var hasCurrentPlayer = currentPlayerUid != 0;
+	/// <summary>
+	/// Updates data with pre-computed values for efficient batch processing
+	/// </summary>
+	internal void UpdateDataOptimized(Dictionary<long, DpsDataProcessed> processedData, long currentPlayerUid)
+	{
+		var hasCurrentPlayer = currentPlayerUid != 0;
 
-        // Update all slots with pre-processed data
-        foreach (var (uid, processed) in processedData)
-        {
-            // Skip if this statistic type has no value
-            if (processed.Value == 0)
-                continue;
+		// Update all slots with pre-processed data
+		foreach (var (uid, processed) in processedData)
+		{
+			// Skip if this statistic type has no value
+			if (processed.Value == 0)
+				continue;
 
-            var slot = GetOrAddStatisticDataViewModel(processed.OriginalData);
+			var slot = GetOrAddStatisticDataViewModel(processed.OriginalData);
 
-            // Update player info
-            var ret = _storage.ReadOnlyPlayerInfoDatas.TryGetValue(processed.Uid, out var playerInfo);
-            if (!ret) continue;
-            UpdatePlayerInfo(slot, playerInfo);
+			// Update player info
+			var playerInfoDict = _dataSourceEngine.GetPlayerInfoDictionary();
+			var ret = playerInfoDict.TryGetValue(processed.Uid, out var playerInfo);
+			if (!ret) continue;
+			UpdatePlayerInfo(slot, playerInfo);
 
-            // Update slot values with pre-computed data
-            slot.Value = processed.Value;
-            slot.DurationTicks = processed.DurationTicks;
-            slot.ValuePerSecond = processed.ValuePerSecond;
+			// Update slot values with pre-computed data
+			slot.Value = processed.Value;
+			slot.DurationTicks = processed.DurationTicks;
+			slot.ValuePerSecond = processed.ValuePerSecond;
 
-            // Set current player slot if this is the current player
-            if (hasCurrentPlayer && uid == currentPlayerUid)
-            {
-                SelectedSlot = slot;
-                CurrentPlayerSlot = slot;
-            }
-        }
+			// Set current player slot if this is the current player
+			if (hasCurrentPlayer && uid == currentPlayerUid)
+			{
+				SelectedSlot = slot;
+				CurrentPlayerSlot = slot;
+			}
+		}
 
-        // Batch calculate percentages
-        if (Data.Count > 0)
-        {
-            var maxValue = Data.Max(d => d.Value);
-            var totalValue = Data.Sum(d => Convert.ToDouble(d.Value));
+		// Batch calculate percentages
+		if (Data.Count > 0)
+		{
+			var maxValue = Data.Max(d => d.Value);
+			var totalValue = Data.Sum(d => Convert.ToDouble(d.Value));
 
-            foreach (var slot in Data)
-            {
-                slot.PercentOfMax = MathExtension.Percentage(slot.Value, maxValue);
-                slot.Percent = MathExtension.Percentage(slot.Value, totalValue);
-            }
-        }
+			foreach (var slot in Data)
+			{
+				slot.PercentOfMax = MathExtension.Percentage(slot.Value, maxValue);
+				slot.Percent = MathExtension.Percentage(slot.Value, totalValue);
+			}
+		}
 
-        // Sort data in place 
-        SortSlotsInPlace();
-        UpdateCurrentPlayerRank(currentPlayerUid);
-    }
+		// Sort data in place 
+		SortSlotsInPlace();
+		UpdateCurrentPlayerRank(currentPlayerUid);
+	}
 
-    private ulong GetValueForType(DpsData dpsData)
-    {
-        return _type switch
-        {
-            StatisticType.Damage => dpsData.TotalAttackDamage.ConvertToUnsigned(),
-            StatisticType.Healing => dpsData.TotalHeal.ConvertToUnsigned(),
-            StatisticType.TakenDamage => dpsData.TotalTakenDamage.ConvertToUnsigned(),
-            StatisticType.NpcTakenDamage => dpsData.IsNpcData ? dpsData.TotalTakenDamage.ConvertToUnsigned() : 0UL,
-            _ => throw new ArgumentOutOfRangeException(nameof(_type), _type, "Invalid statistic type")
-        };
-    }
+	private ulong GetValueForType(DpsData dpsData)
+	{
+		return _type switch
+		{
+			StatisticType.Damage => dpsData.TotalAttackDamage.ConvertToUnsigned(),
+			StatisticType.Healing => dpsData.TotalHeal.ConvertToUnsigned(),
+			StatisticType.TakenDamage => dpsData.TotalTakenDamage.ConvertToUnsigned(),
+			StatisticType.NpcTakenDamage => dpsData.IsNpcData ? dpsData.TotalTakenDamage.ConvertToUnsigned() : 0UL,
+			_ => throw new ArgumentOutOfRangeException(nameof(_type), _type, "Invalid statistic type")
+		};
+	}
 
-    /// <summary>
-    /// Updates the Index property of items to reflect their current position in the collection
-    /// </summary>
-    private void UpdateItemIndices()
-    {
-        var data = Data;
-        for (var i = 0; i < data.Count; i++)
-        {
-            data[i].Index = i + 1; // 1-based index
-        }
-    }
+	/// <summary>
+	/// Updates the Index property of items to reflect their current position in the collection
+	/// </summary>
+	private void UpdateItemIndices()
+	{
+		var data = Data;
+		for (var i = 0; i < data.Count; i++)
+		{
+			data[i].Index = i + 1; // 1-based index
+		}
+	}
 
-    public void AddTestItem()
-    {
-        var slots = Data;
-        var newItem = new StatisticDataViewModel(_debugFunctions, _localizationManager, FetchSkillListFunc)
-        {
-            Index = slots.Count + 1,
-            Value = (ulong)Random.Shared.Next(100, 2000),
-            DurationTicks = 60000,
-            Player = new PlayerInfoViewModel(LocalizationManager.Instance)
-            {
-                Uid = Random.Shared.Next(100, 999),
-                Class = RandomClass(),
-                Guild = "Test Guild",
-                Name = $"Test Player {slots.Count + 1}",
-                Spec = ClassSpecHelper.Random(),
-                PowerLevel = Random.Shared.Next(5000, 39000)
-            }
-        };
+	public void AddTestItem()
+	{
+		var slots = Data;
+		var newItem = new StatisticDataViewModel(_debugFunctions, _localizationManager, FetchSkillListFunc)
+		{
+			Index = slots.Count + 1,
+			Value = (ulong)Random.Shared.Next(100, 2000),
+			DurationTicks = 60000,
+			Player = new PlayerInfoViewModel(LocalizationManager.Instance)
+			{
+				Uid = Random.Shared.Next(100, 999),
+				Class = RandomClass(),
+				Guild = "Test Guild",
+				Name = $"Test Player {slots.Count + 1}",
+				Spec = ClassSpecHelper.Random(),
+				PowerLevel = Random.Shared.Next(5000, 39000)
+			}
+		};
 
-        newItem.Damage.FilteredSkillList =
-        [
-            new SkillItemViewModel
-            {
-                SkillName = "Test Skill A",
-                TotalValue = 15000, HitCount = 25, CritCount = 8, Average = 600
-            },
-            new SkillItemViewModel
-            {
-                SkillName = "Test Skill B",
-                TotalValue = 8500, HitCount = 15, CritCount = 4, Average = 567
-            },
-            new SkillItemViewModel
-            {
-                SkillName = "Test Skill C",
-                TotalValue = 12300, HitCount = 30, CritCount = 12, Average = 410
-            }
-        ];
-        newItem.Heal.FilteredSkillList =
-        [
-            new SkillItemViewModel
-            {
-                SkillName = "Test Heal Skill A", TotalValue = 15000, HitCount = 25, CritCount = 8, Average = 600
-            },
-            new SkillItemViewModel
-            {
-                SkillName = "Test Heal Skill B", TotalValue = 8500, HitCount = 15, CritCount = 4, Average = 567
-            },
-            new SkillItemViewModel
-            {
-                SkillName = "Test Heal Skill C", TotalValue = 12300, HitCount = 30, CritCount = 12, Average = 410
-            }
-        ];
-        newItem.TakenDamage.FilteredSkillList =
-        [
-            new SkillItemViewModel
-            {
-                SkillName = "Test Taken Skill A", TotalValue = 15000, HitCount = 25, CritCount = 8, Average = 600
-            },
-            new SkillItemViewModel
-            {
-                SkillName = "Test Taken Skill B", TotalValue = 8500, HitCount = 15, CritCount = 4, Average = 567
-            },
-            new SkillItemViewModel
-            {
-                SkillName = "Test Taken Skill C", TotalValue = 12300, HitCount = 30, CritCount = 12, Average = 410
-            }
-        ];
+		newItem.Damage.FilteredSkillList =
+		[
+			new SkillItemViewModel
+			{
+				SkillName = "Test Skill A",
+				TotalValue = 15000, HitCount = 25, CritCount = 8, Average = 600
+			},
+			new SkillItemViewModel
+			{
+				SkillName = "Test Skill B",
+				TotalValue = 8500, HitCount = 15, CritCount = 4, Average = 567
+			},
+			new SkillItemViewModel
+			{
+				SkillName = "Test Skill C",
+				TotalValue = 12300, HitCount = 30, CritCount = 12, Average = 410
+			}
+		];
+		newItem.Heal.FilteredSkillList =
+		[
+			new SkillItemViewModel
+			{
+				SkillName = "Test Heal Skill A", TotalValue = 15000, HitCount = 25, CritCount = 8, Average = 600
+			},
+			new SkillItemViewModel
+			{
+				SkillName = "Test Heal Skill B", TotalValue = 8500, HitCount = 15, CritCount = 4, Average = 567
+			},
+			new SkillItemViewModel
+			{
+				SkillName = "Test Heal Skill C", TotalValue = 12300, HitCount = 30, CritCount = 12, Average = 410
+			}
+		];
+		newItem.TakenDamage.FilteredSkillList =
+		[
+			new SkillItemViewModel
+			{
+				SkillName = "Test Taken Skill A", TotalValue = 15000, HitCount = 25, CritCount = 8, Average = 600
+			},
+			new SkillItemViewModel
+			{
+				SkillName = "Test Taken Skill B", TotalValue = 8500, HitCount = 15, CritCount = 4, Average = 567
+			},
+			new SkillItemViewModel
+			{
+				SkillName = "Test Taken Skill C", TotalValue = 12300, HitCount = 30, CritCount = 12, Average = 410
+			}
+		];
 
-        // Calculate percentages
-        if (slots.Count > 0)
-        {
-            var maxValue = Math.Max(slots.Max(d => d.Value), newItem.Value);
-            var totalValue = slots.Sum(d => Convert.ToDouble(d.Value)) + newItem.Value;
+		// Calculate percentages
+		if (slots.Count > 0)
+		{
+			var maxValue = Math.Max(slots.Max(d => d.Value), newItem.Value);
+			var totalValue = slots.Sum(d => Convert.ToDouble(d.Value)) + newItem.Value;
 
-            // Update all existing items
-            foreach (var slot in slots)
-            {
-                slot.PercentOfMax = maxValue > 0 ? slot.Value / (double)maxValue * 100 : 0;
-                slot.Percent = totalValue > 0 ? slot.Value / totalValue : 0;
-            }
+			// Update all existing items
+			foreach (var slot in slots)
+			{
+				slot.PercentOfMax = maxValue > 0 ? slot.Value / (double)maxValue * 100 : 0;
+				slot.Percent = totalValue > 0 ? slot.Value / totalValue : 0;
+			}
 
-            // Set new item percentages
-            newItem.PercentOfMax = maxValue > 0 ? newItem.Value / (double)maxValue * 100 : 0;
-            newItem.Percent = totalValue > 0 ? newItem.Value / totalValue : 0;
-        }
-        else
-        {
-            newItem.PercentOfMax = 100;
-            newItem.Percent = 1;
-        }
+			// Set new item percentages
+			newItem.PercentOfMax = maxValue > 0 ? newItem.Value / (double)maxValue * 100 : 0;
+			newItem.Percent = totalValue > 0 ? newItem.Value / totalValue : 0;
+		}
+		else
+		{
+			newItem.PercentOfMax = 100;
+			newItem.Percent = 1;
+		}
 
-        slots.Add(newItem);
-        SortSlotsInPlace();
-        return;
+		slots.Add(newItem);
+		SortSlotsInPlace();
+		return;
 
-        static SkillViewModelCollection FetchSkillListFunc(long uid)
-        {
-            List<SkillItemViewModel> damage = [new SkillItemViewModel()];
-            List<SkillItemViewModel> healing = [new SkillItemViewModel()];
-            List<SkillItemViewModel> taken = [new SkillItemViewModel()];
-            return new SkillViewModelCollection(damage, healing, taken);
-        }
-    }
+		static SkillViewModelCollection FetchSkillListFunc(long uid)
+		{
+			List<SkillItemViewModel> damage = [new()];
+			List<SkillItemViewModel> healing = [new()];
+			List<SkillItemViewModel> taken = [new()];
+			return new SkillViewModelCollection(damage, healing, taken);
+		}
+	}
 
-    private Classes RandomClass()
-    {
-        var values = Enum.GetValues(typeof(Classes));
-        return (Classes)values.GetValue(Random.Shared.Next(values.Length))!;
-    }
+	private Classes RandomClass()
+	{
+		var values = Enum.GetValues(typeof(Classes));
+		return (Classes)values.GetValue(Random.Shared.Next(values.Length))!;
+	}
 
-    public void Reset()
-    {
-        // Ensure collection modifications happen on the UI thread
-        if (!_dispatcher.CheckAccess())
-        {
-            _dispatcher.Invoke(Reset);
-            return;
-        }
+	public void Reset()
+	{
+		// Ensure collection modifications happen on the UI thread
+		if (!_dispatcher.CheckAccess())
+		{
+			_dispatcher.Invoke(Reset);
+			return;
+		}
 
-        // Clear items (will also clear DataDictionary via CollectionChanged Reset handler)
-        Data.Clear();
-        SelectedSlot = null;
-        CurrentPlayerSlot = null;
-    }
+		// Clear items (will also clear DataDictionary via CollectionChanged Reset handler)
+		Data.Clear();
+		SelectedSlot = null;
+		CurrentPlayerSlot = null;
+	}
 
-    public void RefreshSkillDisplayLimit()
-    {
-        foreach (var vm in Data)
-        {
-            vm.RefreshFilterLists(SkillDisplayLimit);
-        }
-    }
+	public void RefreshSkillDisplayLimit()
+	{
+		foreach (var vm in Data)
+		{
+			vm.RefreshFilterLists(SkillDisplayLimit);
+		}
+	}
 
-    partial void OnSkillDisplayLimitChanged(int value)
-    {
-        RefreshSkillDisplayLimit();
-    }
+	partial void OnSkillDisplayLimitChanged(int value)
+	{
+		RefreshSkillDisplayLimit();
+	}
 
-    #region Sort
+	#region Sort
 
-    /// <summary>
-    /// Changes the sort member path and re-sorts the data
-    /// </summary>
-    [RelayCommand]
-    private void SetSortMemberPath(string memberPath)
-    {
-        if (SortMemberPath == memberPath)
-        {
-            // Toggle sort direction if the same property is clicked
-            SortDirection = SortDirection == SortDirectionEnum.Ascending
-                ? SortDirectionEnum.Descending
-                : SortDirectionEnum.Ascending;
-        }
-        else
-        {
-            SortMemberPath = memberPath;
-            SortDirection = SortDirectionEnum.Descending; // Default to descending for new properties
-        }
+	/// <summary>
+	/// Changes the sort member path and re-sorts the data
+	/// </summary>
+	[RelayCommand]
+	private void SetSortMemberPath(string memberPath)
+	{
+		if (SortMemberPath == memberPath)
+		{
+			// Toggle sort direction if the same property is clicked
+			SortDirection = SortDirection == SortDirectionEnum.Ascending
+				? SortDirectionEnum.Descending
+				: SortDirectionEnum.Ascending;
+		}
+		else
+		{
+			SortMemberPath = memberPath;
+			SortDirection = SortDirectionEnum.Descending; // Default to descending for new properties
+		}
 
-        // Trigger immediate re-sort
-        SortSlotsInPlace(true);
-    }
+		// Trigger immediate re-sort
+		SortSlotsInPlace(true);
+	}
 
-    /// <summary>
-    /// Manually triggers a sort operation
-    /// </summary>
-    [RelayCommand]
-    private void ManualSort()
-    {
-        SortSlotsInPlace(true);
-    }
+	/// <summary>
+	/// Manually triggers a sort operation
+	/// </summary>
+	[RelayCommand]
+	private void ManualSort()
+	{
+		SortSlotsInPlace(true);
+	}
 
-    /// <summary>
-    /// Sorts by Value in descending order (highest DPS first)
-    /// </summary>
-    [RelayCommand]
-    private void SortByValue()
-    {
-        SetSortMemberPath("Value");
-    }
+	/// <summary>
+	/// Sorts by Value in descending order (highest DPS first)
+	/// </summary>
+	[RelayCommand]
+	private void SortByValue()
+	{
+		SetSortMemberPath("Value");
+	}
 
-    /// <summary>
-    /// Sorts by Name in ascending order
-    /// </summary>
-    [RelayCommand]
-    private void SortByName()
-    {
-        SortMemberPath = "Name";
-        SortDirection = SortDirectionEnum.Ascending;
-        SortSlotsInPlace(true);
-    }
+	/// <summary>
+	/// Sorts by Name in ascending order
+	/// </summary>
+	[RelayCommand]
+	private void SortByName()
+	{
+		SortMemberPath = "Name";
+		SortDirection = SortDirectionEnum.Ascending;
+		SortSlotsInPlace(true);
+	}
 
-    /// <summary>
-    /// Sorts by Classes
-    /// </summary>
-    [RelayCommand]
-    private void SortByClass()
-    {
-        SetSortMemberPath("Classes");
-    }
+	/// <summary>
+	/// Sorts by Classes
+	/// </summary>
+	[RelayCommand]
+	private void SortByClass()
+	{
+		SetSortMemberPath("Classes");
+	}
 
-    #endregion
+	#endregion
 }

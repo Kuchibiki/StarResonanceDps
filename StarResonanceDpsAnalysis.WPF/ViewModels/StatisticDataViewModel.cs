@@ -136,7 +136,7 @@ public partial class StatisticDataViewModel(DebugFunctions debug, LocalizationMa
         /// </summary>
         public void SortSkillList()
         {
-			// 리스트가 null이면 빈 리스트로 만들어 버림 (에러 방지)
+			// If the list is null, initialize it as an empty list (to prevent errors)
 			if (TotalSkillList == null)
 			{
 				TotalSkillList = new List<SkillItemViewModel>();
