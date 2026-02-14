@@ -178,7 +178,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 
         var playerInfoDict = _dataSourceEngine.GetPlayerInfoDictionary();
         var ret = playerInfoDict.TryGetValue(playerStats.Uid, out var playerInfo);
-        slot = new StatisticDataViewModel(_debugFunctions, _localizationManager, FetchSkillList)
+        slot = new StatisticDataViewModel(_debugFunctions, _localizationManager, playerStats)
         {
             Index = 999,
             Value = 0,
@@ -205,24 +205,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
         return slot;
     }
 
-    private SkillViewModelCollection FetchSkillList(long playerUid)
-    {
-        var data = _dataSourceEngine.CurrentSource.GetRawData();
-        var found = data.TryGetValue(playerUid, out var value);
-
-        Debug.Assert(found, $"PlayerNotFound with {playerUid}");
-        Debug.Assert(value != null, nameof(value) + " != null");
-        if (!found)
-        {
-            _logger.LogWarning("Player not found with {playerUid}", playerUid);
-            return SkillViewModelCollection.Empty;
-        }
-
-        var list = value.ToSkillItemVmList(_localizationManager);
-        return list;
-    }
-
-    private void UpdatePlayerInfo(StatisticDataViewModel slot, PlayerInfo? playerInfo)
+    private static void UpdatePlayerInfo(StatisticDataViewModel slot, PlayerInfo? playerInfo)
     {
         if (playerInfo != null)
         {
@@ -304,6 +287,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
             slot.Value = processed.Value;
             slot.DurationTicks = processed.DurationTicks;
             slot.ValuePerSecond = processed.ValuePerSecond;
+            slot.OriginalData = processed.OriginalData;
 
             // Set current player slot if this is the current player
             if (hasCurrentPlayer && uid == currentPlayerUid)
@@ -358,14 +342,15 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
     public void AddTestItem()
     {
         var slots = Data;
-        var newItem = new StatisticDataViewModel(_debugFunctions, _localizationManager, FetchSkillListFunc)
+        var uid = Random.Shared.Next(100, 999);
+        var newItem = new StatisticDataViewModel(_debugFunctions, _localizationManager, new PlayerStatistics(uid))
         {
             Index = slots.Count + 1,
             Value = (ulong)Random.Shared.Next(100, 2000),
             DurationTicks = 60000,
             Player = new PlayerInfoViewModel(LocalizationManager.Instance)
             {
-                Uid = Random.Shared.Next(100, 999),
+                Uid = uid,
                 Class = RandomClass(),
                 Guild = "Test Guild",
                 Name = $"Test Player {slots.Count + 1}",
@@ -449,14 +434,6 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
         slots.Add(newItem);
         SortSlotsInPlace();
         return;
-
-        static SkillViewModelCollection FetchSkillListFunc(long uid)
-        {
-            List<SkillItemViewModel> damage = [new()];
-            List<SkillItemViewModel> healing = [new()];
-            List<SkillItemViewModel> taken = [new()];
-            return new SkillViewModelCollection(damage, healing, taken);
-        }
     }
 
     private Classes RandomClass()
