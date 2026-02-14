@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Globalization;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,6 +12,7 @@ using StarResonanceDpsAnalysis.Core.Statistics;
 using StarResonanceDpsAnalysis.WPF.Extensions;
 using StarResonanceDpsAnalysis.WPF.Localization;
 using StarResonanceDpsAnalysis.WPF.Models;
+using StarResonanceDpsAnalysis.WPF.Properties;
 using StarResonanceDpsAnalysis.WPF.ViewModels.DpsStatisticDataEngine;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
@@ -186,7 +188,7 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
             Player = new PlayerInfoViewModel(_localizationManager)
             {
                 Uid = playerStats.Uid,
-                Guild = "Unknown",
+                Guild = GetLocalizedString(ResourcesKeys.PlayerInfo_Guild_Unknown, "Unknown"),
                 Name = playerInfo?.Name,
                 Spec = playerInfo?.Spec ?? ClassSpec.Unknown,
                 IsNpc = playerStats.IsNpc,
@@ -468,6 +470,11 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
     partial void OnSkillDisplayLimitChanged(int value)
     {
         RefreshSkillDisplayLimit();
+    }
+
+    private string GetLocalizedString(string key, string defaultValue)
+    {
+        return _localizationManager.GetString(key, defaultValue: defaultValue);
     }
 
     #region Sort

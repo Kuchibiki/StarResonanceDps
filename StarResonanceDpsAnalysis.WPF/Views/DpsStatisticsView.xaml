@@ -566,7 +566,7 @@
 
                                     <MenuItem
                                         Command="{Binding OpenSkillLogCommand}"
-                                        Header="技能日记" />
+                                        Header="{lex:Loc Key={x:Static loc:ResourcesKeys.Menu_SkillDiary}}" />
 
                                     <!--  记录设置  -->
                                     <MenuItem Header="{lex:Loc Key={x:Static loc:ResourcesKeys.Menu_RecordSettings}}"
@@ -928,7 +928,7 @@
                             Style="{StaticResource FooterTextContent}"
                             Margin="8,0,0,0"
                             Visibility="{Binding ShowTeamTotalDamage, Converter={StaticResource BoolToVisibilityConverter}}">
-                            <Run Text="队伍:" />
+                            <Run Text="{lex:Loc Key={x:Static loc:ResourcesKeys.DpsStatistics_Team_Label}}" />
                             <Run>
                                 <Run.Text>
                                     <MultiBinding Converter="{StaticResource HumanReadableNumberConverter}">

@@ -132,6 +132,9 @@
   <data name="Menu_Personal_Training_Mode" xml:space="preserve">
     <value>개인/훈련 모드</value>
   </data>
+  <data name="Menu_SkillDiary" xml:space="preserve">
+    <value>스킬 일지</value>
+  </data>
   <data name="Menu_RecordSettings" xml:space="preserve">
     <value>기록 옵션</value>
   </data>
@@ -188,6 +191,39 @@
   </data>
   <data name="DpsStatistics_Snapshot_Label" xml:space="preserve">
     <value>[스냅샷]</value>
+  </data>
+  <data name="DpsStatistics_Team_Label" xml:space="preserve">
+    <value>팀:</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_Damage" xml:space="preserve">
+    <value>팀 DPS</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_Healing" xml:space="preserve">
+    <value>팀 치유</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_TakenDamage" xml:space="preserve">
+    <value>팀 피해량</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_NpcTakenDamage" xml:space="preserve">
+    <value>NPC 피해량</value>
+  </data>
+  <data name="PlayerInfo_Guild_Unknown" xml:space="preserve">
+    <value>알 수 없음</value>
+  </data>
+  <data name="DpsStatistics_Test_Guild" xml:space="preserve">
+    <value>테스트 길드</value>
+  </data>
+  <data name="DpsStatistics_Test_Player_Format" xml:space="preserve">
+    <value>테스트 플레이어 {0}</value>
+  </data>
+  <data name="DpsStatistics_Test_Skill_Format" xml:space="preserve">
+    <value>테스트 스킬 {0}</value>
+  </data>
+  <data name="DpsStatistics_Test_Heal_Skill_Format" xml:space="preserve">
+    <value>테스트 치유 스킬 {0}</value>
+  </data>
+  <data name="DpsStatistics_Test_Taken_Skill_Format" xml:space="preserve">
+    <value>테스트 피해 스킬 {0}</value>
   </data>
   <data name="Menu_Exit" xml:space="preserve">
     <value>종료</value>

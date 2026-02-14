@@ -11,6 +11,7 @@ using StarResonanceDpsAnalysis.Core.Statistics;
 using StarResonanceDpsAnalysis.WPF.Config;
 using StarResonanceDpsAnalysis.WPF.Localization;
 using StarResonanceDpsAnalysis.WPF.Models;
+using StarResonanceDpsAnalysis.WPF.Properties;
 using StarResonanceDpsAnalysis.WPF.Services;
 using StarResonanceDpsAnalysis.WPF.ViewModels.DpsStatisticDataEngine.DataSource;
 using StarResonanceDpsAnalysis.WPF.Views;
@@ -69,9 +70,13 @@ public sealed class DpsStatisticsDesignTimeViewModel : DpsStatisticsViewModel
     // ⭐ NEW: Design-time team stats manager
     private sealed class DesignTeamStatsManager : ITeamStatsUIManager
     {
+        private readonly LocalizationManager _localizationManager = LocalizationManager.Instance;
+
         public ulong TeamTotalDamage => 1000000;
         public double TeamTotalDps => 50000;
-        public string TeamTotalLabel => "团队DPS";
+        public string TeamTotalLabel => _localizationManager.GetString(
+            ResourcesKeys.DpsStatistics_TeamLabel_Damage,
+            defaultValue: "Team DPS");
         public bool ShowTeamTotal { get; set; }
 
         public event EventHandler<TeamStatsUpdatedEventArgs>? TeamStatsUpdated;

@@ -132,6 +132,9 @@
   <data name="Menu_Personal_Training_Mode" xml:space="preserve">
     <value>Solo/Traning Mode</value>
   </data>
+  <data name="Menu_SkillDiary" xml:space="preserve">
+    <value>Skill Diary</value>
+  </data>
   <data name="Menu_RecordSettings" xml:space="preserve">
     <value>Record Options</value>
   </data>
@@ -188,6 +191,39 @@
   </data>
   <data name="DpsStatistics_Snapshot_Label" xml:space="preserve">
     <value>[Snapshot]</value>
+  </data>
+  <data name="DpsStatistics_Team_Label" xml:space="preserve">
+    <value>Team:</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_Damage" xml:space="preserve">
+    <value>Team DPS</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_Healing" xml:space="preserve">
+    <value>Team Healing</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_TakenDamage" xml:space="preserve">
+    <value>Team Damage Taken</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_NpcTakenDamage" xml:space="preserve">
+    <value>NPC Damage Taken</value>
+  </data>
+  <data name="PlayerInfo_Guild_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="DpsStatistics_Test_Guild" xml:space="preserve">
+    <value>Test Guild</value>
+  </data>
+  <data name="DpsStatistics_Test_Player_Format" xml:space="preserve">
+    <value>Test Player {0}</value>
+  </data>
+  <data name="DpsStatistics_Test_Skill_Format" xml:space="preserve">
+    <value>Test Skill {0}</value>
+  </data>
+  <data name="DpsStatistics_Test_Heal_Skill_Format" xml:space="preserve">
+    <value>Test Heal Skill {0}</value>
+  </data>
+  <data name="DpsStatistics_Test_Taken_Skill_Format" xml:space="preserve">
+    <value>Test Taken Skill {0}</value>
   </data>
   <data name="Menu_Exit" xml:space="preserve">
     <value>Exit</value>
