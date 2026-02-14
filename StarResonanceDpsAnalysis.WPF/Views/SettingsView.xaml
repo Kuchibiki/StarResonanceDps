@@ -476,8 +476,8 @@
                                             <TextBlock
                                                 Grid.Column="0"
                                                 Style="{StaticResource FieldName}"
-                                                Text="长名字滚动显示"
-                                                ToolTip="当玩家名字过长超出显示区域时，启用自动滚动效果" />
+                                                Text="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_MarqueeText}}"
+                                                ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_MarqueeText_Tooltip}}" />
                                             <Border Grid.Column="2" HorizontalAlignment="Right">
                                                 <ctrl:SwitchControl
                                                     IsChecked="{Binding AppConfig.EnableMarqueeText, Mode=TwoWay}"
@@ -539,7 +539,7 @@
                                                         Margin="0,0,5,0"
                                                         Padding="10,4"
                                                         Style="{StaticResource AntButtonStyle}"
-                                                        ToolTip="PlayerName - FrostMage (25000-8)" />
+                                                        ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_PlayerInfo_Preset_Default_Tooltip}}" />
                                                     <Button
                                                         Command="{Binding SetPlayerInfoFormatPresetCommand}"
                                                         CommandParameter="{}{Name} ({PowerLevel})"
@@ -547,7 +547,7 @@
                                                         Margin="0,0,5,0"
                                                         Padding="10,4"
                                                         Style="{StaticResource AntButtonStyle}"
-                                                        ToolTip="PlayerName (25000)" />
+                                                        ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_PlayerInfo_Preset_Simple_Tooltip}}" />
                                                     <Button
                                                         Command="{Binding SetPlayerInfoFormatPresetCommand}"
                                                         CommandParameter="{}{Name} - {Spec} [S{SeasonStrength} Lv{SeasonLevel}] ({PowerLevel})"
@@ -555,14 +555,14 @@
                                                         Margin="0,0,5,0"
                                                         Padding="10,4"
                                                         Style="{StaticResource AntButtonStyle}"
-                                                        ToolTip="PlayerName - FrostMage [S8 Lv50] (25000)" />
+                                                        ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_PlayerInfo_Preset_Detailed_Tooltip}}" />
                                                     <Button
                                                         Command="{Binding SetPlayerInfoFormatPresetCommand}"
                                                         CommandParameter="{}{Name}"
                                                         Content="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_PlayerInfo_Preset_NameOnly}}"
                                                         Padding="10,4"
                                                         Style="{StaticResource AntButtonStyle}"
-                                                        ToolTip="PlayerName" />
+                                                        ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_PlayerInfo_Preset_NameOnly_Tooltip}}" />
                                                 </WrapPanel>
                                             </Border>
                                         </Grid>
@@ -669,7 +669,7 @@
                                                     <Button
                                                         Command="{Binding AddSeparatorToFormatCommand}"
                                                         CommandParameter=" "
-                                                        Content="Space"
+                                                        Content="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_PlayerInfo_Separator_Space}}"
                                                         Margin="0,0,5,5"
                                                         Padding="8,4"
                                                         Style="{StaticResource AntButtonStyle}" />
@@ -1109,7 +1109,7 @@
                                             <TextBlock
                                                 Grid.Column="0"
                                                 Style="{StaticResource FieldName}"
-                                                Text="显示总伤害" />
+                                                Text="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_ShowDamage}}" />
                                             <Border Grid.Column="2" HorizontalAlignment="Right">
                                                 <ctrl:SwitchControl
                                                     IsChecked="{Binding AppConfig.ShowDamage, Mode=TwoWay}"
@@ -1130,7 +1130,7 @@
                                             <TextBlock
                                                 Grid.Column="0"
                                                 Style="{StaticResource FieldName}"
-                                                Text="显示秒伤 (DPS)" />
+                                                Text="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_ShowDps}}" />
                                             <Border Grid.Column="2" HorizontalAlignment="Right">
                                                 <ctrl:SwitchControl
                                                     IsChecked="{Binding AppConfig.ShowDps, Mode=TwoWay}"
@@ -1151,7 +1151,7 @@
                                             <TextBlock
                                                 Grid.Column="0"
                                                 Style="{StaticResource FieldName}"
-                                                Text="显示伤害占比" />
+                                                Text="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_ShowPercentage}}" />
                                             <Border Grid.Column="2" HorizontalAlignment="Right">
                                                 <ctrl:SwitchControl
                                                     IsChecked="{Binding AppConfig.ShowPercentage, Mode=TwoWay}"
@@ -1172,14 +1172,14 @@
                                             <TextBlock
                                                 Grid.Column="0"
                                                 Style="{StaticResource FieldName}"
-                                                Text="DPS显示模式"
-                                                ToolTip="选择DPS显示的计算方式：累计伤害/战斗时长 或 全程平均秒伤" />
+                                                Text="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_DpsMode}}"
+                                                ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_DpsMode_Tooltip}}" />
                                             <Border Grid.Column="2" HorizontalAlignment="Right">
                                                 <ctrl:SwitchControl
                                                     IsChecked="{Binding AppConfig.UseConverterBasedDps, Mode=TwoWay}"
-                                                    OnContent="全程秒伤"
-                                                    OffContent="累计/时长"
-                                                    ToolTip="开启=累计伤害除以时长, 关闭=全程平均秒伤(ValuePerSecond)" />
+                                                    OnContent="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_DpsMode_On}}"
+                                                    OffContent="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_DpsMode_Off}}"
+                                                    ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_DpsMode_Switch_Tooltip}}" />
                                             </Border>
                                         </Grid>
                                     </Border>
@@ -1272,8 +1272,8 @@
                                             <TextBlock
                                                 Grid.Column="0"
                                                 Style="{StaticResource FieldName}"
-                                                Text="Time Series Sample Capacity"
-                                                ToolTip="Maximum number of data points stored for DPS/HPS/DTPS trend charts. Higher values show more history but use more memory. Range: 50-1000 samples." />
+                                                Text="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_TimeSeriesCapacity}}"
+                                                ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Display_TimeSeriesCapacity_Tooltip}}" />
                                             <Grid Grid.Column="2">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition />
@@ -1298,7 +1298,7 @@
                                                 <TextBlock
                                                     Grid.Column="4"
                                                     Style="{StaticResource SuffixText}"
-                                                    Text="samples" />
+                                                    Text="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Common_Samples}}" />
                                             </Grid>
                                         </Grid>
                                     </Border>
@@ -1416,7 +1416,7 @@
                                                             Width="30" Height="30"
                                                             Margin="5,0,0,0"
                                                             BorderBrush="#EEE" BorderThickness="1"
-                                                            ToolTip="自定义颜色">
+                                                            ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Theme_CustomColor_Tooltip}}">
                                                         <Button.Background>
                                                             <LinearGradientBrush StartPoint="0,0.25" EndPoint="1,0.75">
                                                                 <GradientStop Color="#F00" Offset="0.0"/>
@@ -1517,7 +1517,7 @@
                                                 <Button
                                                     Grid.Column="4"
                                                     Command="{Binding ClearBackgroundImageCommand}"
-                                                    Content="清除"
+                                                    Content="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Theme_ClearImage}}"
                                                     Padding="12,4"
                                                     Style="{StaticResource AntButtonStyle}" />
                                             </Grid>

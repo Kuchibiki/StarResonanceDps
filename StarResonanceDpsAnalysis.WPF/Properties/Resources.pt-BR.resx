@@ -309,6 +309,66 @@
   <data name="Settings_Display_PlayerNameBlur" xml:space="preserve">
     <value>Ocultar nomes dos jogadores</value>
   </data>
+  <data name="Settings_Display_MarqueeText" xml:space="preserve">
+    <value>Rolar nomes longos</value>
+  </data>
+  <data name="Settings_Display_MarqueeText_Tooltip" xml:space="preserve">
+    <value>Ative a rolagem automática quando o nome do jogador exceder o espaço disponível.</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Default_Tooltip" xml:space="preserve">
+    <value>NomeDoJogador - Mago de Gelo (25000-8)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Simple_Tooltip" xml:space="preserve">
+    <value>NomeDoJogador (25000)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Detailed_Tooltip" xml:space="preserve">
+    <value>NomeDoJogador - Mago de Gelo [S8 Nv50] (25000)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_NameOnly_Tooltip" xml:space="preserve">
+    <value>NomeDoJogador</value>
+  </data>
+  <data name="Settings_PlayerInfo_Separator_Space" xml:space="preserve">
+    <value>Espaço</value>
+  </data>
+  <data name="Settings_Display_ShowDamage" xml:space="preserve">
+    <value>Mostrar dano total</value>
+  </data>
+  <data name="Settings_Display_ShowDps" xml:space="preserve">
+    <value>Mostrar DPS</value>
+  </data>
+  <data name="Settings_Display_ShowPercentage" xml:space="preserve">
+    <value>Mostrar porcentagem de dano</value>
+  </data>
+  <data name="Settings_Display_DpsMode" xml:space="preserve">
+    <value>Modo de exibição de DPS</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Tooltip" xml:space="preserve">
+    <value>Escolha como o DPS é calculado: dano total dividido pela duração ou DPS médio geral.</value>
+  </data>
+  <data name="Settings_Display_DpsMode_On" xml:space="preserve">
+    <value>DPS geral</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Off" xml:space="preserve">
+    <value>Total/Duração</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Switch_Tooltip" xml:space="preserve">
+    <value>Ligado = dano total / duração; Desligado = DPS médio geral (ValuePerSecond).</value>
+  </data>
+  <data name="Settings_Display_TimeSeriesCapacity" xml:space="preserve">
+    <value>Capacidade de amostras da série temporal</value>
+  </data>
+  <data name="Settings_Display_TimeSeriesCapacity_Tooltip" xml:space="preserve">
+    <value>Número máximo de pontos de dados armazenados para gráficos de tendência de DPS/HPS/DTPS. Valores maiores mostram mais histórico, mas usam mais memória. Intervalo: 50-1000 amostras.</value>
+  </data>
+  <data name="Settings_Common_Samples" xml:space="preserve">
+    <value>amostras</value>
+  </data>
+  <data name="Settings_Theme_CustomColor_Tooltip" xml:space="preserve">
+    <value>Cor personalizada</value>
+  </data>
+  <data name="Settings_Theme_ClearImage" xml:space="preserve">
+    <value>Limpar</value>
+  </data>
   <data name="Settings_PlayerNameMask_Warning_Title" xml:space="preserve">
     <value>Aviso</value>
   </data>
@@ -1027,9 +1087,6 @@ Como obter: Após uma luta, seu personagem aparecerá automaticamente na janela 
   <data name="Debug_Localization_Apply" xml:space="preserve">
     <value>Aplicar</value>
   </data>
-  <data name="Menu_SkillDiary" xml:space="preserve">
-    <value>Diário de Habilidades</value>
-  </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
     <value>한국어</value>
   </data>
@@ -1219,5 +1276,8 @@ Como obter: Após uma luta, seu personagem aparecerá automaticamente na janela 
   </data>
   <data name="SkillBreakdown_Label_ValuePercentToTotal" xml:space="preserve">
     <value>Por cento</value>
+  </data>
+  <data name="Menu_About" xml:space="preserve">
+    <value>Sobre</value>
   </data>
 </root>

@@ -747,6 +747,8 @@
                                         Visibility="{Binding IsViewingSnapshot, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                                     <Separator />
+                                    <MenuItem Command="{Binding ShowAboutCommand}" Header="{lex:Loc {x:Static loc:ResourcesKeys.Menu_About}}" />
+                                    <Separator />
 
                                     <MenuItem Command="{Binding ShutdownCommand}" Header="{lex:Loc {x:Static loc:ResourcesKeys.Menu_Exit}}" />
                                 </ContextMenu>

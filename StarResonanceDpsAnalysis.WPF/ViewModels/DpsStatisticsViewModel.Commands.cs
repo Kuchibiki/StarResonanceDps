@@ -17,6 +17,14 @@ public partial class DpsStatisticsViewModel
     }
 
     [RelayCommand]
+    private void ShowAbout()
+    {
+        var about = _windowManagement.AboutView;
+        about.ShowDialog();
+        about.Activate();
+    }
+
+    [RelayCommand]
     private void OpenSettings()
     {
         _windowManagement.SettingsView.Show();

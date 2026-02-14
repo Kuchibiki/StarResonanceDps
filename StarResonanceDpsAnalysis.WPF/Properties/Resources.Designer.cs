@@ -1037,6 +1037,51 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Team:.
+        /// </summary>
+        public static string DpsStatistics_Team_Label {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Team_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team DPS.
+        /// </summary>
+        public static string DpsStatistics_TeamLabel_Damage {
+            get {
+                return ResourceManager.GetString("DpsStatistics_TeamLabel_Damage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Healing.
+        /// </summary>
+        public static string DpsStatistics_TeamLabel_Healing {
+            get {
+                return ResourceManager.GetString("DpsStatistics_TeamLabel_Healing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Damage Taken.
+        /// </summary>
+        public static string DpsStatistics_TeamLabel_NpcTakenDamage {
+            get {
+                return ResourceManager.GetString("DpsStatistics_TeamLabel_NpcTakenDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team Damage Taken.
+        /// </summary>
+        public static string DpsStatistics_TeamLabel_TakenDamage {
+            get {
+                return ResourceManager.GetString("DpsStatistics_TeamLabel_TakenDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team DPS.
         /// </summary>
         public static string DpsStatistics_TeamTotal_Damage {
@@ -1069,6 +1114,51 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string DpsStatistics_TeamTotal_TakenDamage {
             get {
                 return ResourceManager.GetString("DpsStatistics_TeamTotal_TakenDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test Guild.
+        /// </summary>
+        public static string DpsStatistics_Test_Guild {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Test_Guild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test Heal Skill {0}.
+        /// </summary>
+        public static string DpsStatistics_Test_Heal_Skill_Format {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Test_Heal_Skill_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test Player {0}.
+        /// </summary>
+        public static string DpsStatistics_Test_Player_Format {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Test_Player_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test Skill {0}.
+        /// </summary>
+        public static string DpsStatistics_Test_Skill_Format {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Test_Skill_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test Taken Skill {0}.
+        /// </summary>
+        public static string DpsStatistics_Test_Taken_Skill_Format {
+            get {
+                return ResourceManager.GetString("DpsStatistics_Test_Taken_Skill_Format", resourceCulture);
             }
         }
         
@@ -1366,6 +1456,15 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string MainView_PluginList_Title {
             get {
                 return ResourceManager.GetString("MainView_PluginList_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string Menu_About {
+            get {
+                return ResourceManager.GetString("Menu_About", resourceCulture);
             }
         }
         
@@ -1811,6 +1910,15 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown.
+        /// </summary>
+        public static string PlayerInfo_Guild_Unknown {
+            get {
+                return ResourceManager.GetString("PlayerInfo_Guild_Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current.
         /// </summary>
         public static string ScopeTime_Current {
@@ -1978,11 +2086,83 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to samples.
+        /// </summary>
+        public static string Settings_Common_Samples {
+            get {
+                return ResourceManager.GetString("Settings_Common_Samples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to s.
         /// </summary>
         public static string Settings_Common_Seconds {
             get {
                 return ResourceManager.GetString("Settings_Common_Seconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DPS display mode.
+        /// </summary>
+        public static string Settings_Display_DpsMode {
+            get {
+                return ResourceManager.GetString("Settings_Display_DpsMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total/Duration.
+        /// </summary>
+        public static string Settings_Display_DpsMode_Off {
+            get {
+                return ResourceManager.GetString("Settings_Display_DpsMode_Off", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overall DPS.
+        /// </summary>
+        public static string Settings_Display_DpsMode_On {
+            get {
+                return ResourceManager.GetString("Settings_Display_DpsMode_On", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On = total damage / duration, Off = overall average DPS (ValuePerSecond)..
+        /// </summary>
+        public static string Settings_Display_DpsMode_Switch_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_Display_DpsMode_Switch_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose how DPS is calculated: total damage divided by duration, or overall average DPS..
+        /// </summary>
+        public static string Settings_Display_DpsMode_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_Display_DpsMode_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll long names.
+        /// </summary>
+        public static string Settings_Display_MarqueeText {
+            get {
+                return ResourceManager.GetString("Settings_Display_MarqueeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable automatic scrolling when a player name exceeds the available space..
+        /// </summary>
+        public static string Settings_Display_MarqueeText_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_Display_MarqueeText_Tooltip", resourceCulture);
             }
         }
         
@@ -2010,6 +2190,51 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string Settings_Display_PlayerNameBlur {
             get {
                 return ResourceManager.GetString("Settings_Display_PlayerNameBlur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show total damage.
+        /// </summary>
+        public static string Settings_Display_ShowDamage {
+            get {
+                return ResourceManager.GetString("Settings_Display_ShowDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show DPS.
+        /// </summary>
+        public static string Settings_Display_ShowDps {
+            get {
+                return ResourceManager.GetString("Settings_Display_ShowDps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show damage percentage.
+        /// </summary>
+        public static string Settings_Display_ShowPercentage {
+            get {
+                return ResourceManager.GetString("Settings_Display_ShowPercentage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time series sample capacity.
+        /// </summary>
+        public static string Settings_Display_TimeSeriesCapacity {
+            get {
+                return ResourceManager.GetString("Settings_Display_TimeSeriesCapacity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum number of data points stored for DPS/HPS/DTPS trend charts. Higher values show more history but use more memory. Range: 50-1000 samples..
+        /// </summary>
+        public static string Settings_Display_TimeSeriesCapacity_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_Display_TimeSeriesCapacity_Tooltip", resourceCulture);
             }
         }
         
@@ -2167,11 +2392,29 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PlayerName - FrostMage (25000-8).
+        /// </summary>
+        public static string Settings_PlayerInfo_Preset_Default_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_PlayerInfo_Preset_Default_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Detailed.
         /// </summary>
         public static string Settings_PlayerInfo_Preset_Detailed {
             get {
                 return ResourceManager.GetString("Settings_PlayerInfo_Preset_Detailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PlayerName - FrostMage [S8 Lv50] (25000).
+        /// </summary>
+        public static string Settings_PlayerInfo_Preset_Detailed_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_PlayerInfo_Preset_Detailed_Tooltip", resourceCulture);
             }
         }
         
@@ -2185,11 +2428,29 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PlayerName.
+        /// </summary>
+        public static string Settings_PlayerInfo_Preset_NameOnly_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_PlayerInfo_Preset_NameOnly_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Simple.
         /// </summary>
         public static string Settings_PlayerInfo_Preset_Simple {
             get {
                 return ResourceManager.GetString("Settings_PlayerInfo_Preset_Simple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PlayerName (25000).
+        /// </summary>
+        public static string Settings_PlayerInfo_Preset_Simple_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_PlayerInfo_Preset_Simple_Tooltip", resourceCulture);
             }
         }
         
@@ -2208,6 +2469,15 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string Settings_PlayerInfo_QuickPresets {
             get {
                 return ResourceManager.GetString("Settings_PlayerInfo_QuickPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Space.
+        /// </summary>
+        public static string Settings_PlayerInfo_Separator_Space {
+            get {
+                return ResourceManager.GetString("Settings_PlayerInfo_Separator_Space", resourceCulture);
             }
         }
         
@@ -2469,6 +2739,24 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string Settings_Theme_BackgroundImage {
             get {
                 return ResourceManager.GetString("Settings_Theme_BackgroundImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string Settings_Theme_ClearImage {
+            get {
+                return ResourceManager.GetString("Settings_Theme_ClearImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom color.
+        /// </summary>
+        public static string Settings_Theme_CustomColor_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_Theme_CustomColor_Tooltip", resourceCulture);
             }
         }
         

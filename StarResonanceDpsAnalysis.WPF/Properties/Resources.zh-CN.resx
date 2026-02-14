@@ -133,7 +133,7 @@
     <value>个人打桩模式</value>
   </data>
   <data name="Menu_SkillDiary" xml:space="preserve">
-    <value>技能日记</value>
+    <value>技能日志</value>
   </data>
   <data name="Menu_RecordSettings" xml:space="preserve">
     <value>记录设置</value>
@@ -308,6 +308,66 @@
   </data>
   <data name="Settings_Display_PlayerNameBlur" xml:space="preserve">
     <value>玩家名脱敏</value>
+  </data>
+  <data name="Settings_Display_MarqueeText" xml:space="preserve">
+    <value>长名字滚动显示</value>
+  </data>
+  <data name="Settings_Display_MarqueeText_Tooltip" xml:space="preserve">
+    <value>当玩家名字过长超出显示区域时，启用自动滚动效果</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Default_Tooltip" xml:space="preserve">
+    <value>玩家名 - 冰霜法师 (25000-8)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Simple_Tooltip" xml:space="preserve">
+    <value>玩家名 (25000)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Detailed_Tooltip" xml:space="preserve">
+    <value>玩家名 - 冰霜法师 [S8 Lv50] (25000)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_NameOnly_Tooltip" xml:space="preserve">
+    <value>玩家名</value>
+  </data>
+  <data name="Settings_PlayerInfo_Separator_Space" xml:space="preserve">
+    <value>空格</value>
+  </data>
+  <data name="Settings_Display_ShowDamage" xml:space="preserve">
+    <value>显示总伤害</value>
+  </data>
+  <data name="Settings_Display_ShowDps" xml:space="preserve">
+    <value>显示秒伤 (DPS)</value>
+  </data>
+  <data name="Settings_Display_ShowPercentage" xml:space="preserve">
+    <value>显示伤害占比</value>
+  </data>
+  <data name="Settings_Display_DpsMode" xml:space="preserve">
+    <value>DPS显示模式</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Tooltip" xml:space="preserve">
+    <value>选择DPS显示的计算方式：累计伤害/战斗时长 或 全程平均秒伤</value>
+  </data>
+  <data name="Settings_Display_DpsMode_On" xml:space="preserve">
+    <value>全程秒伤</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Off" xml:space="preserve">
+    <value>累计/时长</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Switch_Tooltip" xml:space="preserve">
+    <value>开启=累计伤害除以时长, 关闭=全程平均秒伤(ValuePerSecond)</value>
+  </data>
+  <data name="Settings_Display_TimeSeriesCapacity" xml:space="preserve">
+    <value>时间序列样本容量</value>
+  </data>
+  <data name="Settings_Display_TimeSeriesCapacity_Tooltip" xml:space="preserve">
+    <value>DPS/HPS/DTPS趋势图存储的数据点上限。值越大历史越多但占用内存更高。范围：50-1000 个样本。</value>
+  </data>
+  <data name="Settings_Common_Samples" xml:space="preserve">
+    <value>样本</value>
+  </data>
+  <data name="Settings_Theme_CustomColor_Tooltip" xml:space="preserve">
+    <value>自定义颜色</value>
+  </data>
+  <data name="Settings_Theme_ClearImage" xml:space="preserve">
+    <value>清除</value>
   </data>
   <data name="Settings_PlayerNameMask_Warning_Title" xml:space="preserve">
     <value>警告</value>
@@ -1027,9 +1087,6 @@
   <data name="Debug_Localization_Apply" xml:space="preserve">
     <value>应用</value>
   </data>
-  <data name="Menu_SkillDiary" xml:space="preserve">
-    <value>技能日志</value>
-  </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
     <value>한국어</value>
   </data>
@@ -1250,5 +1307,8 @@
   </data>
   <data name="DpsStatistics_CurrentPlayerRank" xml:space="preserve">
     <value>当前玩家排名</value>
+  </data>
+  <data name="Menu_About" xml:space="preserve">
+    <value>关于</value>
   </data>
 </root>

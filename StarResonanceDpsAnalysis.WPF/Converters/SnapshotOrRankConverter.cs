@@ -24,7 +24,7 @@ public sealed class SnapshotOrRankConverter : IMultiValueConverter
             return LocalizationManager.Instance.GetString(
                 ResourcesKeys.DpsStatistics_Snapshot_Label,
                 culture,
-                "[Snapshot]");
+                "Snapshot");
         }
 
         // 战斗模式下,直接返回排名字符串(已经包含方括号)
