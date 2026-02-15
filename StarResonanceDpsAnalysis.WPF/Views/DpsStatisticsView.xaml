@@ -40,6 +40,10 @@
             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
 
+    <b:Interaction.Behaviors>
+        <behaviors:WindowPlacementBehavior SaveCommand="{Binding SaveWindowPositionCommand}" StartUpState="{Binding AppConfig.StartUpState}" />
+    </b:Interaction.Behaviors>
+
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:InvokeCommandAction Command="{Binding LoadedCommand}" />
