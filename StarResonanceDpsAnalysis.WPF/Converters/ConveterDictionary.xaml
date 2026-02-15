@@ -5,6 +5,7 @@
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
     <converters:ClassesToIconConverter x:Key="ClassesToIconConverter" />
+    <converters:ClassesToColoredIconConverter x:Key="ClassesToColoredIconConverter" />
     <converters:EqualsConverter x:Key="EqualsConverter" />
     <converters:HalfValueConverter x:Key="HalfValueConverter" />
     <converters:HumanReadableNumberConverter x:Key="HumanReadableNumberConverter" />

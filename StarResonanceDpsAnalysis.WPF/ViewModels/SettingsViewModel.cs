@@ -26,15 +26,9 @@ using KeyBinding = StarResonanceDpsAnalysis.WPF.Models.KeyBinding;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
 
-public partial class SettingsViewModel(
-    IConfigManager configManager,
-    IDeviceManagementService deviceManagementService,
-    LocalizationManager localization,
-    IMessageDialogService messageDialogService,
-    IDataStorage dataStorage)
-    : BaseViewModel
+public partial class SettingsViewModel : BaseViewModel
 {
-    [ObservableProperty] private AppConfig _appConfig = configManager.CurrentConfig.Clone(); // Initialized here with a cloned config; may be overwritten in LoadedAsync
+    [ObservableProperty] private AppConfig _appConfig; // Initialized here with a cloned config; may be overwritten in LoadedAsync
 
     [ObservableProperty]
     private ObservableCollection<ClassColorSettingViewModel> _classColorSettings = new();
@@ -68,6 +62,28 @@ public partial class SettingsViewModel(
 
     [ObservableProperty] private Option<Language>? _selectedLanguage;
     [ObservableProperty] private Option<NumberDisplayMode>? _selectedNumberDisplayMode;
+    private readonly IConfigManager _configManager;
+    private readonly IDeviceManagementService _deviceManagementService;
+    private readonly LocalizationManager _localization;
+    private readonly IMessageDialogService _messageDialogService;
+    private readonly IDataStorage _dataStorage;
+
+    /// <inheritdoc/>
+    public SettingsViewModel(IConfigManager configManager,
+        IDeviceManagementService deviceManagementService,
+        LocalizationManager localization,
+        IMessageDialogService messageDialogService,
+        IDataStorage dataStorage)
+    {
+        _configManager = configManager;
+        _deviceManagementService = deviceManagementService;
+        _localization = localization;
+        _messageDialogService = messageDialogService;
+        _dataStorage = dataStorage;
+        _appConfig = configManager.CurrentConfig.Clone();
+
+        InitializeClassColors();
+    }
 
 
     /// <summary>
@@ -80,7 +96,7 @@ public partial class SettingsViewModel(
             if (!AppConfig.UseCustomFormat) return "Custom format is disabled. Using field visibility settings.";
 
             // 创建一个示例 PlayerInfoViewModel 来生成预览
-            var previewVm = new PlayerInfoViewModel(localization)
+            var previewVm = new PlayerInfoViewModel(_localization)
             {
                 Name = "PlayerName",
                 Spec = ClassSpec.FrostMageIcicle,
@@ -180,7 +196,7 @@ public partial class SettingsViewModel(
     partial void OnAppConfigChanging(AppConfig value)
     {
         // Unsubscribe from the old instance before changing
-        _appConfig.PropertyChanged -= OnAppConfigPropertyChanged;
+        AppConfig.PropertyChanged -= OnAppConfigPropertyChanged;
     }
 
     partial void OnAppConfigChanged(AppConfig value)
@@ -188,7 +204,7 @@ public partial class SettingsViewModel(
         // Subscribe to the new instance
         value.PropertyChanged += OnAppConfigPropertyChanged;
 
-        localization.ApplyLanguage(value.Language);
+        _localization.ApplyLanguage(value.Language);
         UpdateLanguageDependentCollections();
         SyncOptions();
     }
@@ -203,7 +219,7 @@ public partial class SettingsViewModel(
     {
         if (value == null) return;
         AppConfig.Language = value.Value;
-        localization.ApplyLanguage(value.Value);
+        _localization.ApplyLanguage(value.Value);
     }
 
     partial void OnAvailableNetworkAdaptersChanged(List<NetworkAdapterInfo> value)
@@ -215,18 +231,16 @@ public partial class SettingsViewModel(
     private async Task LoadedAsync()
     {
         // Clone current config for editing
-        AppConfig = configManager.CurrentConfig.Clone();
+        AppConfig = _configManager.CurrentConfig.Clone();
 
         // Store original config for cancel/restore (deep clone)
-        _originalConfig = configManager.CurrentConfig.Clone();
+        _originalConfig = _configManager.CurrentConfig.Clone();
 
         SubscribeHandlers();
 
         UpdateLanguageDependentCollections();
-        localization.ApplyLanguage(AppConfig.Language);
+        _localization.ApplyLanguage(AppConfig.Language);
         await LoadNetworkAdaptersAsync();
-
-        InitializeClassColors();
 
         _hasUnsavedChanges = false;
         _isLoaded = true;
@@ -244,7 +258,7 @@ public partial class SettingsViewModel(
             var color = GetClassColor(cls);
             var defaultColor = GetDefaultClassColor(cls);
             var name = cls.GetLocalizedDescription();
-            ClassColorSettings.Add(new ClassColorSettingViewModel(cls, name, color, defaultColor, _appConfig, ApplyColorChange));
+            ClassColorSettings.Add(new ClassColorSettingViewModel(cls, name, color, defaultColor, AppConfig, ApplyColorChange));
         }
     }
 
@@ -264,7 +278,7 @@ public partial class SettingsViewModel(
     private Color GetClassColor(Classes cls)
     {
         // Check config first
-        if (_appConfig.CustomClassColors.TryGetValue(cls, out var hex))
+        if (AppConfig.CustomClassColors.TryGetValue(cls, out var hex))
         {
             try { return (Color)ColorConverter.ConvertFromString(hex); } catch { }
         }
@@ -290,19 +304,19 @@ public partial class SettingsViewModel(
     [RelayCommand(AllowConcurrentExecutions = false)]
     private async Task NetworkAdapterAutoSelect()
     {
-        var ret = await deviceManagementService.GetAutoSelectedNetworkAdapterAsync();
+        var ret = await _deviceManagementService.GetAutoSelectedNetworkAdapterAsync();
         if (ret != null)
         {
             AppConfig.PreferredNetworkAdapter = ret;
-            deviceManagementService.SetActiveNetworkAdapter(ret);
+            _deviceManagementService.SetActiveNetworkAdapter(ret);
             return;
         }
-        MessageBox.Show(localization.GetString(ResourcesKeys.Settings_NetworkAdapterAutoSelect_Failed)); // Temporary message dialog
+        MessageBox.Show(_localization.GetString(ResourcesKeys.Settings_NetworkAdapterAutoSelect_Failed)); // Temporary message dialog
     }
 
     private async Task LoadNetworkAdaptersAsync()
     {
-        var adapters = await deviceManagementService.GetNetworkAdaptersAsync();
+        var adapters = await _deviceManagementService.GetNetworkAdaptersAsync();
         AvailableNetworkAdapters = adapters.Select(a => new NetworkAdapterInfo(a.name, a.description)).ToList();
         AppConfig.PreferredNetworkAdapter =
             AvailableNetworkAdapters.FirstOrDefault(a => a.Name == AppConfig.PreferredNetworkAdapter?.Name);
@@ -312,7 +326,7 @@ public partial class SettingsViewModel(
     {
         if (!_cultureHandlerSubscribed)
         {
-            localization.CultureChanged += OnCultureChanged;
+            _localization.CultureChanged += OnCultureChanged;
             _cultureHandlerSubscribed = true;
         }
 
@@ -379,14 +393,14 @@ public partial class SettingsViewModel(
 
         if (e.PropertyName == nameof(AppConfig.Language))
         {
-            localization.ApplyLanguage(config.Language);
+            _localization.ApplyLanguage(config.Language);
             UpdateLanguageDependentCollections();
         }
         else if (e.PropertyName == nameof(AppConfig.MaskPlayerName) && _isLoaded && !config.MaskPlayerName)
         {
-            var title = localization.GetString(ResourcesKeys.Settings_PlayerNameMask_Warning_Title);
-            var message = localization.GetString(ResourcesKeys.Settings_PlayerNameMask_Warning_Message);
-            var result = messageDialogService.Show(title, message);
+            var title = _localization.GetString(ResourcesKeys.Settings_PlayerNameMask_Warning_Title);
+            var message = _localization.GetString(ResourcesKeys.Settings_PlayerNameMask_Warning_Message);
+            var result = _messageDialogService.Show(title, message);
             if (result != true)
             {
                 config.MaskPlayerName = true;
@@ -397,7 +411,7 @@ public partial class SettingsViewModel(
             var adapter = AppConfig.PreferredNetworkAdapter;
             if (adapter != null)
             {
-                deviceManagementService.SetActiveNetworkAdapter(adapter);
+                _deviceManagementService.SetActiveNetworkAdapter(adapter);
             }
         }
         else if (e.PropertyName == nameof(AppConfig.Opacity))
@@ -424,7 +438,7 @@ public partial class SettingsViewModel(
         else if (e.PropertyName == nameof(AppConfig.DpsUpdateInterval))
         {
             // Update sample recording interval when DpsUpdateInterval changes
-            if (_isLoaded && dataStorage is DataStorageV2 storageV2)
+            if (_isLoaded && _dataStorage is DataStorageV2 storageV2)
             {
                 storageV2.SampleRecordingInterval = config.DpsUpdateInterval;
             }
@@ -443,7 +457,7 @@ public partial class SettingsViewModel(
     {
         // Update the actual application config (not just the clone)
         // This allows real-time preview while still supporting cancel
-        configManager.CurrentConfig.Opacity = opacity;
+        _configManager.CurrentConfig.Opacity = opacity;
     }
 
     /// <summary>
@@ -517,7 +531,7 @@ public partial class SettingsViewModel(
 
     public Task ApplySettingsAsync()
     {
-        return configManager.SaveAsync(AppConfig);
+        return _configManager.SaveAsync(AppConfig);
     }
 
     [RelayCommand]
@@ -538,10 +552,10 @@ public partial class SettingsViewModel(
             return;
         }
 
-        var title = localization.GetString(ResourcesKeys.Settings_CancelConfirm_Title);
-        var message = localization.GetString(ResourcesKeys.Settings_CancelConfirm_Message);
+        var title = _localization.GetString(ResourcesKeys.Settings_CancelConfirm_Title);
+        var message = _localization.GetString(ResourcesKeys.Settings_CancelConfirm_Message);
 
-        var result = messageDialogService.Show(title, message);
+        var result = _messageDialogService.Show(title, message);
         if (result == true)
         {
             // User chose to discard changes - restore original config
@@ -601,7 +615,7 @@ public partial class SettingsViewModel(
         AppConfig.ThemeColor = hexColor;
 
         // ⭐ 实时应用到当前运行的配置（预览效果）
-        configManager.CurrentConfig.ThemeColor = hexColor;
+        _configManager.CurrentConfig.ThemeColor = hexColor;
     }
 
     /// <summary>
@@ -624,7 +638,7 @@ public partial class SettingsViewModel(
         {
             var hexColor = $"#{value.R:X2}{value.G:X2}{value.B:X2}";
             AppConfig.ThemeColor = hexColor;
-            configManager.CurrentConfig.ThemeColor = hexColor;
+            _configManager.CurrentConfig.ThemeColor = hexColor;
             OnPropertyChanged();
         }
     }
@@ -637,11 +651,11 @@ public partial class SettingsViewModel(
         if (_originalConfig == null) return;
 
         // Restore opacity to original value
-        configManager.CurrentConfig.Opacity = _originalConfig.Opacity;
+        _configManager.CurrentConfig.Opacity = _originalConfig.Opacity;
 
         // Restore player info format settings
-        configManager.CurrentConfig.UseCustomFormat = _originalConfig.UseCustomFormat;
-        configManager.CurrentConfig.PlayerInfoFormatString = _originalConfig.PlayerInfoFormatString;
+        _configManager.CurrentConfig.UseCustomFormat = _originalConfig.UseCustomFormat;
+        _configManager.CurrentConfig.PlayerInfoFormatString = _originalConfig.PlayerInfoFormatString;
     }
 
     private void OnCultureChanged(object? sender, CultureInfo culture)
@@ -653,7 +667,7 @@ public partial class SettingsViewModel(
     {
         if (_cultureHandlerSubscribed)
         {
-            localization.CultureChanged -= OnCultureChanged;
+            _localization.CultureChanged -= OnCultureChanged;
             _cultureHandlerSubscribed = false;
         }
 

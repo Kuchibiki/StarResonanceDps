@@ -1553,9 +1553,9 @@
                                                         </Grid.ColumnDefinitions>
 
                                                         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                                                            <Image Source="{Binding Class, Converter={StaticResource ClassesToIconConverter}}" 
+                                                            <Image Source="{Binding Class, Converter={StaticResource ClassesToColoredIconConverter}}" 
                                                                    Width="26" Height="26" Margin="0,0,10,0"
-                                                                   RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True"/>
+                                                                   RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
                                                             <!--<TextBlock Style="{StaticResource FieldName}" Text="{Binding Name}" />-->
                                                             <TextBlock Style="{StaticResource FieldName}" Text="{lex:Loc {Binding Name, StringFormat={}Classes_{0}}}"></TextBlock>
                                                         </StackPanel>
@@ -1568,7 +1568,7 @@
 
                                                                     <Border Width="24" Height="24" CornerRadius="4">
                                                                         <Border.Background>
-                                                                             <SolidColorBrush Color="{Binding Color}" />
+                                                                            <SolidColorBrush Color="{Binding Color}" />
                                                                         </Border.Background>
                                                                     </Border>
                                                                 </ToggleButton.Content>
