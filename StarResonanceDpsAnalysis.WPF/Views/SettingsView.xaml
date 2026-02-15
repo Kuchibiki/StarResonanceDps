@@ -1527,6 +1527,83 @@
                                 </StackPanel>
                             </Border>
 
+                            <!-- Class Color Section -->
+                            <ctrl:CardHeader 
+                                x:Name="SectionClassColors"
+                                Title="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Section_ClassColors_Title}}"
+                                Subtitle="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Section_ClassColors_Description}}" />
+
+                            <Border Style="{StaticResource SectionBorder}">
+                                <StackPanel Style="{StaticResource SectionStackPanel}">
+
+                                    <ItemsControl ItemsSource="{Binding ClassColorSettings}" Focusable="False">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Style="{StaticResource SectionFieldBorder}">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="39*" />
+                                                            <ColumnDefinition Width="*" MinWidth="10" />
+                                                            <ColumnDefinition Width="60*" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                            <Image Source="{Binding Class, Converter={StaticResource ClassesToIconConverter}}" 
+                                                                   Width="26" Height="26" Margin="0,0,10,0"
+                                                                   RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True"/>
+                                                            <!--<TextBlock Style="{StaticResource FieldName}" Text="{Binding Name}" />-->
+                                                            <TextBlock Style="{StaticResource FieldName}" Text="{lex:Loc {Binding Name, StringFormat={}Classes_{0}}}"></TextBlock>
+                                                        </StackPanel>
+
+
+                                                        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                                                            <!-- Color Toggle Button -->
+                                                            <ToggleButton x:Name="ColorToggle" Width="30" Height="30" Margin="0,0,10,0" Style="{StaticResource AntToggleButtonStyle}" Padding="0">
+                                                                <ToggleButton.Content>
+
+                                                                    <Border Width="24" Height="24" CornerRadius="4">
+                                                                        <Border.Background>
+                                                                             <SolidColorBrush Color="{Binding Color}" />
+                                                                        </Border.Background>
+                                                                    </Border>
+                                                                </ToggleButton.Content>
+                                                            </ToggleButton>
+
+                                                            <Popup IsOpen="{Binding IsChecked, ElementName=ColorToggle}" 
+                                                                   PlacementTarget="{Binding ElementName=ColorToggle}" 
+                                                                   Placement="Bottom" 
+                                                                   StaysOpen="False" 
+                                                                   AllowsTransparency="True">
+                                                                <Border Background="White" BorderBrush="#DDD" BorderThickness="1" CornerRadius="8" Margin="5">
+                                                                    <Border.Effect>
+                                                                        <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.3" Color="Black"/>
+                                                                    </Border.Effect>
+                                                                    <ctrl:SimpleColorPicker SelectedColor="{Binding Color, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10"/>
+                                                                </Border>
+                                                            </Popup>
+
+                                                            <Button Command="{Binding ResetCommand}" Padding="8,4" 
+                                                                    FontFamily="pack://application:,,,/Assets/Fonts/#IconFont" 
+                                                                    Content="{lex:Loc {x:Static loc:ResourcesKeys.Settings_ClassColors_Reset}}" 
+                                                                    ToolTip="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_ClassColors_Reset_Tooltip}}" 
+                                                                    Style="{StaticResource AntButtonStyle}"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                </StackPanel>
+                            </Border>
+
+
+
                         </StackPanel>
                     </ScrollViewer>
                 </Border>

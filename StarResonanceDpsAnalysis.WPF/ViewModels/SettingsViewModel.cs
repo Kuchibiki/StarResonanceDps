@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -15,6 +16,7 @@ using StarResonanceDpsAnalysis.Core.Extends.System;
 using StarResonanceDpsAnalysis.Core.Models;
 using StarResonanceDpsAnalysis.Core.Statistics;
 using StarResonanceDpsAnalysis.WPF.Config;
+using StarResonanceDpsAnalysis.WPF.Converters;
 using StarResonanceDpsAnalysis.WPF.Localization;
 using StarResonanceDpsAnalysis.WPF.Models;
 using StarResonanceDpsAnalysis.WPF.Properties;
@@ -33,6 +35,9 @@ public partial class SettingsViewModel(
     : BaseViewModel
 {
     [ObservableProperty] private AppConfig _appConfig = configManager.CurrentConfig.Clone(); // Initialized here with a cloned config; may be overwritten in LoadedAsync
+
+    [ObservableProperty]
+    private ObservableCollection<ClassColorSettingViewModel> _classColorSettings = new();
 
     [ObservableProperty]
     private List<Option<Language>> _availableLanguages =
@@ -221,8 +226,86 @@ public partial class SettingsViewModel(
         localization.ApplyLanguage(AppConfig.Language);
         await LoadNetworkAdaptersAsync();
 
+        InitializeClassColors();
+
         _hasUnsavedChanges = false;
         _isLoaded = true;
+    }
+
+    private void InitializeClassColors()
+    {
+        ClassColorSettings.Clear();
+        var classes = Enum.GetValues<Classes>()
+            .Where(c => c != Classes.Unknown) 
+            .ToList();
+
+        foreach (var cls in classes)
+        {
+            var color = GetClassColor(cls);
+            var defaultColor = GetDefaultClassColor(cls);
+            var name = cls.GetLocalizedDescription();
+            ClassColorSettings.Add(new ClassColorSettingViewModel(cls, name, color, defaultColor, _appConfig, ApplyColorChange));
+        }
+    }
+
+    private Color GetDefaultClassColor(Classes cls)
+    {
+         var app = Application.Current;
+         var keys = new[] { $"Classes{cls}Color", $"{cls}Color", $"Classes{cls}Brush", $"{cls}Brush" };
+         foreach(var key in keys)
+         {
+              var res = app.TryFindResource(key);
+              if (res is Color c) return c;
+              if (res is SolidColorBrush b) return b.Color;
+         }
+         return Colors.White;
+    }
+
+    private Color GetClassColor(Classes cls)
+    {
+        // Check config first
+        if (_appConfig.CustomClassColors.TryGetValue(cls, out var hex))
+        {
+            try { return (Color)ColorConverter.ConvertFromString(hex); } catch { }
+        }
+        
+        // Fallback to existing converter lookup
+        // We can use a temporary converter instance or just TryFindResource from App
+        var app = Application.Current;
+        var keys = new[] { $"Classes{cls}Color", $"{cls}Color", $"Classes{cls}Brush", $"{cls}Brush" };
+        foreach(var key in keys)
+        {
+             var res = app.TryFindResource(key);
+             if (res is Color c) return c;
+             if (res is SolidColorBrush b) return b.Color;
+        }
+        return Colors.White; // Default
+    }
+
+    private void ApplyColorChange(Classes cls, Color color)
+    {
+        ClassesColorConverter.UpdateColor(cls, color);
+    }
+
+    [RelayCommand(AllowConcurrentExecutions = false)]
+    private async Task NetworkAdapterAutoSelect()
+    {
+        var ret = await deviceManagementService.GetAutoSelectedNetworkAdapterAsync();
+        if (ret != null)
+        {
+            AppConfig.PreferredNetworkAdapter = ret;
+            deviceManagementService.SetActiveNetworkAdapter(ret);
+            return;
+        }
+        MessageBox.Show(localization.GetString(ResourcesKeys.Settings_NetworkAdapterAutoSelect_Failed)); // Temporary message dialog
+    }
+
+    private async Task LoadNetworkAdaptersAsync()
+    {
+        var adapters = await deviceManagementService.GetNetworkAdaptersAsync();
+        AvailableNetworkAdapters = adapters.Select(a => new NetworkAdapterInfo(a.name, a.description)).ToList();
+        AppConfig.PreferredNetworkAdapter =
+            AvailableNetworkAdapters.FirstOrDefault(a => a.Name == AppConfig.PreferredNetworkAdapter?.Name);
     }
 
     private void SubscribeHandlers()
@@ -239,27 +322,6 @@ public partial class SettingsViewModel(
             NetworkChange.NetworkAddressChanged += OnSystemNetworkChanged;
             _networkHandlerSubscribed = true;
         }
-    }
-
-    private async Task LoadNetworkAdaptersAsync()
-    {
-        var adapters = await deviceManagementService.GetNetworkAdaptersAsync();
-        AvailableNetworkAdapters = adapters.Select(a => new NetworkAdapterInfo(a.name, a.description)).ToList();
-        AppConfig.PreferredNetworkAdapter =
-            AvailableNetworkAdapters.FirstOrDefault(a => a.Name == AppConfig.PreferredNetworkAdapter?.Name);
-    }
-
-    [RelayCommand(AllowConcurrentExecutions = false)]
-    private async Task NetworkAdapterAutoSelect()
-    {
-        var ret = await deviceManagementService.GetAutoSelectedNetworkAdapterAsync();
-        if (ret != null)
-        {
-            AppConfig.PreferredNetworkAdapter = ret;
-            deviceManagementService.SetActiveNetworkAdapter(ret);
-            return;
-        }
-        MessageBox.Show(localization.GetString(ResourcesKeys.Settings_NetworkAdapterAutoSelect_Failed)); // Temporary message dialog
     }
 
     private async void OnSystemNetworkChanged(object? sender, EventArgs e)
@@ -525,13 +587,8 @@ public partial class SettingsViewModel(
     [RelayCommand]
     private void SetThemeColor(string color)
     {
-        if (!string.IsNullOrEmpty(color))
-        {
-            AppConfig.ThemeColor = color;
-
-            // ⭐ 实时应用到当前运行的配置（预览效果，不需要点保存）
-            configManager.CurrentConfig.ThemeColor = color;
-        }
+        AppConfig.ThemeColor = color;
+        OnPropertyChanged(nameof(CurrentThemeColor));
     }
 
     /// <summary>

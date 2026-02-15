@@ -100,6 +100,12 @@ public partial class AppConfig : ObservableObject
     private string _theme = "Light";
 
     /// <summary>
+    /// 自定义职业颜色
+    /// </summary>
+    [ObservableProperty]
+    private ObservableDictionary<Classes, string> _customClassColors = new();
+
+    /// <summary>
     /// 当前界面语言（如 zh-CN、en-US、auto）
     /// </summary>
     [ObservableProperty]

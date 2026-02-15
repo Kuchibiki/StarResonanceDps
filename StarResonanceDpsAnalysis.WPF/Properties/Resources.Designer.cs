@@ -1974,6 +1974,24 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string Settings_ClassColors_Reset {
+            get {
+                return ResourceManager.GetString("Settings_ClassColors_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Default.
+        /// </summary>
+        public static string Settings_ClassColors_Reset_Tooltip {
+            get {
+                return ResourceManager.GetString("Settings_ClassColors_Reset_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear data after combat.
         /// </summary>
         public static string Settings_Combat_ClearAfterBattle {
@@ -2559,6 +2577,24 @@ namespace StarResonanceDpsAnalysis.WPF.Properties {
         public static string Settings_Section_Character_Title {
             get {
                 return ResourceManager.GetString("Settings_Section_Character_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customize colors for each class.
+        /// </summary>
+        public static string Settings_Section_ClassColors_Description {
+            get {
+                return ResourceManager.GetString("Settings_Section_ClassColors_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class Colors.
+        /// </summary>
+        public static string Settings_Section_ClassColors_Title {
+            get {
+                return ResourceManager.GetString("Settings_Section_ClassColors_Title", resourceCulture);
             }
         }
         

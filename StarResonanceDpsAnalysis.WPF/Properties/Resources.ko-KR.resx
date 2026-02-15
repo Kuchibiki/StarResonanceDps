@@ -1303,4 +1303,16 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   <data name="Menu_About" xml:space="preserve">
     <value>정보</value>
   </data>
+  <data name="Settings_Section_ClassColors_Title" xml:space="preserve">
+    <value>직업 색상</value>
+  </data>
+  <data name="Settings_Section_ClassColors_Description" xml:space="preserve">
+    <value>각 직업의 색상 커스터마이징</value>
+  </data>
+  <data name="Settings_ClassColors_Reset_Tooltip" xml:space="preserve">
+    <value>Valores Padrão</value>
+  </data>
+  <data name="Settings_ClassColors_Reset" xml:space="preserve">
+    <value>Redefinir</value>
+  </data>
 </root>
