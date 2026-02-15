@@ -10,6 +10,7 @@ using StarResonanceDpsAnalysis.Core.Statistics;
 using StarResonanceDpsAnalysis.WPF.Models;
 using System.Windows.Threading;
 using StarResonanceDpsAnalysis.Core.Data;
+using StarResonanceDpsAnalysis.Core.Data.Models;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
 
@@ -23,13 +24,13 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
     private readonly IDataStorage _storage;
     [ObservableProperty] private StatisticType _statisticIndex;
     private PlayerStatistics? _playerStatistics;
-    
+
     // NEW: App configuration for number formatting
     [ObservableProperty] private Config.AppConfig _appConfig;
-    
-    // ? ĞÂÔö£ºÊµÊ±¸üĞÂ¶¨Ê±Æ÷
+
+    // ? æ–°å¢ï¼šå®æ—¶æ›´æ–°å®šæ—¶å™¨
     private DispatcherTimer? _updateTimer;
-    private const int UpdateIntervalMs = 1000; // Ã¿Ãë¸üĞÂÒ»´Î
+    private const int UpdateIntervalMs = 1000; // æ¯ç§’æ›´æ–°ä¸€æ¬¡
 
     // NEW: Tab ViewModels for modular components
     [ObservableProperty] private TabContentViewModel _dpsTabViewModel;
@@ -40,7 +41,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
     /// ViewModel for the skill breakdown view, showing detailed statistics for a player.
     /// </summary>
     public SkillBreakdownViewModel(
-        ILogger<SkillBreakdownViewModel> logger, 
+        ILogger<SkillBreakdownViewModel> logger,
         LocalizationManager localizationManager,
         IDataStorage storage,
         Config.IConfigManager configManager)
@@ -58,13 +59,13 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
         _dpsTabViewModel.Plot.DamageDisplayMode = _appConfig.DamageDisplayType;
         _healingTabViewModel.Plot.DamageDisplayMode = _appConfig.DamageDisplayType;
         _tankingTabViewModel.Plot.DamageDisplayMode = _appConfig.DamageDisplayType;
-        
-        // ? ³õÊ¼»¯¸üĞÂ¶¨Ê±Æ÷
+
+        // ? åˆå§‹åŒ–æ›´æ–°å®šæ—¶å™¨
         InitializeUpdateTimer();
     }
 
     /// <summary>
-    /// ? ³õÊ¼»¯ÊµÊ±¸üĞÂ¶¨Ê±Æ÷
+    /// ? åˆå§‹åŒ–å®æ—¶æ›´æ–°å®šæ—¶å™¨
     /// </summary>
     private void InitializeUpdateTimer()
     {
@@ -76,7 +77,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
     }
 
     /// <summary>
-    /// ? ¶¨Ê±Æ÷»Øµ÷£ºË¢ĞÂÍ³¼ÆÊı¾İ
+    /// ? å®šæ—¶å™¨å›è°ƒï¼šåˆ·æ–°ç»Ÿè®¡æ•°æ®
     /// </summary>
     private void UpdateTimer_Tick(object? sender, EventArgs e)
     {
@@ -85,8 +86,8 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
             return;
         }
 
-        // Ê¹ÓÃ _playerStatistics.Uid ¶ø²»ÊÇ ObservedSlot?.Player.Uid
-        var playerUid = ObservedSlot?.Player.Uid ?? _playerStatistics.Uid;
+        // ä½¿ç”¨ _playerStatistics.Uid è€Œä¸æ˜¯ ObservedSlot?.Player.Uid
+        var playerUid = _playerStatistics.Uid;
         if (playerUid == 0)
         {
             return;
@@ -94,7 +95,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
 
         try
         {
-            // ? ´Ó´æ´¢ÖĞ»ñÈ¡×îĞÂµÄPlayerStatistics
+            // ? ä»å­˜å‚¨ä¸­è·å–æœ€æ–°çš„PlayerStatistics
             var latestStats = _storage.GetStatistics(fullSession: false);
             if (latestStats.TryGetValue(playerUid, out var updated))
             {
@@ -109,7 +110,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
     }
 
     /// <summary>
-    /// ? Æô¶¯ÊµÊ±¸üĞÂ
+    /// ? å¯åŠ¨å®æ—¶æ›´æ–°
     /// </summary>
     public void StartRealTimeUpdate()
     {
@@ -118,7 +119,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
     }
 
     /// <summary>
-    /// ? Í£Ö¹ÊµÊ±¸üĞÂ
+    /// ? åœæ­¢å®æ—¶æ›´æ–°
     /// </summary>
     public void StopRealTimeUpdate()
     {
@@ -129,17 +130,14 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
     /// <summary>
     /// Initialize from PlayerStatistics directly 
     /// </summary>
-    public void InitializeFrom(
-        PlayerStatistics playerStats,
-        Core.Data.Models.PlayerInfo? playerInfo,
-        StatisticType statisticType,
-        StatisticDataViewModel slot)
+    public void InitializeFrom(PlayerStatistics playerStats,
+        PlayerInfo? playerInfo,
+        StatisticType statisticType)
     {
         _logger.LogDebug("Initializing SkillBreakdownViewModel from PlayerStatistics for UID {Uid}",
             playerStats.Uid);
 
         _playerStatistics = playerStats;
-        ObservedSlot = slot;
 
         // Update player info
         UpdatePlayerInfo(playerStats, playerInfo);
@@ -147,18 +145,12 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
 
         // Update all statistics
         RefreshAllStatistics();
-        
-        // ? Æô¶¯ÊµÊ±¸üĞÂ
+
+        // ? å¯åŠ¨å®æ—¶æ›´æ–°
         StartRealTimeUpdate();
 
         _logger.LogDebug("SkillBreakdownViewModel initialized from PlayerStatistics: {Name}", PlayerName);
     }
-
-    #region Observed Slot (Data Source)
-
-    [ObservableProperty] private StatisticDataViewModel? _observedSlot;
-
-    #endregion
 
     #region Player Info Properties
 
@@ -197,7 +189,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
     /// <summary>
     /// Update player basic information
     /// </summary>
-    private void UpdatePlayerInfo(PlayerStatistics playerStats, Core.Data.Models.PlayerInfo? playerInfo)
+    private void UpdatePlayerInfo(PlayerStatistics playerStats, PlayerInfo? playerInfo)
     {
         PlayerName = playerInfo?.Name ?? $"UID: {playerStats.Uid}";
         Uid = playerStats.Uid;
@@ -244,7 +236,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
         // Convert and set statistics
         var stats = statisticValues.ToDataStatistics(duration);
         tabViewModel.Stats = stats;
-        
+
         PopulateSkills(tabViewModel.SkillList.SkillItems, skills);
 
         // Update charts
@@ -430,7 +422,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
     }
 
     /// <summary>
-    /// ? ÊµÏÖIDisposable½Ó¿ÚÒÔÊÍ·Å¶¨Ê±Æ÷×ÊÔ´
+    /// ? å®ç°IDisposableæ¥å£ä»¥é‡Šæ”¾å®šæ—¶å™¨èµ„æº
     /// </summary>
     public void Dispose()
     {

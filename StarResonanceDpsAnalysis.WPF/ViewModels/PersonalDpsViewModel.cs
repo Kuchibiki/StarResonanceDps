@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Windows.Threading;
@@ -831,8 +831,8 @@ public partial class PersonalDpsViewModel : BaseViewModel
                 _logger?.LogWarning(ex, "Failed to get player info for UID {UID}", currentPlayerUid);
             }
             
-            // 初始化 ViewModel - 传入 null 作为 slot 参数（因为个人模式没有 slot 概念）
-            vm.InitializeFrom(stats, playerInfo, StatisticType.Damage, null);
+            // 初始化 ViewModel
+            vm.InitializeFrom(stats, playerInfo, StatisticType.Damage);
             
             // 显示窗口
             _windowManagementService.SkillBreakdownView.Show();

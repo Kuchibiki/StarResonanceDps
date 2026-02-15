@@ -1,9 +1,8 @@
 using System.Windows;
-using StarResonanceDpsAnalysis.WPF.Config;
 
 namespace StarResonanceDpsAnalysis.WPF.Services;
 
-public class ApplicationControlService(IConfigManager configManager) : IApplicationControlService
+public class ApplicationControlService : IApplicationControlService
 {
     public void Shutdown()
     {

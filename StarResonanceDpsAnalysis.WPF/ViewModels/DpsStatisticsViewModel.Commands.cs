@@ -210,7 +210,7 @@ public partial class DpsStatisticsViewModel
             ? info
             : null;
 
-        vm.InitializeFrom(stats, playerInfo, StatisticIndex, target);
+        vm.InitializeFrom(stats, playerInfo, StatisticIndex);
         _windowManagement.SkillBreakdownView.Show();
         _windowManagement.SkillBreakdownView.Activate();
     }
