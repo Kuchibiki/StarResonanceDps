@@ -106,25 +106,25 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
         _teamStatsManager = teamStatsManager;
         _resetCoordinator = resetCoordinator;
 
+        StatisticData = new Dictionary<StatisticType, DpsStatisticsSubViewModel>
+        {
+            [StatisticType.Damage] = new(logger, dispatcher, StatisticType.Damage, debugFunctions, this, localizationManager, dataSourceEngine),
+            [StatisticType.Healing] = new(logger, dispatcher, StatisticType.Healing, debugFunctions, this, localizationManager, dataSourceEngine),
+            [StatisticType.TakenDamage] = new(logger, dispatcher, StatisticType.TakenDamage, debugFunctions, this, localizationManager, dataSourceEngine),
+            [StatisticType.NpcTakenDamage] = new(logger, dispatcher, StatisticType.NpcTakenDamage, debugFunctions, this, localizationManager, dataSourceEngine)
+        };
+
         // Subscribe to engine processed data ready event
         _dataSourceEngine = dataSourceEngine;
+
         _dataSourceEngine.ProcessedDataReady += DataSourceEngineOnProcessedDataReady;
         void DataSourceEngineOnProcessedDataReady(Dictionary<StatisticType, Dictionary<long, DpsDataProcessed>> processed)
         {
             InvokeOnDispatcher(() => ApplyProcessedData(processed));
         }
 
-
         // Configure engine mode according to config
         _dataSourceEngine.ChangeMode(_configManager.CurrentConfig.DpsUpdateMode.ToDataSourceMode());
-
-        StatisticData = new Dictionary<StatisticType, DpsStatisticsSubViewModel>
-        {
-            [StatisticType.Damage] = new(logger, dispatcher, StatisticType.Damage, debugFunctions, this, localizationManager, _dataSourceEngine),
-            [StatisticType.Healing] = new(logger, dispatcher, StatisticType.Healing, debugFunctions, this, localizationManager, _dataSourceEngine),
-            [StatisticType.TakenDamage] = new(logger, dispatcher, StatisticType.TakenDamage, debugFunctions, this, localizationManager, _dataSourceEngine),
-            [StatisticType.NpcTakenDamage] = new(logger, dispatcher, StatisticType.NpcTakenDamage, debugFunctions, this, localizationManager, _dataSourceEngine)
-        };
 
 
         _configManager.ConfigurationUpdated += ConfigManagerOnConfigurationUpdated;
