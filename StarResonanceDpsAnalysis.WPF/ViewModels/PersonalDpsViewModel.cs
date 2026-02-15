@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Windows.Threading;
@@ -7,8 +7,10 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using StarResonanceDpsAnalysis.Core.Data;
 using StarResonanceDpsAnalysis.Core.Data.Models;
+using StarResonanceDpsAnalysis.Core.Statistics;
 using StarResonanceDpsAnalysis.WPF.Config;
 using StarResonanceDpsAnalysis.WPF.Extensions;
+using StarResonanceDpsAnalysis.WPF.Models;
 using StarResonanceDpsAnalysis.WPF.Services;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
@@ -50,6 +52,12 @@ public partial class PersonalDpsViewModel : BaseViewModel
 
     // ⭐ 新增：超时标记（用于打桩模式下的倒计时功能）
     private bool _isTimedOut = false;
+    
+    // 脱战时间戳（用于防止脱战后立即重新计时）
+    private DateTime? _disengagementTime = null;
+    
+    // 正在清空标志（用于防止Clear期间的数据更新干扰显示）
+    private bool _isClearing = false;
 
     public PersonalDpsViewModel(
         IWindowManagementService windowManagementService,
@@ -97,16 +105,16 @@ public partial class PersonalDpsViewModel : BaseViewModel
     {
         get
         {
-            if (StartTime is null) return 100;
+            if (StartTime is null) return 0;
 
-            var remaining = GetRemaining();
+            var elapsed = GetElapsed();
             return TimeLimit.TotalMilliseconds <= 0
                 ? 0
-                : Math.Max(0, remaining.TotalMilliseconds / TimeLimit.TotalMilliseconds * 100);
+                : Math.Min(1, elapsed.TotalMilliseconds / TimeLimit.TotalMilliseconds);
         }
     }
 
-    public string RemainingTimeDisplay => FormatRemaining(GetRemaining());
+    public string RemainingTimeDisplay => FormatElapsed(GetElapsed());
 
     partial void OnStartTrainingChanged(bool value)
     {
@@ -117,6 +125,7 @@ public partial class PersonalDpsViewModel : BaseViewModel
         {
             StartTime = null;
             StopTimer();
+            RefreshRemaining();
         }
         else
         {
@@ -229,6 +238,13 @@ public partial class PersonalDpsViewModel : BaseViewModel
     /// </summary>
     private void OnDpsDataUpdated()
     {
+        // 如果正在清空，直接忽略所有处理
+        if (_isClearing)
+        {
+            _logger?.LogDebug("正在清空，忽略DpsDataUpdated事件");
+            return;
+        }
+        
         if (!_dispatcher.CheckAccess())
         {
             _dispatcher.BeginInvoke(OnDpsDataUpdated);
@@ -247,13 +263,26 @@ public partial class PersonalDpsViewModel : BaseViewModel
         // ⭐ 关键逻辑：如果正在等待新战斗 且 现在有数据了 → 说明新战斗开始，清空缓存
         if (_awaitingNewBattle && hasDataNow)
         {
+            // 检查是否是脱战后立即的数据更新（可能是延迟的数据包）
+            if (_disengagementTime.HasValue)
+            {
+                var timeSinceDisengagement = DateTime.Now - _disengagementTime.Value;
+                if (timeSinceDisengagement.TotalSeconds < 2.0)
+                {
+                    _logger?.LogDebug("脱战后{Seconds:F1}秒内的数据更新，忽略（可能是延迟数据）", timeSinceDisengagement.TotalSeconds);
+                    UpdatePersonalDpsDisplay();
+                    return;
+                }
+            }
+            
             _logger?.LogInformation("个人模式检测到新战斗开始，清空上一场缓存数据");
 
             // 清空缓存的显示数据
             ResetDisplay();
 
-            // 重置等待标记
+            // 重置等待标记和脱战时间戳
             _awaitingNewBattle = false;
+            _disengagementTime = null;
 
             // ⭐ 修改：只在非打桩模式下才重置训练状态
             // 打桩模式下应该保持训练状态，让倒计时继续
@@ -285,6 +314,13 @@ public partial class PersonalDpsViewModel : BaseViewModel
     {
         try
         {
+            // 如果正在清空，不更新显示
+            if (_isClearing)
+            {
+                _logger?.LogDebug("正在清空，不更新显示");
+                return;
+            }
+            
             // ⭐ 功能3：倒计时超时后不更新显示（冻结在最后的值）
             if (_isTimedOut)
             {
@@ -385,17 +421,27 @@ public partial class PersonalDpsViewModel : BaseViewModel
                 totalDamage, elapsedTicks, elapsedSeconds, dps);
 
             // 计算团队总伤害占比
-            var allPlayerData = dpsDataDict.Values.Where(d => !d.IsNpc).ToList();
-            var teamTotalDamage = (ulong)allPlayerData.Sum(d => Math.Max(0, d.AttackDamage.Total));
-
-            _logger?.LogDebug("Team Stats: TeamTotal={TeamTotal}, PlayerCount={Count}",
-                teamTotalDamage, allPlayerData.Count);
-
             double percent = 0;
-            if (teamTotalDamage > 0)
+            
+            // 打桩模式下不计算团队百分比（保持00%）
+            if (EnableTrainingMode && StartTraining)
             {
-                percent = (double)totalDamage / teamTotalDamage;
-                percent = Math.Min(1, Math.Max(0, percent));
+                percent = 1.0; // 100%
+                _logger?.LogDebug("打桩模式：团队百分比固定为100%");
+            }
+            else
+            {
+                var allPlayerData = dpsDataDict.Values.Where(d => !d.IsNpc).ToList();
+                var teamTotalDamage = (ulong)allPlayerData.Sum(d => Math.Max(0, d.AttackDamage.Total));
+
+                _logger?.LogDebug("Team Stats: TeamTotal={TeamTotal}, PlayerCount={Count}",
+                    teamTotalDamage, allPlayerData.Count);
+
+                if (teamTotalDamage > 0)
+                {
+                    percent = (double)totalDamage / teamTotalDamage;
+                    percent = Math.Min(1, Math.Max(0, percent));
+                }
             }
 
             // ⭐ 更新缓存（战斗中的最新数据）
@@ -438,20 +484,32 @@ public partial class PersonalDpsViewModel : BaseViewModel
 
     private void RemainingTimerOnTick(object? state)
     {
-        var remaining = GetRemaining();
-        if (remaining <= TimeSpan.Zero)
+        var elapsed = GetElapsed();
+        
+        // 打桩模式下，3分钟后停止
+        if (EnableTrainingMode && StartTraining && elapsed >= TimeLimit)
         {
-            // ⭐ 功能3：倒计时归0后，停止记录伤害
             _isTimedOut = true;
-            _logger?.LogInformation("打桩倒计时结束，停止记录伤害");
+            _logger?.LogInformation("打桩模式3分钟计时结束，停止记录伤害");
             
             StopTimer();
-            _dispatcher.BeginInvoke(() => StartTraining = false);
+            _dispatcher.BeginInvoke(() => 
+            {
+                StartTraining = false;
+                RefreshRemaining();
+            });
             return;
         }
+        
         _dispatcher.BeginInvoke(RefreshRemaining);
     }
 
+    private TimeSpan GetElapsed()
+    {
+        if (StartTime is null) return TimeSpan.Zero;
+        return DateTime.Now - StartTime.Value;
+    }
+    
     private TimeSpan GetRemaining()
     {
         if (StartTime is null) return TimeLimit;
@@ -461,44 +519,82 @@ public partial class PersonalDpsViewModel : BaseViewModel
 
     private void OnBattleLogCreated(BattleLog log)
     {
-        if (!StartTraining) return;
-
         var currentPlayerUid = _configManager.CurrentConfig.Uid;
         if (currentPlayerUid == 0) currentPlayerUid = log.AttackerUuid;
 
         if (log.AttackerUuid != currentPlayerUid) return;
 
-        // ⭐ 新增：只有攻击指定木桩时才开始倒计时
-        // 检查是否是攻击指定NPC的日志
-        if (!log.IsHeal && !log.IsTargetPlayer)
+        // ⭐ BUG修复：如果是治疗日志，不触发计时（只有伤害数据才触发）
+        if (log.IsHeal)
+        {
+            _logger?.LogDebug("治疗日志，不触发计时");
+            return;
+        }
+
+        // 如果正在等待新战斗（已经脱战），检查是否真的是新战斗
+        if (_awaitingNewBattle)
+        {
+            // 如果刚脱战不久（2秒内），不启动计时（可能是延迟的战斗日志）
+            if (_disengagementTime.HasValue)
+            {
+                var timeSinceDisengagement = DateTime.Now - _disengagementTime.Value;
+                if (timeSinceDisengagement.TotalSeconds < 2.0)
+                {
+                    _logger?.LogDebug("脱战后{Seconds:F1}秒内的战斗日志，忽略（_awaitingNewBattle=true）", timeSinceDisengagement.TotalSeconds);
+                    return;
+                }
+            }
+            _logger?.LogDebug("正在等待新战斗，不启动计时（_awaitingNewBattle=true）");
+            return;
+        }
+
+        // 检查是否是攻击NPC的日志（已经排除了治疗）
+        if (!log.IsTargetPlayer)
         {
             var targetNpcId = log.TargetUuid;
             
-            // 只有攻击指定木桩才启动倒计时
-            if (!ShouldCountNpcDamage(targetNpcId))
+            // 打桩模式下，只有攻击指定木桩才启动计时
+            if (EnableTrainingMode && StartTraining && !ShouldCountNpcDamage(targetNpcId))
             {
-                _logger?.LogDebug("攻击的NPC ID={NpcId}不是指定木桩，不启动倒计时", targetNpcId);
+                _logger?.LogDebug("打桩模式：攻击的NPC ID={NpcId}不是指定木桩，不启动计时", targetNpcId);
                 return;
             }
             
-            _logger?.LogDebug("检测到攻击指定木桩 NPC ID={NpcId}，准备启动倒计时", targetNpcId);
+            _logger?.LogDebug("检测到攻击 NPC ID={NpcId}，准备启动计时", targetNpcId);
         }
         else
         {
-            // 不是攻击NPC的日志（治疗或攻击玩家），不启动倒计时
-            _logger?.LogDebug("不是攻击NPC的日志，不启动倒计时");
-            return;
+            // 攻击玩家的情况（PVP）
+            if (!EnableTrainingMode)
+            {
+                _logger?.LogDebug("非打桩模式：检测到攻击玩家，准备启动计时");
+            }
+            else
+            {
+                // 打桩模式下攻击玩家不启动计时
+                _logger?.LogDebug("打桩模式：攻击玩家，不启动计时");
+                return;
+            }
         }
 
         _dispatcher.BeginInvoke(() =>
         {
-            if (!StartTraining) return;
+            // 打桩模式下如果已经超时，不再重新开始计时
+            if (EnableTrainingMode && _isTimedOut)
+            {
+                _logger?.LogDebug("打桩模式已超时，不再重新开始计时");
+                return;
+            }
             
             // 只有在尚未开始计时时才设置StartTime
             if (StartTime == null)
             {
                 StartTime = DateTime.Now;
-                _logger?.LogInformation("开始倒计时：{Time}", StartTime);
+                _logger?.LogInformation("开始计时：{Time}，_awaitingNewBattle={Awaiting}", StartTime, _awaitingNewBattle);
+            }
+            else
+            {
+                _logger?.LogDebug("计时已经在进行中，StartTime={StartTime}", StartTime);
             }
         });
     }
@@ -515,15 +611,41 @@ public partial class PersonalDpsViewModel : BaseViewModel
             return;
         }
 
-        _logger?.LogInformation("个人模式检测到脱战，设置等待新战斗标记");
+        _logger?.LogInformation("==== 个人模式检测到脱战 ====");
 
         // ⭐ 关键：设置等待标记，但保持当前显示不变（使用缓存）
         _awaitingNewBattle = true;
+        _disengagementTime = DateTime.Now; // 记录脱战时间
+        
+        // 非打桩模式下，脱战后停止计时
+        if (!EnableTrainingMode)
+        {
+            _logger?.LogWarning("非打桩模式：脱战前 StartTime={StartTime}", StartTime);
+            
+            // 停止计时器
+            StopTimer();
+            
+            // 重置 StartTime
+            StartTime = null;
+            
+            // 刷新 UI
+            RefreshRemaining();
+            
+            _logger?.LogWarning("非打桩模式：脱战后 StartTime={StartTime}，计时器已停止，显示应为 00:00", StartTime);
+        }
+        else
+        {
+            _logger?.LogInformation("打桩模式：脱战后保持计时，StartTime={StartTime}", StartTime);
+        }
 
         // 只刷新显示（会使用缓存值）
         UpdatePersonalDpsDisplay();
+        
+        _logger?.LogInformation("==== 脱战处理完成 ====");
     }
 
+    private string FormatElapsed(TimeSpan time) => time.ToString(@"mm\:ss");
+    
     private string FormatRemaining(TimeSpan time) => time.ToString(@"mm\:ss");
 
     private void RefreshRemaining()
@@ -564,23 +686,70 @@ public partial class PersonalDpsViewModel : BaseViewModel
     [RelayCommand]
     public void Clear()
     {
-        _logger?.LogInformation("个人模式Clear命令执行");
+        // 确保在UI线程上执行
+        if (!_dispatcher.CheckAccess())
+        {
+            _dispatcher.Invoke(Clear);
+            return;
+        }
 
-        _logger?.LogInformation("清空当前段落数据");
-        _dataStorage.ClearDpsData();
+        _logger?.LogWarning("==== 个人模式Clear命令开始执行 ====");
 
-        // ⭐ 修复问题2：立即清空显示，不等待下一次战斗
-        ResetDisplay();
-        _awaitingNewBattle = false;
-
-        // 重置计时器和训练状态
-        StartTime = null;
-        StartTraining = false;
+        // 设置清空标志，阻止数据更新事件干扰
+        _isClearing = true;
         
-        // 重置超时标记
-        _isTimedOut = false;
-
-        _logger?.LogInformation("个人模式Clear完成，已立即清空显示");
+        try
+        {
+            // 1. 清空所有状态标记
+            _awaitingNewBattle = false;
+            _disengagementTime = null;
+            _isTimedOut = false;
+            
+            _logger?.LogInformation("1. 状态标记已清空");
+            
+            // 2. 重置计时器
+            StopTimer();
+            StartTime = null;
+            
+            _logger?.LogInformation("2. 计时器已停止，StartTime={StartTime}", StartTime);
+            
+            // 3. 清空训练状态
+            StartTraining = false;
+            EnableTrainingMode = false;
+            
+            _logger?.LogInformation("3. 训练状态已清空");
+            
+            // 4. 清空显示数据（直接设置字段和属性）
+            _cachedTotalDamage = 0;
+            _cachedDps = 0;
+            _cachedTeamPercent = 0;
+            TotalDamage = 0;
+            Dps = 0;
+            TeamDamagePercent = 0;
+            
+            _logger?.LogInformation("4. 显示数据已清空：TotalDamage={Total}, Dps={Dps}, Percent={Percent}", 
+                TotalDamage, Dps, TeamDamagePercent);
+            
+            // 5. 刷新UI
+            RefreshRemaining();
+            
+            _logger?.LogInformation("5. UI已刷新");
+            
+            // 6. 最后清空数据存储
+            _logger?.LogInformation("6. 开始清空数据存储...");
+            _dataStorage.ClearDpsData();
+            _logger?.LogInformation("6. 数据存储已清空");
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogError(ex, "Clear执行过程中发生错误");
+        }
+        finally
+        {
+            // 确保清空标志被重置
+            _isClearing = false;
+            _logger?.LogWarning("==== 个人模式Clear命令执行完成 ====");
+        }
     }
 
     [RelayCommand]
@@ -606,8 +775,73 @@ public partial class PersonalDpsViewModel : BaseViewModel
     [RelayCommand]
     private void OpenSkillBreakdownView()
     {
-        _windowManagementService.SkillBreakdownView.Show();
-        _windowManagementService.SkillBreakdownView.Activate();
+        try
+        {
+            var currentPlayerUid = _configManager.CurrentConfig.Uid;
+            
+            // 如果UID为0，尝试自动检测第一个非NPC玩家
+            if (currentPlayerUid == 0)
+            {
+                var dpsDict = _dataStorage.GetStatistics(false);
+                var firstPlayer = dpsDict.Values.FirstOrDefault(d => !d.IsNpc);
+                if (firstPlayer != null)
+                {
+                    currentPlayerUid = firstPlayer.Uid;
+                    _logger?.LogInformation("Auto-detected player UID for skill breakdown: {UID}", currentPlayerUid);
+                }
+            }
+            
+            if (currentPlayerUid == 0)
+            {
+                _logger?.LogWarning("无法打开技能详情：未找到玩家UID");
+                return;
+            }
+            
+            var vm = _windowManagementService.SkillBreakdownView.DataContext as SkillBreakdownViewModel;
+            if (vm == null)
+            {
+                _logger?.LogError("SkillBreakdownViewModel is null");
+                return;
+            }
+            
+            // 获取玩家统计数据
+            var playerStats = _dataStorage.GetStatistics(false);
+            if (!playerStats.TryGetValue(currentPlayerUid, out var stats))
+            {
+                _logger?.LogWarning("未找到玩家 {UID} 的统计数据", currentPlayerUid);
+                return;
+            }
+            
+            _logger?.LogInformation("Opening SkillBreakdownView for player {UID}", currentPlayerUid);
+            
+            // 尝试获取玩家信息（可能不存在）
+            PlayerInfo? playerInfo = null;
+            try
+            {
+                // 从存储的玩家信息中查找
+                var allStats = _dataStorage.GetStatistics(false);
+                if (allStats.TryGetValue(currentPlayerUid, out var playerStat))
+                {
+                    // 使用统计数据中的昵称等信息
+                    _logger?.LogDebug("Found player stats for UID {UID}", currentPlayerUid);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger?.LogWarning(ex, "Failed to get player info for UID {UID}", currentPlayerUid);
+            }
+            
+            // 初始化 ViewModel
+            vm.InitializeFrom(stats, playerInfo, StatisticType.Damage);
+            
+            // 显示窗口
+            _windowManagementService.SkillBreakdownView.Show();
+            _windowManagementService.SkillBreakdownView.Activate();
+        }
+        catch (Exception ex)
+        {
+            _logger?.LogError(ex, "Error opening skill breakdown view");
+        }
     }
 
     [RelayCommand]

@@ -133,7 +133,7 @@
     <value>개인/훈련 모드</value>
   </data>
   <data name="Menu_SkillDiary" xml:space="preserve">
-    <value>스킬 일지</value>
+    <value>스킬 기록</value>
   </data>
   <data name="Menu_RecordSettings" xml:space="preserve">
     <value>기록 옵션</value>
@@ -308,6 +308,66 @@
   </data>
   <data name="Settings_Display_PlayerNameBlur" xml:space="preserve">
     <value>플레이어 이름 익명 처리</value>
+  </data>
+  <data name="Settings_Display_MarqueeText" xml:space="preserve">
+    <value>긴 이름 스크롤</value>
+  </data>
+  <data name="Settings_Display_MarqueeText_Tooltip" xml:space="preserve">
+    <value>플레이어 이름이 표시 영역을 초과하면 자동 스크롤을 활성화합니다.</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Default_Tooltip" xml:space="preserve">
+    <value>플레이어이름 - 서리 마법사 (25000-8)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Simple_Tooltip" xml:space="preserve">
+    <value>플레이어이름 (25000)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Detailed_Tooltip" xml:space="preserve">
+    <value>플레이어이름 - 서리 마법사 [S8 Lv50] (25000)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_NameOnly_Tooltip" xml:space="preserve">
+    <value>플레이어이름</value>
+  </data>
+  <data name="Settings_PlayerInfo_Separator_Space" xml:space="preserve">
+    <value>공백</value>
+  </data>
+  <data name="Settings_Display_ShowDamage" xml:space="preserve">
+    <value>총 피해량 표시</value>
+  </data>
+  <data name="Settings_Display_ShowDps" xml:space="preserve">
+    <value>DPS 표시</value>
+  </data>
+  <data name="Settings_Display_ShowPercentage" xml:space="preserve">
+    <value>피해 비율 표시</value>
+  </data>
+  <data name="Settings_Display_DpsMode" xml:space="preserve">
+    <value>DPS 표시 방식</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Tooltip" xml:space="preserve">
+    <value>DPS 계산 방식을 선택하세요: 누적 피해/전투 시간 또는 전체 평균 DPS.</value>
+  </data>
+  <data name="Settings_Display_DpsMode_On" xml:space="preserve">
+    <value>전체 DPS</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Off" xml:space="preserve">
+    <value>누적/시간</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Switch_Tooltip" xml:space="preserve">
+    <value>켬 = 누적 피해 / 시간, 끔 = 전체 평균 DPS(ValuePerSecond).</value>
+  </data>
+  <data name="Settings_Display_TimeSeriesCapacity" xml:space="preserve">
+    <value>시계열 샘플 용량</value>
+  </data>
+  <data name="Settings_Display_TimeSeriesCapacity_Tooltip" xml:space="preserve">
+    <value>DPS/HPS/DTPS 추세 차트에 저장할 데이터 포인트 최대값입니다. 값이 클수록 더 많은 기록을 표시하지만 메모리를 더 사용합니다. 범위: 50-1000 샘플.</value>
+  </data>
+  <data name="Settings_Common_Samples" xml:space="preserve">
+    <value>샘플</value>
+  </data>
+  <data name="Settings_Theme_CustomColor_Tooltip" xml:space="preserve">
+    <value>사용자 지정 색상</value>
+  </data>
+  <data name="Settings_Theme_ClearImage" xml:space="preserve">
+    <value>지우기</value>
   </data>
   <data name="Settings_PlayerNameMask_Warning_Title" xml:space="preserve">
     <value>경고</value>
@@ -1027,9 +1087,6 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   <data name="Debug_Localization_Apply" xml:space="preserve">
     <value>적용</value>
   </data>
-  <data name="Menu_SkillDiary" xml:space="preserve">
-    <value>스킬 기록</value>
-  </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
     <value>한국어</value>
   </data>
@@ -1109,7 +1166,7 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
     <value>치명타</value>
   </data>
   <data name="Common_HitType_Normal" xml:space="preserve">
-    <value>Normal</value>
+    <value>일반</value>
   </data>
   <data name="Settings_PlayerInfoCustomization_Title" xml:space="preserve">
     <value>플레이어 정보 표시</value>
@@ -1248,43 +1305,19 @@ UID 확인: 게임 내 왼쪽 아래 플레이어 번호가 UID입니다.</value
   <data name="App_PrivilegeLevel_Standard" xml:space="preserve">
     <value>표준 사용자</value>
   </data>
-  <data name="Menu_Battle_Log" xml:space="preserve">
-    <value>전투 로그</value>
+  <data name="Menu_About" xml:space="preserve">
+    <value>정보</value>
   </data>
-  <data name="Settings_Display_LongPlayerNameScroll" xml:space="preserve">
-    <value>긴 이름 스크롤 표시</value>
+  <data name="Settings_Section_ClassColors_Title" xml:space="preserve">
+    <value>직업 색상</value>
   </data>
-  <data name="Settings_Display_LongPlayerNameScroll_ToolTip" xml:space="preserve">
-    <value>플레이어 이름이 표시 영역보다 길면 자동 스크롤 효과를 활성화합니다</value>
+  <data name="Settings_Section_ClassColors_Description" xml:space="preserve">
+    <value>각 직업의 색상 커스터마이징</value>
   </data>
-  <data name="Settings_Display_Total_Damage" xml:space="preserve">
-    <value>총 피해 보기</value>
+  <data name="Settings_ClassColors_Reset_Tooltip" xml:space="preserve">
+    <value>Valores Padrão</value>
   </data>
-  <data name="Settings_Display_DPS" xml:space="preserve">
-    <value>DPS 표시</value>
-  </data>
-  <data name="Settings_Display_Damage_Contribution" xml:space="preserve">
-    <value>피해량 비율 표시</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode" xml:space="preserve">
-    <value>DPS 표시 모드</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode_Tooltip" xml:space="preserve">
-    <value>DPS 표시 방식 선택: 누적 피해량/전투 시간 또는 전체 평균 초당 피해량</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode_On" xml:space="preserve">
-    <value>전체 DPS</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode_Off" xml:space="preserve">
-    <value>누적/시간</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode_OnOff_Tooltip" xml:space="preserve">
-    <value>켜짐=누적 피해량÷시간, 꺼짐=전체 평균 초당 피해량(ValuePerSecond)</value>
-  </data>
-  <data name="Settings_Theme_ClearImage" xml:space="preserve">
-    <value>제거</value>
-  </data>
-  <data name="Menu_Team_Total_Damage" xml:space="preserve">
-    <value>파티:</value>
+  <data name="Settings_ClassColors_Reset" xml:space="preserve">
+    <value>Redefinir</value>
   </data>
 </root>

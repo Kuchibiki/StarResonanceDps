@@ -40,6 +40,10 @@
             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
 
+    <b:Interaction.Behaviors>
+        <behaviors:WindowPlacementBehavior SaveCommand="{Binding SaveWindowPositionCommand}" StartUpState="{Binding AppConfig.StartUpState}" />
+    </b:Interaction.Behaviors>
+
     <b:Interaction.Triggers>
         <b:EventTrigger EventName="Loaded">
             <b:InvokeCommandAction Command="{Binding LoadedCommand}" />
@@ -746,6 +750,8 @@
                                         Header="{lex:Loc {x:Static loc:ResourcesKeys.Menu_ExitSnapshotMode}}"
                                         Visibility="{Binding IsViewingSnapshot, Converter={StaticResource BoolToVisibilityConverter}}" />
 
+                                    <Separator />
+                                    <MenuItem Command="{Binding ShowAboutCommand}" Header="{lex:Loc {x:Static loc:ResourcesKeys.Menu_About}}" />
                                     <Separator />
 
                                     <MenuItem Command="{Binding ShutdownCommand}" Header="{lex:Loc {x:Static loc:ResourcesKeys.Menu_Exit}}" />

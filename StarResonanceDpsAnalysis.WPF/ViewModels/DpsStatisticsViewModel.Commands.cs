@@ -17,6 +17,14 @@ public partial class DpsStatisticsViewModel
     }
 
     [RelayCommand]
+    private void ShowAbout()
+    {
+        var about = _windowManagement.AboutView;
+        about.ShowDialog();
+        about.Activate();
+    }
+
+    [RelayCommand]
     private void OpenSettings()
     {
         _windowManagement.SettingsView.Show();
@@ -202,7 +210,7 @@ public partial class DpsStatisticsViewModel
             ? info
             : null;
 
-        vm.InitializeFrom(stats, playerInfo, StatisticIndex, target);
+        vm.InitializeFrom(stats, playerInfo, StatisticIndex);
         _windowManagement.SkillBreakdownView.Show();
         _windowManagement.SkillBreakdownView.Activate();
     }

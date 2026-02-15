@@ -9,7 +9,20 @@ namespace StarResonanceDpsAnalysis.WPF.Converters;
 
 internal sealed class ClassesColorConverter : IValueConverter
 {
-    private readonly Dictionary<Classes, Brush?> _brushCache = new();
+    // Use static cache so we can update colors globally
+    private static readonly Dictionary<Classes, Brush> _brushCache = new();
+
+    public static void UpdateColor(Classes classes, Color color)
+    {
+        if (_brushCache.TryGetValue(classes, out var brush) && brush is SolidColorBrush solidBrush && !solidBrush.IsFrozen)
+        {
+            solidBrush.Color = color;
+        }
+        else
+        {
+            _brushCache[classes] = new SolidColorBrush(color);
+        }
+    }
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -33,6 +46,15 @@ internal sealed class ClassesColorConverter : IValueConverter
             var resource = app?.TryFindResource(key!);
             if (resource is Brush brush)
             {
+                // If the resource brush is frozen, we can't update it later.
+                // For customizability, we might want to wrap it or clone it if it's solid.
+                if (brush is SolidColorBrush solidBrush && solidBrush.IsFrozen)
+                {
+                    var clone = solidBrush.Clone();
+                    _brushCache[classes] = clone;
+                    return clone;
+                }
+
                 _brushCache[classes] = brush;
                 return brush;
             }
@@ -40,27 +62,22 @@ internal sealed class ClassesColorConverter : IValueConverter
             if (resource is Color color)
             {
                 var solidBrush = new SolidColorBrush(color);
-                if (solidBrush.CanFreeze)
-                {
-                    solidBrush.Freeze();
-                }
+                // Do not freeze if we want to allow updates
+                // if (solidBrush.CanFreeze)
+                // {
+                //     solidBrush.Freeze();
+                // }
 
                 _brushCache[classes] = solidBrush;
                 return solidBrush;
             }
         }
 
-        if (app?.TryFindResource("ClassesUnknownBrush") is Brush fallback)
-        {
-            _brushCache[classes] = fallback;
-            return fallback;
-        }
-
-        return Brushes.Gray;
+        return null;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        throw new NotSupportedException("ClassesColorConverter does not support ConvertBack.");
+        throw new NotImplementedException();
     }
 }

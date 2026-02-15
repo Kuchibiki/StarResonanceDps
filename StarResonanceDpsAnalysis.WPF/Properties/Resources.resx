@@ -309,6 +309,66 @@
   <data name="Settings_Display_PlayerNameBlur" xml:space="preserve">
     <value>Mask player names</value>
   </data>
+  <data name="Settings_Display_MarqueeText" xml:space="preserve">
+    <value>Scroll long names</value>
+  </data>
+  <data name="Settings_Display_MarqueeText_Tooltip" xml:space="preserve">
+    <value>Enable automatic scrolling when a player name exceeds the available space.</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Default_Tooltip" xml:space="preserve">
+    <value>PlayerName - FrostMage (25000-8)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Simple_Tooltip" xml:space="preserve">
+    <value>PlayerName (25000)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_Detailed_Tooltip" xml:space="preserve">
+    <value>PlayerName - FrostMage [S8 Lv50] (25000)</value>
+  </data>
+  <data name="Settings_PlayerInfo_Preset_NameOnly_Tooltip" xml:space="preserve">
+    <value>PlayerName</value>
+  </data>
+  <data name="Settings_PlayerInfo_Separator_Space" xml:space="preserve">
+    <value>Space</value>
+  </data>
+  <data name="Settings_Display_ShowDamage" xml:space="preserve">
+    <value>Show total damage</value>
+  </data>
+  <data name="Settings_Display_ShowDps" xml:space="preserve">
+    <value>Show DPS</value>
+  </data>
+  <data name="Settings_Display_ShowPercentage" xml:space="preserve">
+    <value>Show damage percentage</value>
+  </data>
+  <data name="Settings_Display_DpsMode" xml:space="preserve">
+    <value>DPS display mode</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Tooltip" xml:space="preserve">
+    <value>Choose how DPS is calculated: total damage divided by duration, or overall average DPS.</value>
+  </data>
+  <data name="Settings_Display_DpsMode_On" xml:space="preserve">
+    <value>Overall DPS</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Off" xml:space="preserve">
+    <value>Total/Duration</value>
+  </data>
+  <data name="Settings_Display_DpsMode_Switch_Tooltip" xml:space="preserve">
+    <value>On = total damage / duration, Off = overall average DPS (ValuePerSecond).</value>
+  </data>
+  <data name="Settings_Display_TimeSeriesCapacity" xml:space="preserve">
+    <value>Time series sample capacity</value>
+  </data>
+  <data name="Settings_Display_TimeSeriesCapacity_Tooltip" xml:space="preserve">
+    <value>Maximum number of data points stored for DPS/HPS/DTPS trend charts. Higher values show more history but use more memory. Range: 50-1000 samples.</value>
+  </data>
+  <data name="Settings_Common_Samples" xml:space="preserve">
+    <value>samples</value>
+  </data>
+  <data name="Settings_Theme_CustomColor_Tooltip" xml:space="preserve">
+    <value>Custom color</value>
+  </data>
+  <data name="Settings_Theme_ClearImage" xml:space="preserve">
+    <value>Clear</value>
+  </data>
   <data name="Settings_PlayerNameMask_Warning_Title" xml:space="preserve">
     <value>Warning</value>
   </data>
@@ -1046,9 +1106,6 @@ How to get: After a fight, your character will automatically appear in the stats
   <data name="Debug_Localization_Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
-  <data name="Menu_SkillDiary" xml:space="preserve">
-    <value>Skill Diary</value>
-  </data>
   <data name="Settings_Language_Korean" xml:space="preserve">
     <value>한국어</value>
   </data>
@@ -1276,43 +1333,19 @@ Would you like to restart the application as administrator?</value>
   <data name="DpsStatistics_CurrentPlayerRank" xml:space="preserve">
     <value>CurrentPlayerRank</value>
   </data>
-  <data name="Menu_Battle_Log" xml:space="preserve">
-    <value />
+  <data name="Menu_About" xml:space="preserve">
+    <value>About</value>
   </data>
-  <data name="Settings_Display_LongPlayerNameScroll" xml:space="preserve">
-    <value>Scroll Long Names</value>
+  <data name="Settings_Section_ClassColors_Title" xml:space="preserve">
+    <value>Class Colors</value>
   </data>
-  <data name="Settings_Display_LongPlayerNameScroll_ToolTip" xml:space="preserve">
-    <value>Enables automatic scrolling when a player's name exceeds the display area</value>
+  <data name="Settings_Section_ClassColors_Description" xml:space="preserve">
+    <value>Customize colors for each class</value>
   </data>
-  <data name="Settings_Display_Total_Damage" xml:space="preserve">
-    <value>Display total damage</value>
+  <data name="Settings_ClassColors_Reset_Tooltip" xml:space="preserve">
+    <value>Reset Default</value>
   </data>
-  <data name="Settings_Display_DPS" xml:space="preserve">
-    <value>Display DPS</value>
-  </data>
-  <data name="Settings_Display_Damage_Contribution" xml:space="preserve">
-    <value>Display Damage Contribution</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode" xml:space="preserve">
-    <value>DPS mode</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode_Tooltip" xml:space="preserve">
-    <value>Select DPS calculation method: Total Damage / Combat Duration OR Overall Average DPS</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode_On" xml:space="preserve">
-    <value>Total DPS</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode_Off" xml:space="preserve">
-    <value>Total/Duration</value>
-  </data>
-  <data name="Settings_Display_DPS_Mode_OnOff_Tooltip" xml:space="preserve">
-    <value>ON = Total Damage divided by Duration, OFF = Overall Average DPS (ValuePerSecond)</value>
-  </data>
-  <data name="Settings_Theme_ClearImage" xml:space="preserve">
-    <value>Clear</value>
-  </data>
-  <data name="Menu_Team_Total_Damage" xml:space="preserve">
-    <value>Party:</value>
+  <data name="Settings_ClassColors_Reset" xml:space="preserve">
+    <value>Reset</value>
   </data>
 </root>
