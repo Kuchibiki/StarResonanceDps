@@ -129,7 +129,7 @@
 
 
     <!--  森语者 (VerdantOracle)  -->
-    <BitmapImage x:Key="ClassesIconVerdantOracleIcon" UriSource="pack://application:,,,/Assets/Images/Classes_VerdantOracle.png" />
+    <BitmapImage x:Key="ClassesVerdantOracleIcon" UriSource="pack://application:,,,/Assets/Images/Classes_VerdantOracle.png" />
     <!-- <BitmapImage x:Key="{x:Static models:Classes.VerdantOracle}" UriSource="pack://application:,,,/Assets/Images/Classes_VerdantOracle.png" /> -->
     <DrawingImage x:Key="{x:Static models:Classes.VerdantOracle}" RenderOptions.EdgeMode="Aliased">
         <DrawingImage.Drawing>
@@ -143,7 +143,7 @@
     </DrawingImage>
 
     <!--  灵魂乐手 (SoulMusician)  -->
-    <BitmapImage x:Key="ClassesIconShieldKnightIcon" UriSource="pack://application:,,,/Assets/Images/Classes_SoulMusician.png" />
+    <BitmapImage x:Key="ClassesSoulMusicianIcon" UriSource="pack://application:,,,/Assets/Images/Classes_SoulMusician.png" />
     <!-- <BitmapImage x:Key="{x:Static models:Classes.SoulMusician}" UriSource="pack://application:,,,/Assets/Images/Classes_SoulMusician.png" /> -->
     <DrawingImage x:Key="{x:Static models:Classes.SoulMusician}" RenderOptions.EdgeMode="Aliased">
         <DrawingImage.Drawing>
