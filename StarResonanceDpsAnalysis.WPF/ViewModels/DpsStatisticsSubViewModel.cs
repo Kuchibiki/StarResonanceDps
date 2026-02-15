@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Globalization;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,6 +12,7 @@ using StarResonanceDpsAnalysis.Core.Statistics;
 using StarResonanceDpsAnalysis.WPF.Extensions;
 using StarResonanceDpsAnalysis.WPF.Localization;
 using StarResonanceDpsAnalysis.WPF.Models;
+using StarResonanceDpsAnalysis.WPF.Properties;
 using StarResonanceDpsAnalysis.WPF.ViewModels.DpsStatisticDataEngine;
 
 namespace StarResonanceDpsAnalysis.WPF.ViewModels;
@@ -176,28 +178,28 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 		if (DataDictionary.TryGetValue(playerStats.Uid, out var slot))
 			return slot;
 
-		var playerInfoDict = _dataSourceEngine.GetPlayerInfoDictionary();
-		var ret = playerInfoDict.TryGetValue(playerStats.Uid, out var playerInfo);
-		slot = new StatisticDataViewModel(_debugFunctions, _localizationManager, FetchSkillList)
-		{
-			Index = 999,
-			Value = 0,
-			DurationTicks = playerStats.LastTick - (playerStats.StartTick ?? 0),
-			Player = new PlayerInfoViewModel(_localizationManager)
-			{
-				Uid = playerStats.Uid,
-				Guild = "Unknown",
-				Name = playerInfo?.Name,
-				Spec = playerInfo?.Spec ?? ClassSpec.Unknown,
-				IsNpc = playerStats.IsNpc,
-				NpcTemplateId = playerInfo?.NpcTemplateId ?? 0,
-				Mask = _parent.AppConfig.MaskPlayerName,
-				// ⭐ 应用自定义格式字符串配置
-				UseCustomFormat = _parent.AppConfig.UseCustomFormat,
-				FormatString = _parent.AppConfig.PlayerInfoFormatString
-			},
-			SetHoverStateAction = isHovering => _parent.SetIndicatorHover(isHovering)
-		};
+        var playerInfoDict = _dataSourceEngine.GetPlayerInfoDictionary();
+        var ret = playerInfoDict.TryGetValue(playerStats.Uid, out var playerInfo);
+        slot = new StatisticDataViewModel(_debugFunctions, _localizationManager, playerStats)
+        {
+            Index = 999,
+            Value = 0,
+            DurationTicks = playerStats.LastTick - (playerStats.StartTick ?? 0),
+            Player = new PlayerInfoViewModel(_localizationManager)
+            {
+                Uid = playerStats.Uid,
+                Guild = GetLocalizedString(ResourcesKeys.PlayerInfo_Guild_Unknown, "Unknown"),
+                Name = playerInfo?.Name,
+                Spec = playerInfo?.Spec ?? ClassSpec.Unknown,
+                IsNpc = playerStats.IsNpc,
+                NpcTemplateId = playerInfo?.NpcTemplateId ?? 0,
+                Mask = _parent.AppConfig.MaskPlayerName,
+                // ⭐ 应用自定义格式字符串配置
+                UseCustomFormat = _parent.AppConfig.UseCustomFormat,
+                FormatString = _parent.AppConfig.PlayerInfoFormatString
+            },
+            SetHoverStateAction = isHovering => _parent.SetIndicatorHover(isHovering)
+        };
 
 
 		_dispatcher.Invoke(() => { Data.Add(slot); });
@@ -205,45 +207,28 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 		return slot;
 	}
 
-	private SkillViewModelCollection FetchSkillList(long playerUid)
-	{
-		var data = _dataSourceEngine.CurrentSource.GetRawData();
-		var found = data.TryGetValue(playerUid, out var value);
-
-		Debug.Assert(found, $"PlayerNotFound with {playerUid}");
-		Debug.Assert(value != null, nameof(value) + " != null");
-		if (!found)
-		{
-			_logger.LogWarning("Player not found with {playerUid}", playerUid);
-			return SkillViewModelCollection.Empty;
-		}
-
-		var list = value.ToSkillItemVmList(_localizationManager);
-		return list;
-	}
-
-	private void UpdatePlayerInfo(StatisticDataViewModel slot, PlayerInfo? playerInfo)
-	{
-		if (playerInfo != null)
-		{
-			Debug.Assert(playerInfo != null, nameof(playerInfo) + " != null");
-			slot.Player.Name = playerInfo.Name;
-			slot.Player.Class = playerInfo.Class;
-			slot.Player.Spec = playerInfo.Spec;
-			slot.Player.PowerLevel = playerInfo.CombatPower ?? 0;
-			slot.Player.SeasonLevel = playerInfo.SeasonLevel;
-			slot.Player.SeasonStrength = playerInfo.SeasonStrength ?? 0;
-		}
-		else
-		{
-			slot.Player.Name = null;
-			slot.Player.Class = Classes.Unknown;
-			slot.Player.Spec = ClassSpec.Unknown;
-			slot.Player.PowerLevel = 0;
-			slot.Player.SeasonLevel = 0;
-			slot.Player.SeasonStrength = 0;
-		}
-	}
+    private static void UpdatePlayerInfo(StatisticDataViewModel slot, PlayerInfo? playerInfo)
+    {
+        if (playerInfo != null)
+        {
+            Debug.Assert(playerInfo != null, nameof(playerInfo) + " != null");
+            slot.Player.Name = playerInfo.Name;
+            slot.Player.Class = playerInfo.Class;
+            slot.Player.Spec = playerInfo.Spec;
+            slot.Player.PowerLevel = playerInfo.CombatPower ?? 0;
+            slot.Player.SeasonLevel = playerInfo.SeasonLevel;
+            slot.Player.SeasonStrength = playerInfo.SeasonStrength ?? 0;
+        }
+        else
+        {
+            slot.Player.Name = null;
+            slot.Player.Class = Classes.Unknown;
+            slot.Player.Spec = ClassSpec.Unknown;
+            slot.Player.PowerLevel = 0;
+            slot.Player.SeasonLevel = 0;
+            slot.Player.SeasonStrength = 0;
+        }
+    }
 
 	/// <summary>
 	/// ⭐ 更新当前玩家排名(使用用户在设置中配置的UID)
@@ -300,10 +285,11 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 			if (!ret) continue;
 			UpdatePlayerInfo(slot, playerInfo);
 
-			// Update slot values with pre-computed data
-			slot.Value = processed.Value;
-			slot.DurationTicks = processed.DurationTicks;
-			slot.ValuePerSecond = processed.ValuePerSecond;
+            // Update slot values with pre-computed data
+            slot.Value = processed.Value;
+            slot.DurationTicks = processed.DurationTicks;
+            slot.ValuePerSecond = processed.ValuePerSecond;
+            slot.OriginalData = processed.OriginalData;
 
 			// Set current player slot if this is the current player
 			if (hasCurrentPlayer && uid == currentPlayerUid)
@@ -355,24 +341,25 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 		}
 	}
 
-	public void AddTestItem()
-	{
-		var slots = Data;
-		var newItem = new StatisticDataViewModel(_debugFunctions, _localizationManager, FetchSkillListFunc)
-		{
-			Index = slots.Count + 1,
-			Value = (ulong)Random.Shared.Next(100, 2000),
-			DurationTicks = 60000,
-			Player = new PlayerInfoViewModel(LocalizationManager.Instance)
-			{
-				Uid = Random.Shared.Next(100, 999),
-				Class = RandomClass(),
-				Guild = "Test Guild",
-				Name = $"Test Player {slots.Count + 1}",
-				Spec = ClassSpecHelper.Random(),
-				PowerLevel = Random.Shared.Next(5000, 39000)
-			}
-		};
+    public void AddTestItem()
+    {
+        var slots = Data;
+        var uid = Random.Shared.Next(100, 999);
+        var newItem = new StatisticDataViewModel(_debugFunctions, _localizationManager, new PlayerStatistics(uid))
+        {
+            Index = slots.Count + 1,
+            Value = (ulong)Random.Shared.Next(100, 2000),
+            DurationTicks = 60000,
+            Player = new PlayerInfoViewModel(LocalizationManager.Instance)
+            {
+                Uid = uid,
+                Class = RandomClass(),
+                Guild = "Test Guild",
+                Name = $"Test Player {slots.Count + 1}",
+                Spec = ClassSpecHelper.Random(),
+                PowerLevel = Random.Shared.Next(5000, 39000)
+            }
+        };
 
 		newItem.Damage.FilteredSkillList =
 		[
@@ -446,18 +433,10 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 			newItem.Percent = 1;
 		}
 
-		slots.Add(newItem);
-		SortSlotsInPlace();
-		return;
-
-		static SkillViewModelCollection FetchSkillListFunc(long uid)
-		{
-			List<SkillItemViewModel> damage = [new()];
-			List<SkillItemViewModel> healing = [new()];
-			List<SkillItemViewModel> taken = [new()];
-			return new SkillViewModelCollection(damage, healing, taken);
-		}
-	}
+        slots.Add(newItem);
+        SortSlotsInPlace();
+        return;
+    }
 
 	private Classes RandomClass()
 	{
@@ -493,7 +472,12 @@ public partial class DpsStatisticsSubViewModel : BaseViewModel
 		RefreshSkillDisplayLimit();
 	}
 
-	#region Sort
+    private string GetLocalizedString(string key, string defaultValue)
+    {
+        return _localizationManager.GetString(key, defaultValue: defaultValue);
+    }
+
+    #region Sort
 
 	/// <summary>
 	/// Changes the sort member path and re-sorts the data

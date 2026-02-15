@@ -185,23 +185,20 @@ public partial class DpsStatisticsViewModel
         UpdateData();
     }
 
-    partial void OnScopeTimeChanged(ScopeTime value)
+    partial void OnScopeTimeChanged(ScopeTime oldValue, ScopeTime newValue)
     {
-        _logger.LogInformation("=== ScopeTime changed: {OldValue} -> {NewValue} ===", ScopeTime, value);
-
+        _logger.LogInformation("ScopeTime changed: {OldValue} -> {NewValue}", oldValue, newValue);
         foreach (var subViewModel in StatisticData.Values)
         {
-            subViewModel.ScopeTime = value;
+            subViewModel.ScopeTime = oldValue;
             subViewModel.Data.Clear();
             subViewModel.DataDictionary.Clear();
         }
 
         UpdateBattleDuration();
-        _dataSourceEngine.Scope = value;
+        _dataSourceEngine.Scope = oldValue;
         UpdateData();
         OnPropertyChanged(nameof(CurrentStatisticData));
-
-        _logger.LogInformation("=== ScopeTime change complete ===");
     }
 
     partial void OnShowTeamTotalDamageChanged(bool value)
@@ -219,10 +216,10 @@ public partial class DpsStatisticsViewModel
 
     partial void OnStatisticIndexChanged(StatisticType value)
     {
-        _logger.LogDebug("OnStatisticIndexChanged: 切换到统计类型 {Type}", value);
+        _logger.LogDebug("OnStatisticIndexChanged: Changed to {Type}", value);
 
         OnPropertyChanged(nameof(CurrentStatisticData));
 
-        _logger.LogDebug("OnStatisticIndexChanged: 统计类型已切换,强制刷新完成");
+        _logger.LogDebug("OnStatisticIndexChanged: Statistic type changed, force refresh");
     }
 }

@@ -93,14 +93,28 @@ public partial class App : Application
 
     private static IObservable<LogEvent>? ConfigureLogging(IConfiguration configRoot)
     {
+        var debugEnabled = configRoot.GetSection("Config").GetValue<bool>("DebugEnabled");
+        if (debugEnabled)
+        {
+            Interop.Kernel32.AllocConsole();
+        }
+
         IObservable<LogEvent>? streamRef = null;
-        Log.Logger = new LoggerConfiguration()
+        var loggerConfig = new LoggerConfiguration()
             .ReadFrom.Configuration(configRoot)
             .MinimumLevel.Verbose()
-            .Enrich.FromLogContext()
-            .WriteTo.Console()
+            .Enrich.FromLogContext();
+
+        if (debugEnabled)
+        {
+            loggerConfig.WriteTo.Console(
+                outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}");
+        }
+
+        Log.Logger = loggerConfig
             .WriteTo.Observers(obs => streamRef = obs)
             .CreateLogger();
+
         return streamRef;
     }
 

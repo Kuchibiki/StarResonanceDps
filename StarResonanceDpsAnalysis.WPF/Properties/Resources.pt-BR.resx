@@ -132,6 +132,9 @@
   <data name="Menu_Personal_Training_Mode" xml:space="preserve">
     <value>Modo Solo/Treino</value>
   </data>
+  <data name="Menu_SkillDiary" xml:space="preserve">
+    <value>Diário de Habilidades</value>
+  </data>
   <data name="Menu_RecordSettings" xml:space="preserve">
     <value>Opções de Gravação</value>
   </data>
@@ -188,6 +191,39 @@
   </data>
   <data name="DpsStatistics_Snapshot_Label" xml:space="preserve">
     <value>[Instantâneo]</value>
+  </data>
+  <data name="DpsStatistics_Team_Label" xml:space="preserve">
+    <value>Equipe:</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_Damage" xml:space="preserve">
+    <value>DPS da Equipe</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_Healing" xml:space="preserve">
+    <value>Cura da Equipe</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_TakenDamage" xml:space="preserve">
+    <value>Dano Sofrido da Equipe</value>
+  </data>
+  <data name="DpsStatistics_TeamLabel_NpcTakenDamage" xml:space="preserve">
+    <value>Dano Sofrido por NPC</value>
+  </data>
+  <data name="PlayerInfo_Guild_Unknown" xml:space="preserve">
+    <value>Desconhecido</value>
+  </data>
+  <data name="DpsStatistics_Test_Guild" xml:space="preserve">
+    <value>Guilda de Teste</value>
+  </data>
+  <data name="DpsStatistics_Test_Player_Format" xml:space="preserve">
+    <value>Jogador de Teste {0}</value>
+  </data>
+  <data name="DpsStatistics_Test_Skill_Format" xml:space="preserve">
+    <value>Habilidade de Teste {0}</value>
+  </data>
+  <data name="DpsStatistics_Test_Heal_Skill_Format" xml:space="preserve">
+    <value>Cura de Teste {0}</value>
+  </data>
+  <data name="DpsStatistics_Test_Taken_Skill_Format" xml:space="preserve">
+    <value>Dano Sofrido de Teste {0}</value>
   </data>
   <data name="Menu_Exit" xml:space="preserve">
     <value>Sair</value>
@@ -1178,16 +1214,10 @@ Como obter: Após uma luta, seu personagem aparecerá automaticamente na janela 
   <data name="SkillBreakdown_Label_SkillName" xml:space="preserve">
     <value>Habilidade(Nome)</value>
   </data>
+  <data name="SkillBreakdown_Label_Uid" xml:space="preserve">
+    <value>UID</value>
+  </data>
   <data name="SkillBreakdown_Label_ValuePercentToTotal" xml:space="preserve">
     <value>Por cento</value>
-  </data>
-  <data name="Menu_Training_Extreme" xml:space="preserve">
-    <value>Treino Extremo</value>
-  </data>
-  <data name="Menu_Training_Personal" xml:space="preserve">
-    <value>Treino Solo</value>
-  </data>
-  <data name="Menu_Training_Faction" xml:space="preserve">
-    <value>Treino de Facção</value>
   </data>
 </root>

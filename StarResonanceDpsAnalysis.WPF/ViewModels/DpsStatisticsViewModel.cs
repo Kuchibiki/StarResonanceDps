@@ -230,7 +230,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
     [RelayCommand]
     public void ResetSection()
     {
-        _logger.LogInformation("=== ResetSection START ===");
+        _logger.LogInformation("ResetSection START");
 
         // Delegate to ResetCoordinator
         _resetCoordinator.ResetCurrentSection();
@@ -239,7 +239,7 @@ public partial class DpsStatisticsViewModel : BaseViewModel, IDisposable
             ExitSnapshotViewMode();
         }
 
-        _logger.LogInformation("=== ResetSection COMPLETE ===");
+        _logger.LogInformation("ResetSection COMPLETE");
     }
 
     public void SetIndicatorHover(bool isHovering)
