@@ -409,6 +409,28 @@
                             </Button.Template>
                         </Button>
 
+                        <Button Click="Nav_ClassColors_Click" Style="{StaticResource SectionTitleButton}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border x:Name="bb" Style="{StaticResource SectionTitleBorder}">
+
+                                        <Grid>
+                                            <TextBlock Style="{StaticResource SectionListTitleText}"
+                                                       Text="{lex:Loc Key={x:Static loc:ResourcesKeys.Settings_Section_ClassColors_Title}}" />
+
+                                            <Border Style="{StaticResource SectionTitlePointer}" />
+                                        </Grid>
+                                    </Border>
+
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="bb" Property="Background" Value="#EEE" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
                     </StackPanel>
                 </Border>
 
@@ -1556,7 +1578,6 @@
                                                             <Image Source="{Binding Class, Converter={StaticResource ClassesToColoredIconConverter}}" 
                                                                    Width="26" Height="26" Margin="0,0,10,0"
                                                                    RenderOptions.BitmapScalingMode="HighQuality" SnapsToDevicePixels="True" />
-                                                            <!--<TextBlock Style="{StaticResource FieldName}" Text="{Binding Name}" />-->
                                                             <TextBlock Style="{StaticResource FieldName}" Text="{lex:Loc {Binding Name, StringFormat={}Classes_{0}}}"></TextBlock>
                                                         </StackPanel>
 
@@ -1601,9 +1622,6 @@
 
                                 </StackPanel>
                             </Border>
-
-
-
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
