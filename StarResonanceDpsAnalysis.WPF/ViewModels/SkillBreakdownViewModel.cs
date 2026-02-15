@@ -80,7 +80,14 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
     /// </summary>
     private void UpdateTimer_Tick(object? sender, EventArgs e)
     {
-        if (_playerStatistics == null || ObservedSlot?.Player.Uid == null)
+        if (_playerStatistics == null)
+        {
+            return;
+        }
+
+        // 使用 _playerStatistics.Uid 而不是 ObservedSlot?.Player.Uid
+        var playerUid = ObservedSlot?.Player.Uid ?? _playerStatistics.Uid;
+        if (playerUid == 0)
         {
             return;
         }
@@ -89,7 +96,7 @@ public partial class SkillBreakdownViewModel : BaseViewModel, IDisposable
         {
             // ? 从存储中获取最新的PlayerStatistics
             var latestStats = _storage.GetStatistics(fullSession: false);
-            if (latestStats.TryGetValue(ObservedSlot.Player.Uid, out var updated))
+            if (latestStats.TryGetValue(playerUid, out var updated))
             {
                 _playerStatistics = updated;
                 RefreshAllStatistics();

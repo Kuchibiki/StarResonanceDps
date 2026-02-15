@@ -197,7 +197,7 @@
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource NumberClipValueConverter}">
                                         <Binding Path="TotalDamage" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
@@ -205,27 +205,27 @@
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource NumberClipUnitConverter}">
                                         <Binding Path="TotalDamage" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                                 <TextBlock.Visibility>
                                     <MultiBinding Converter="{StaticResource NumberClipUnitVisibilityConverter}" ConverterParameter="Full">
                                         <Binding Path="TotalDamage" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Visibility>
                             </TextBlock>
-                            <TextBlock Style="{StaticResource TotalDamageText}">
+                            <TextBlock Style="{StaticResource TotalDamageText}" VerticalAlignment="Center">
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource NumberClipUnitConverter}">
                                         <Binding Path="TotalDamage" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                                 <TextBlock.Visibility>
                                     <MultiBinding Converter="{StaticResource NumberClipUnitVisibilityConverter}" ConverterParameter="Ascii">
                                         <Binding Path="TotalDamage" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Visibility>
                             </TextBlock>
@@ -239,7 +239,7 @@
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource NumberClipValueConverter}">
                                         <Binding Path="Dps" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
@@ -247,13 +247,13 @@
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource NumberClipUnitConverter}">
                                         <Binding Path="Dps" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                                 <TextBlock.Visibility>
                                     <MultiBinding Converter="{StaticResource NumberClipUnitVisibilityConverter}" ConverterParameter="Full">
                                         <Binding Path="Dps" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Visibility>
                             </TextBlock>
@@ -261,13 +261,13 @@
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource NumberClipUnitConverter}">
                                         <Binding Path="Dps" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                                 <TextBlock.Visibility>
                                     <MultiBinding Converter="{StaticResource NumberClipUnitVisibilityConverter}" ConverterParameter="Ascii">
                                         <Binding Path="Dps" />
-                                        <Binding Path="AppConfig.NumberDisplayMode" />
+                                        <Binding Path="AppConfig.DamageDisplayType" />
                                     </MultiBinding>
                                 </TextBlock.Visibility>
                             </TextBlock>
@@ -351,7 +351,7 @@
             <ctrl:CustomProgressBar
                 Style="{StaticResource PersentProgressBar}"
                 Maximum="1"
-                Value="{Binding TeamDamagePercent}" />
+                Value="{Binding TeamDamagePercent}" Margin="28,60,28,0" VerticalAlignment="Top" />
 
         </Grid>
     </Border>
